@@ -1,0 +1,28 @@
+{
+  "name": "wula/jqadmin",
+  "description": "jQadmin UI based on layui for wula framework",
+  "type": "wula-asset",
+  "license": "MIT",
+  "require": {
+	  "wula/wula-installer": "^1.0.0"
+  },
+  "keywords": [
+    "webui",
+    "layui",
+    "adminui",
+    "dashboard",
+    "backendui",
+    "jqadmin"
+  ],
+  "time": "2017-12-04 10:30",
+  "authors": [
+    {
+      "name": "Leo Ning",
+      "email": "windywany@gmail.com"
+    }
+  ],
+  "support": {
+	  "issues": "https://github.com/ninggf/wula_assets_jqadmin/issues"
+  },
+  "homepage": "http://www.wulacms.com/ui/"
+}
