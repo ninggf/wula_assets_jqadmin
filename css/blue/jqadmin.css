@@ -1,0 +1,608 @@
+@charset "utf-8";
+
+/**
+* @Author: Paco
+* @Date: 2017-01-31 
+* @lastModify 2017-03-22
+* +----------------------------------------------------------------------
+* | jqadmin [ jq酷打造的一款懒人后台模板 ]
+* | Copyright (c) 2017 http://jqadmin.jqcool.net All rights reserved.
+* | Licensed ( http://jqadmin.jqcool.net/licenses/ )
+* | Author: Paco <admin@jqcool.net>
+* +----------------------------------------------------------------------
+*/
+
+a:link,
+a:hover,
+a:active,
+a:visited {
+    text-decoration: none;
+    outline: none;
+}
+
+body {
+    color: #333;
+}
+
+
+/**
+* 头部 
+*/
+
+.layui-layout-admin .layui-header {
+    background-color: #1E9FFF;
+    border-bottom: 3px solid #3164AC;
+}
+
+.layui-bg-black {
+    background-color: #FFF!important;
+    color: #c2c2c2!important;
+}
+
+
+/** 导航菜单 **/
+
+.layui-nav {
+    position: relative;
+    padding: 0 20px;
+    background-color: #FFF;
+    color: #333;
+    border-radius: 2px;
+    font-size: 0;
+    box-sizing: border-box;
+}
+
+.layui-nav * {
+    font-size: 14px;
+}
+
+.layui-nav .layui-nav-item {
+    position: relative;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: middle;
+    line-height: 57px;
+}
+
+.layui-nav .layui-nav-item a {
+    display: block;
+    padding: 0 20px;
+    color: #FFF;
+    color: rgba(255, 255, 255, 1);
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}
+
+.sub-menu .layui-nav .layui-nav-item a {
+    color: #000;
+}
+
+.layui-nav-bar,
+.layui-nav .layui-this:after,
+.layui-nav-tree .layui-nav-itemed:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 3px;
+    background-color: #FFB800;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+}
+
+.layui-nav-bar {
+    z-index: 1000;
+}
+
+.layui-nav .layui-this a,
+.layui-nav .layui-nav-item a:hover {
+    color: #FFF;
+    background-color: #2F4056;
+}
+
+.layui-nav .layui-this:after {
+    content: '';
+    top: auto;
+    bottom: 0;
+    width: 100%;
+}
+
+.layui-nav-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.layui-nav .layui-nav-more {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: dashed;
+    border-color: transparent;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+}
+
+.layui-nav .layui-nav-more {
+    position: absolute;
+    top: 28px;
+    right: 3px;
+    border-width: 6px;
+    border-top-style: solid;
+    border-top-color: #FFF;
+}
+
+.sub-menu .layui-nav .layui-nav-more {
+    border-top-color: #333;
+}
+
+.sub-menu .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #333;
+    border-top-color: transparent;
+}
+
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed .layui-nav-more {
+    top: 28px;
+    border-style: dashed;
+    border-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-color: #FFF;
+}
+
+.layui-nav-child {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 56px;
+    min-width: 100%;
+    line-height: 36px;
+    padding: 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+    border: 1px solid #d2d2d2;
+    background-color: #fff;
+    z-index: 100;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+
+.layui-nav .layui-nav-child a {
+    color: #333;
+}
+
+.layui-nav .layui-nav-child a:hover {
+    background-color: #1E9FFF;
+    color: #FFF;
+}
+
+.layui-nav-child dd {
+    position: relative;
+}
+
+.layui-nav-child dd.layui-this {
+    background-color: #1E9FFF;
+    color: #fff;
+}
+
+.layui-nav .layui-nav-child dd.layui-this a {
+    background-color: #1E9FFF;
+    color: #fff;
+}
+
+.layui-nav-child dd.layui-this:after {
+    display: none;
+}
+
+
+/* 垂直导航菜单 */
+
+.layui-nav-tree {
+    width: 200px;
+    padding: 0;
+}
+
+.layui-nav-tree .layui-nav-item {
+    display: block;
+    width: 100%;
+    line-height: 50px;
+}
+
+.layui-nav-tree .layui-nav-item a {
+    height: 45px;
+    padding-left: 30px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.layui-nav-tree .layui-nav-item a:hover {
+    background-color: #FFF;
+    background-color: #1E9FFF;
+}
+
+.layui-nav-tree .layui-nav-bar {
+    width: 5px;
+    height: 0;
+}
+
+.layui-nav-tree .layui-this,
+.layui-nav-tree .layui-this>a,
+.layui-nav-tree .layui-this>a:hover,
+.layui-nav-tree .layui-nav-child dd.layui-this,
+.layui-nav-tree .layui-nav-child dd.layui-this a {
+    background-color: #1E9FFF;
+    color: #fff;
+}
+
+.layui-nav-tree .layui-this:after {
+    display: none;
+}
+
+.layui-nav-tree .layui-nav-title a,
+.layui-nav-tree .layui-nav-title a:hover,
+.layui-nav-itemed>a {
+    color: #000 !important;
+}
+
+.layui-nav-tree .layui-nav-bar {
+    background-color: #1E9FFF;
+}
+
+.layui-nav-tree .layui-nav-child {
+    position: relative;
+    z-index: 0;
+    top: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.layui-nav-tree .layui-nav-child a {
+    height: 40px;
+    line-height: 40px;
+}
+
+.layui-nav-tree .layui-nav-child a {
+    color: #fff;
+    color: rgba(0, 0, 0, .7);
+}
+
+.layui-nav-tree .layui-nav-child a:hover,
+.layui-nav-tree .layui-nav-child {
+    color: #fff;
+}
+
+.layui-nav-tree .layui-nav-more {
+    top: 20px;
+    right: 10px;
+}
+
+.layui-nav-itemed .layui-nav-more {
+    top: 14px;
+}
+
+.layui-nav-itemed .layui-nav-child {
+    display: block;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 1) !important;
+}
+
+
+/**
+*自定义样式
+*
+*/
+
+.jq-btn-primary {
+    background-color: #1E9FFF;
+}
+
+.layui-header .jqadmin-logo-box {
+    float: left;
+    min-width: 150px;
+}
+
+.layui-header .jqadmin-logo-box h1 {
+    font-size: 1.5rem;
+    color: #FFF;
+    text-align: center;
+    line-height: 54px;
+    font-style: italic;
+    float: left;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.menu-type {
+    padding: 0 14px;
+    line-height: 42px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #666;
+    border-right: 1px solid #CCC;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #FFF;
+    z-index: 99;
+}
+
+.layui-header {
+    height: 54px;
+}
+
+.layui-header .jqadmin-main-menu {
+    float: left;
+}
+
+.layui-header .header-right {
+    float: right;
+}
+
+.layui-header .header-right .right-menu {
+    right: 70px;
+}
+
+.layui-header .header-right .fresh-btn {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}
+
+.layui-header .layui-nav {
+    top: 0;
+    padding: 0;
+    background: none;
+}
+
+.layui-header .layui-nav .layui-nav-item {
+    margin: 0px;
+}
+
+.layui-header .jqadmin-header-item {
+    margin-right: 10px;
+}
+
+.layui-header .layui-nav .layui-nav-item a.msg {
+    position: relative;
+}
+
+.layui-header .layui-nav .layui-nav-item .msg-num {
+    background: red;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    border-radius: 10px;
+    line-height: 18px;
+    font-size: 12px;
+    color: #FFF;
+    text-align: center;
+    position: absolute;
+    top: 14px;
+    right: 5px;
+}
+
+.layui-nav-child dd {
+    line-height: 30px;
+    text-indent: 10px;
+}
+
+.hide-icon {
+    display: none;
+}
+
+
+/**
+*左边菜单
+*/
+
+.layui-side .jqadmin-home {
+    height: 50px;
+    line-height: 50px;
+    text-indent: 10px;
+}
+
+.layui-side .jqadmin-home a {
+    color: #ccc;
+}
+
+.layui-side .sub-menu {
+    display: none;
+}
+
+.layui-side .show {
+    display: block;
+}
+
+.sub-menu .layui-nav-item dl dd a {
+    padding-left: 30px;
+}
+
+
+/**
+*内容主体
+*/
+
+.layui-layout-admin .layui-side,
+.layui-layout-admin .layui-body {
+    top: 54px;
+}
+
+.layui-layout-admin .jqadmin-body {
+    overflow-y: hidden;
+    border-left: 1px solid #CCC;
+}
+
+.layui-tab-content {
+    height: 100%;
+    padding: 0;
+}
+
+.layui-body {
+    overflow: hidden;
+}
+
+.layui-body .layui-tab {
+    margin: 0;
+}
+
+.layui-tab-content .layui-tab-item {
+    position: absolute;
+    top: 46px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.layui-tab-card {
+    border-left: none;
+}
+
+.jqadmin-tab-box .layui-tab-title {
+    border-bottom: none;
+    overflow: hidden;
+    height: 40px;
+    padding-top: 4px;
+    background: #FFF;
+}
+
+.jqadmin-tab-box .layui-tab-title li em {
+    font-style: normal;
+    margin-left: 5px;
+}
+
+.layui-tab-title .layui-this:after {
+    border: none;
+}
+
+.jqadmin-tab-box .layui-tab-title .layui-this {
+    background: #EEE;
+    color: #666;
+}
+
+.layui-tab-content .layui-tab-item .jqadmin-iframe {
+    width: 100%;
+    border: 0;
+    height: 100%;
+}
+
+.jqadmin-tab-box .tab-move-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #FFF;
+    height: 45px;
+    line-height: 50px;
+    display: none;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 15px;
+    border: none;
+    border-left: 1px solid #CCC;
+    z-index: 10000;
+}
+
+.menu-list {
+    position: absolute;
+    right: 0;
+    top: 100px;
+    width: 150px;
+    padding: 10px 15px;
+    z-index: 998;
+    background: #FFF;
+    border: 1px solid #CCC;
+    border-top: none;
+    border-right: none;
+    border-radius: 0 0 3px 3px;
+    display: none;
+}
+
+.menu-list li {
+    height: 28px;
+    line-height: 28px;
+}
+
+.jqadmin-tab-box .tab-move-btn span {
+    font-size: 12px;
+}
+
+.jqadmin-tab-box .tab-move-btn span i {
+    font-size: 8px;
+    padding-left: 5px;
+}
+
+.jqadmin-tab-box .tab-move-btn .move-left-btn,
+.jqadmin-tab-box .tab-move-btn .move-right-btn {
+    padding: 11px 5px;
+    cursor: pointer;
+    border-left: 1px solid #ccc;
+}
+
+
+/**
+*底部
+*/
+
+.layui-layout-admin .jqadmin-foot {
+    height: 34px;
+    padding: 5px 0;
+    line-height: 30px;
+    text-align: center;
+    color: #666;
+    font-weight: 300;
+    border-top: 1px solid #CCC;
+    border-left: 1px solid #CCC;
+    z-index: 998;
+}
+
+.jqadmin-foot .jqadmin-author {
+    float: right;
+}
+
+.my-tip {
+    display: none;
+}
+
+.right-click-menu {
+    position: absolute;
+    width: 120px;
+    line-height: 24px;
+    z-index: 999;
+    background: #FFF;
+    border: 1px solid #F2F2F2;
+    border-bottom: none;
+    border-radius: 3px;
+    display: none;
+}
+
+.right-click-menu li a {
+    display: block;
+    padding: 4px 10px;
+    color: #CCC;
+    border-bottom: 1px solid #F2F2F2;
+}
+
+.right-click-menu li a:hover {
+    background: #EEE;
+    color: #666;
+}
+
+.menu-btn {
+    position: fixed;
+    right: 0;
+    top: 61px;
+    width: 30px;
+    height: 40px;
+    border-left: 1px solid #1E9FFF;
+    line-height: 40px;
+    font-size: 18px;
+    color: #1E9FFF;
+    text-align: center;
+    background: #CCC;
+    display: none;
+}

@@ -1,0 +1,9 @@
+# ide
+.settings
+.buildpath
+.project
+.idea
+*.log
+.vscode
+.DS_Store
+*.bak
