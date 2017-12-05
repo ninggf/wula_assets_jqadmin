@@ -1,0 +1,26 @@
+{
+  "name": "wulacms",
+  "version": "1.0.0",
+  "description": "wulacms/jqadmin",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^3.8.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^2.0.2",
+    "gulp-jsvalidate": "^3.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-notify": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rimraf": "^0.2.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-webserver": "^0.9.1",
+    "less": "^2.7.2",
+    "minimist": "^1.2.0"
+  },
+  "dependencies": {}
+}

@@ -1,1 +1,7 @@
+.babelrc export-ignore
+package.json export-ignore
+gulpfile.babel.js export-ignore
 README.md export-ignore
+demo/   export-ignore
+src/   export-ignore
+less/ export-ignore
