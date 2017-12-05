@@ -192,7 +192,7 @@ layui.define(['jquery', 'jqelem'], function(exports) {
         var index = $(this).parents('.right-click-menu').attr('lay-id');
         $(this).parents('.right-click-menu').hide();
         $('.menu-list').slideUp();
-        $('.tab-move-btn').find('i').html("&#xe604;");
+        $('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
         switch (event) {
             case "close":
                 if (index != 0) {

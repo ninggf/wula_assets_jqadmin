@@ -66,7 +66,7 @@ layui.define(['jquery','laytpl', 'layer', 'jqelem', 'tabmenu'], function(exports
         $('.sub-menu .layui-nav-item,.tab-menu,.menu-list li').bind("click", function() {
             var obj = $(this);
             $('.menu-list').slideUp();
-            $('.tab-move-btn').find('i').html("&#xe604;");
+            $('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 
             if (obj.find('dl').length <= 0) {
                 _this.menuSetOption(obj);
@@ -85,7 +85,8 @@ layui.define(['jquery','laytpl', 'layer', 'jqelem', 'tabmenu'], function(exports
 		$('.tab-move-btn').bind("click", function() {
 			var show = $('.menu-list').css('display');
 			if (show == "none") {
-				_this.menulist();
+				$(this).addClass('open');
+                _this.menulist();
 				$('.menu-list li').bind("click", function() {
 					_this.menuSetOption($(this));
 				});
@@ -93,6 +94,7 @@ layui.define(['jquery','laytpl', 'layer', 'jqelem', 'tabmenu'], function(exports
 				$('.menu-list').slideDown('fast');
 				$(this).find('i').html("&#xe603;");
 			} else {
+                $(this).removeClass('open');
 				$('.menu-list').slideUp('fast');
 				$(this).find('i').html("&#xe604;");
 			}
@@ -135,7 +137,7 @@ layui.define(['jquery','laytpl', 'layer', 'jqelem', 'tabmenu'], function(exports
 			var layId = $(this).attr("lay-id");
 
 			$('.menu-list').slideUp();
-			$('.tab-move-btn').find('i').html("&#xe604;");
+			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 			var data = {
 				layId: layId
 			}
