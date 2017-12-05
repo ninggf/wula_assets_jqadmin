@@ -7,42 +7,45 @@
 	<title>登录</title>
 </head>
 <body>
-	<div class="banner containter">
-		<h1 class="logo ellipisis">WulaCMS</h1>
+<div class="banner containter">
+	<h1 class="logo ellipisis">WulaCMS</h1>
+</div>
+<div class="main">
+	<div class="container">
+		<form class="sign-in form-inline" method="get" action="index.html">
+			<p class="form-title ellipsis">亲~, 欢迎您回来^_^</p>
+			<div class="layui-row layui-col-space15">
+				<div class="form-group layui-col-sm1 hidden-xs text-align-center" style="padding-top: 3px;">
+					<i class="layui-icon layui-hide-xs fa fa-user fa-2x txt-color-white"
+					   style="font-size:20px;color:#fff;line-height:38px;">&#xe613;</i>
+				</div>
+				<div class="form-group layui-col-sm5 layui-col-xs12 ">
+					<div class="input-group username ">
+						<input class="form-control" tabindex="2" placeholder="用户名(或邮箱)" type="text"
+							   id="username" value="">
+					</div>
+				</div>
+				<div class="form-group layui-col-sm4 layui-col-xs12">
+					<div class="input-group password">
+						<input type="password" class="form-control" placeholder="密码" id="passwd"
+							   tabindex="3">
+					</div>
+				</div>
+				<div class="form-group layui-col-xs12 layui-col-sm2 log-btn">
+					<button type="submit" class="layui-btn" id="log" tabindex="4">
+						登录
+					</button>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="col-xs-12 clearfix for-btn">
+					<a href="#" class="btn btn-link reset-password">
+						<i class="layui-icon" aria-hidden="true">&#xe69c;</i> 忘记密码？
+					</a>
+				</div>
+			</div>
+		</form>
 	</div>
-	<div class="main">
-		<div class="container">
-			<form class="sign-in form-inline" method="POST" action="/backend/">
-            	                <p class="form-title ellipsis">亲~, 欢迎您回来^_^</p>
-                <div class="layui-row layui-col-space15">
-                    <div class="form-group layui-col-sm1 hidden-xs text-align-center" style="padding-top: 3px;">
-                        <i class="layui-icon layui-hide-xs fa fa-user fa-2x txt-color-white" style="font-size:20px;color:#fff;line-height:38px;">&#xe613;</i>
-                    </div>
-                    <div class="form-group layui-col-sm5 layui-col-xs12 ">
-                        <!-- <label for="username" class="sr-only">username</label> -->
-                        <div class="input-group username ">
-                            <input class="form-control" tabindex="2" placeholder="用户名(或邮箱)" type="text" name="username" id="username" value="">
-                        </div>
-                    </div>
-                    <div class="form-group layui-col-sm4 layui-col-xs12">
-                        <!-- <label for="passwd" class="sr-only">password</label> -->
-                        <div class="input-group password">
-                            <input type="password" class="form-control" placeholder="密码" name="passwd" id="passwd" tabindex="3">
-                        </div>
-                    </div>
-
-                    <div class="form-group layui-col-xs12 layui-col-sm2 log-btn">
-                        <button type="submit" class="layui-btn" id="log" tabindex="4">
-                           登录</button>
-                    </div>
-                </div>
-                <div class="layui-row">
-                    <div class="col-xs-12 clearfix for-btn">
-                    	<a href="#" class="btn btn-link reset-password"><i class="layui-icon" aria-hidden="true">&#xe69c;</i> 忘记密码？</a>
-                    </div>
-                </div>
-            </form>
-		</div>
-	</div>
+</div>
 </body>
 </html>
