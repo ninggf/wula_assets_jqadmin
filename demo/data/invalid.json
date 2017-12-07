@@ -1,0 +1,9 @@
+{
+  "code": 500,
+  "message": "invalid form",
+  "action": "validate",
+  "target": "invform",
+  "args": {
+	"abc": "server does not accept the value"
+  }
+}

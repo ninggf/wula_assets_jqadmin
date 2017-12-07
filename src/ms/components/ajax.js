@@ -1,8 +1,7 @@
-layui.define(['jquery', 'layer'], function (exports) {
+;(($, layer, wulaui) => {
 	"use strict";
-	const $       = layui.$,
-		  wulajax = $.wulajax = $.ajax,
-		  layer = layui.layer;
+	let wulajax = $.ajax,
+		toast   = wulaui.toast;
 	// 重写ajax
 	$.ajax      = function (url, options) {
 		return wulajax(url, options).done(data => {
@@ -50,39 +49,11 @@ layui.define(['jquery', 'layer'], function (exports) {
 			//处理错误
 			switch (xhr.status) {
 				case 500:
-					deal500({
-						message: (t => {
-							if (xhr.getResponseHeader('ajax')) {
-								try {
-									let data = $.parseJSON(t);
-									return data.message;
-								} catch (e) {
-								}
-							} else if (t.indexOf('</body>')) {
-								t = t.substr(0, t.indexOf('</body>'));
-								t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-							}
-							return t;
-						})(xhr.responseText)
-					});
+					deal500(xhr, '服务器端500错误');
 					break;
 				case 200:
 					//数据类型转换错误
-					deal500({
-						message: (t => {
-							if (xhr.getResponseHeader('ajax')) {
-								try {
-									let data = $.parseJSON(t);
-									return data.message;
-								} catch (e) {
-								}
-							} else if (t.indexOf('</body>')) {
-								t = t.substr(0, t.indexOf('</body>'));
-								t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-							}
-							return t;
-						})(xhr.responseText)
-					}, $.lang.core.ajaxDataConvertException);
+					deal500(xhr, '数据类型转换出错');
 					break;
 				case 401:
 					showNotice(xhr);
@@ -100,7 +71,6 @@ layui.define(['jquery', 'layer'], function (exports) {
 					try {
 						ajaxAction($.parseJSON(xhr.responseText));
 					} catch (e) {
-
 					}
 					break;
 				default:
@@ -113,7 +83,6 @@ layui.define(['jquery', 'layer'], function (exports) {
 		if (opts.mode === 'abort') {
 			return;
 		}
-		//$.wulaUI.loadingBar.success();
 		opts.element.trigger('ajax.success', [data, opts, xhr]);
 	});
 
@@ -134,6 +103,23 @@ layui.define(['jquery', 'layer'], function (exports) {
 		cache  : false,
 		timeout: 900000
 	});
+	const confirmx      = function (ajax, content, opts) {
+		let ops = $.extend({}, {icon: 3, title: '请确认', loading: false}, opts || {});
+		layer.confirm(content || '亲，你确定要这么干吗？', ops, function (index) {
+			layer.close(index);
+			if (ops.loading) {
+				index = layer.load(2);
+				$.ajax(ajax).always(() => {
+					layer.close(index);
+				});
+			} else {
+				$.ajax(ajax);
+			}
+		});
+	};
+	const dialog        = function (opts) {
+		wulaui.dialog(opts);
+	};
 	// ajax 请求
 	const doAjaxRequest = function (e) {
 		e.preventDefault();
@@ -164,18 +150,16 @@ layui.define(['jquery', 'layer'], function (exports) {
 				be.opts.action   = 'update';
 				be.opts.target   = $this.attr('target') || $this.data('target');
 			} else if (be.opts.method === 'DIALOG') {
-				be.opts.method           = 'GET';
-				be.opts.dataType         = 'html';
-				be.opts.action           = 'dialog';
-				be.opts.dialogTitle      = $this.data('dialogTitle') || false;
-				be.opts.dialogType       = $this.data('dialogType') || 'orange';
-				be.opts.dialogWidthClass = $this.data('dialogWidthCls') || false;
-				be.opts.dialogWidth      = $this.data('dialogWidth') || 0;
-				let dialogE              = $.Event('build.dialog');
-				dialogE.buttons          = null;
+				be.opts.method   = 'GET';
+				be.opts.dataType = 'html';
+				be.opts.action   = 'dialog';
+				be.opts.title    = $this.attr('title') || $this.data('title') || false;
+				be.opts.dialog   = $.extend({}, wulaui.params($this, 'params'));
+				let dialogE      = $.Event('build.dialog');
+				dialogE.btn      = null;
 				$this.trigger(dialogE);
-				if (dialogE.buttons) {
-					be.opts.buttons = dialogE.buttons;
+				if (dialogE.btn) {
+					be.opts.btn = dialogE.btn;
 				}
 			}
 
@@ -186,8 +170,8 @@ layui.define(['jquery', 'layer'], function (exports) {
 					ids.push($(n).val());
 				});
 				if (ids.length === 0) {
-					let warn = $this.data('warn') || $.lang.core.emptyWarn;
-					$.notifyW(warn, $.lang.core.warning);
+					let warn = $this.data('warn') || '请选择要处理的数据';
+					toast.warning(warn);
 					return;
 				}
 				ids = ids.join(',');
@@ -201,52 +185,27 @@ layui.define(['jquery', 'layer'], function (exports) {
 				if (be.opts.action === 'update' && $(be.opts.target).data('loaderObj')) {
 					$(be.opts.target).data('load', be.opts.url).data('loaderObj').reload(null, $this.data('force') !== undefined);
 				} else if (be.opts.action === 'dialog') {
-					//是dialog，所以走$.ajaxDialog方法
-					let ops = be.opts;
-					$.ajaxDialog(ops.url, ops.dialogTitle, ops.buttons, ops.dialogType, ops.dialogWidthClass, ops.dialogWidth, $this.data('dialogIcon'), $this.data('dialogId'));
+					let ops = $.extend({}, {
+						content: be.opts.url,
+						title  : be.opts.title,
+						area   : be.opts.area || '',
+						type   : be.opts.type || 2,
+						btn    : be.opts.btn || null,
+						data   : be.opts.data
+					}, be.opts.dialog);
+					dialog(ops);
 				} else if ($this.data('confirm') !== undefined) {
-					//confirm
-					let jc = $.confirm({
-						content    : $this.data('confirm') || '',
-						title      : $this.data('confirmTitle') || $.lang.core.confirmTile,
-						icon       : $this.data('confirmIcon') || 'fa fa-question-circle',
-						type       : $this.data('confirmType') || 'orange',
-						theme      : $this.data('confirmTheme') || 'material',
-						autoClose  : $this.data('confirmAutoclose') || false,
-						draggable  : false,
-						alignMiddle: true,
-						escapeKey  : 'cancel',
-						buttons    : {
-							ok    : {
-								text    : $.lang.core.yes1,
-								btnClass: 'btn-blue',
-								keys    : ['enter'],
-								action() {
-									if ($this.data('loading') !== undefined) {
-										$this.data('loading', null);
-										jc.setTitle('');
-										jc.buttons.ok.hide();
-										jc.buttons.cancel.hide();
-										jc.setIcon('');
-										jc.setContent('<p class="text-center"><i class="fa fa-spinner fa-spin fa-4x" aria-hidden="true"></i></p>');
-
-										$.ajax(be.opts).always(() => {
-											if ($this.data('block') !== undefined) {
-												return;
-											}
-											jc.close();
-										});
-
-										return false;
-									} else
-										$.ajax(be.opts);
-								}
-							},
-							cancel: {
-								text: $.lang.core.cancel
-							}
-						}
-					});
+					let content   = $this.data('confirm'),
+						autoClose = parseInt($this.data('auto'), 0) || 0,
+						opts      = {
+							icon   : 3,
+							loading: $this.data('loading') !== undefined,
+							title  : $this.attr('title') || $this.data('title') || '请确认',
+						};
+					if (autoClose > 0) {
+						opts.time = autoClose;
+					}
+					confirmx(be.opts, content, opts);
 				} else {
 					$.ajax(be.opts);
 				}
@@ -254,80 +213,55 @@ layui.define(['jquery', 'layer'], function (exports) {
 		}
 		return false;
 	};
-	const deal500       = function (data, title) {
+	//处理数据返回错误
+	const deal500       = function (xhr, title) {
 		// 处理500错误
-		console.log('ajax - 500');
+		let message = ((rq) => {
+			let t = rq.responseText;
+			if (rq.getResponseHeader('ajax')) {
+				try {
+					let data = $.parseJSON(t);
+					return data.message;
+				} catch (e) {
+				}
+			} else if (t.indexOf('</body>')) {
+				t = t.substr(0, t.indexOf('</body>'));
+				t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
+			}
+			return t;
+		})(xhr);
+		layer.full(layer.open({
+			type   : 0,
+			title  : title,
+			icon   : 2,
+			content: message
+		}));
 	};
-	const showMsg       = function (data, opts) {
+	//显示正常提示
+	const showMsg       = function (data) {
 		if (data.message) {
-			let notice = true, opts = {};
+			let notice = true;
 			if (data.style === 'alert') {
 				notice = false;
 			}
 			switch (data.code) {
 				case 500://ERROR
-					opts.icon  = 'fa fa-warning';
-					opts.title = $.lang.core.error;
-					if (notice) {
-						opts.type = 'danger';
-					} else {
-						opts.type    = 'red';
-						opts.content = data.message;
-					}
+					notice ? toast.error(data.message) : layer.alert(data.message, {icon: 5});
 					break;
 				case 400://WARNING
-					opts.icon  = 'fa fa-warning';
-					opts.title = $.lang.core.warning;
-					if (notice) {
-						opts.type = 'warning';
-					} else {
-						opts.type    = 'orange';
-						opts.content = data.message;
-					}
+					notice ? toast.warning(data.message) : layer.alert(data.message, {icon: 2});
 					break;
 				case 300://INFO
-					opts.icon  = 'fa fa-info-circle';
-					opts.title = $.lang.core.info;
-					if (notice) {
-						opts.type = 'info';
-					} else {
-						opts.type    = 'blue';
-						opts.content = data.message;
-					}
+					notice ? toast.info(data.message) : layer.alert(data.message, {icon: 1});
 					break;
 				case 200://SUCCESS
 				default:
-					opts.icon  = 'fa fa-check-square';
-					opts.title = $.lang.core.success;
-					if (notice) {
-						opts.type = 'success';
-					} else {
-						opts.type    = 'green';
-						opts.content = data.message;
-					}
+					notice ? toast.success(data.message) : layer.alert(data.message, {icon: 6});
 					break;
 			}
-			if (notice) {
-				opts.z_index    = 900000;
-				opts.placement  = {
-					from : "top",
-					align: "center"
-				};
-				opts.offset     = {y: 5};
-				opts.mouse_over = 'pause';
-				opts.delay      = 3000;
-				//显示提示信息
-				//				$.notify({
-				//					icon   : opts.icon,
-				//					title  : '<strong>' + opts.title + '</strong>',
-				//					message: data.message
-				//				}, opts);
-			} else {
-				//$.dialog(opts);
-			}
 		}
-		console.log('show message');
 	};
+	//处理上ajax返回动作
 	const ajaxAction    = (data, opts) => {
 		let target;
 		switch (data.action) {
@@ -339,11 +273,11 @@ layui.define(['jquery', 'layer'], function (exports) {
 					if (append) {
 						let d = $(data.args.content);
 						target.append(d);
-						//$.wulaUI.initElement(d);
+						wulaui.init(d);
 					} else {
-						//$.wulaUI.destroyElement(target);
+						wulaui.destroy(target);
 						target.empty().html(data.args.content);
-						//$.wulaUI.initElement(target);
+						wulaui.init(target);
 					}
 					target.trigger('content.updated');
 				}
@@ -387,13 +321,16 @@ layui.define(['jquery', 'layer'], function (exports) {
 					}
 				}
 				break;
+			case 'dialog':
+
+				break;
 			case 'validate':
 				//表单验证
 				target   = $('form[name="' + data.target + '"]');
 				let errs = data.args;
 				let obj  = target.data('validateObj');
 				if (obj) {
-					obj.validate(errs);
+					obj.showErrors(errs);
 				}
 				break;
 			default:
@@ -407,11 +344,7 @@ layui.define(['jquery', 'layer'], function (exports) {
 					switch (op) {
 						case 'close':
 							if (args.length > 1) {
-								$.each(args, function (i, e) {
-									if ($.dialogStack[e]) {
-										$.dialogStack[e].close();
-									}
-								});
+								layer.close(layer.index);
 							}
 							break;
 						case 'show':
@@ -422,6 +355,12 @@ layui.define(['jquery', 'layer'], function (exports) {
 						case 'hide':
 							if (args.length > 1) {
 								$(args[1]).addClass('hidden').hide();
+							}
+							break;
+						case 'click':
+							target = $(args[1]);
+							if (target.length) {
+								target.click();
 							}
 							break;
 						case 'reload':
@@ -438,44 +377,32 @@ layui.define(['jquery', 'layer'], function (exports) {
 			}
 		}
 	};
+	//显示http返回异常码是提示
 	const showNotice    = (xhr) => {
-		console.log('show Notice');
-		//		$.notify({
-//			icon   : 'fa fa-warning',
-//			title  : '<strong>' + $.lang.core.error + '</strong>',
-//			message: '<br/>' + (t => {
-//				if (xhr.getResponseHeader('ajax')) {
-//					try {
-//						let data = $.parseJSON(t);
-//						return data.message;
-//					} catch (e) {
-//					}
-//				} else if (t.indexOf('</body>')) {
-//					t = t.substr(0, t.indexOf('</body>'));
-//					t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-//				}
-//				return t;
-//			})(xhr.responseText)
-//		}, {
-//			type     : 'danger',
-//			z_index  : 90000,
-//			placement: {
-//				from : "top",
-//				align: "center"
-//			}
-//		});
+		let message = (t => {
+			if (xhr.getResponseHeader('ajax')) {
+				try {
+					let data = $.parseJSON(t);
+					return data.message;
+				} catch (e) {
+				}
+			} else if (t.indexOf('</body>')) {
+				t = t.substr(0, t.indexOf('</body>'));
+				t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
+			}
+			return t;
+		})(xhr.responseText);
+		toast.error(message);
 	};
-	//页面加载完成时处理
-	$(() => {
-		$('body').on('click', '[data-ajax]:not(form)', doAjaxRequest).on('submit', 'form[data-ajax]', doAjaxRequest).on('change', 'select[data-ajax]', doAjaxRequest);
-	});
 
-	exports('wulajax', {
-		confirm: function () {
-			console.log('confirm');
-		},
-		dialog : function () {
-
-		}
-	});
-});
+	$('body')
+		.on('click', '[data-ajax]:not(form)', doAjaxRequest)
+		.on('submit', 'form[data-ajax]', doAjaxRequest)
+		.on('change', 'select[data-ajax]', doAjaxRequest);
+	//挂载ajax方法
+	wulaui.ajax = {
+		confirm: confirmx,
+		dialog : dialog,
+		ajax   : $.ajax
+	};
+})($, layer, wulaui);

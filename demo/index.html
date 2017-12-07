@@ -29,12 +29,10 @@
 	<div class="layui-header">
 		<!-- logo区域 -->
 		<div class="jqadmin-logo-box">
-			<a class="logo" href="http://jqadmin.jqcool.net" title="jQAdmin">
+			<a class="logo" href="." title="jQAdmin">
 				<h1>jQadmin</h1>
 			</a>
-
 		</div>
-
 		<!-- 主菜单区域 -->
 		<div class="jqadmin-main-menu">
 			<ul class="layui-nav clearfix" id="menu" lay-filter="main-menu">
@@ -53,7 +51,6 @@
 			</ul>
 
 		</div>
-
 		<!-- 头部右侧导航 -->
 		<div class="header-right">
 			<ul class="layui-nav jqadmin-header-item right-menu">
@@ -98,9 +95,8 @@
 	<!-- 左侧导航-->
 	<div class="layui-side layui-bg-black jqamdin-left-bar">
 		<div class="layui-side-scroll">
-
 			<div id="submenu">
-				<div class="sub-menu" style="display: block;">
+				<div class="sub-menu">
 					<ul class="layui-nav layui-nav-tree">
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;" data-title="内容管理"> <i class="iconfont">&#xe637;</i> <span>内容管理</span>
@@ -219,22 +215,22 @@
 			</div>
 		</div>
 	</div>
-
 	<!-- 左侧侧边导航结束 -->
 	<!-- 右侧主体内容 -->
 	<div class="layui-body jqadmin-body">
 		<div class="layui-tab layui-tab-card jqadmin-tab-box" id="jqadmin-tab" lay-filter="tabmenu" lay-notAuto="true">
 			<div class="menu-type"><i class="iconfont">&#xe61a;</i></div>
-			<ul class="layui-tab-title" style="margin-left: 45px">
-				<li class="layui-this" id="admin-home" lay-id="0" fresh=1><i class="iconfont">&#xe622;</i><em>后台首页</em>
+			<ul class="layui-tab-title">
+				<li class="layui-this" id="admin-home" lay-id="0"><i class="iconfont">&#xe622;</i><em
+					data-href="welcome.html">后台首页</em>
 				</li>
 			</ul>
-			<div class="tab-move-btn" style="display: block;">
+			<div class="tab-move-btn">
 				<span>更多<i class="iconfont">&#xe604;</i></span>
 			</div>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
-					<iframe class="jqadmin-iframe" data-id='0' src="welcome.html"></iframe>
+					<iframe class="jqadmin-iframe" data-id="0"></iframe>
 				</div>
 			</div>
 		</div>
@@ -263,7 +259,6 @@
 <script type="text/javascript" src="../layui.js?v=2.2.3"></script>
 <script type="text/javascript" src="./modules.js?v=2.0.1"></script>
 <script>
-	var global = {};
 	layui.use('index');
 </script>
 </body>

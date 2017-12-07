@@ -2,10 +2,22 @@ layui.config({
 	base   : '/demo/js/',
 	version: "2.0.1-simple"
 }).extend({
-	jqelem     : '../../jqmodules/jqelem',
-	jqmenu     : '../../jqmodules/jqmenu',
-	tabmenu    : '../../jqmodules/tabmenu',
-	jqtags     : '../../jqmodules/jqtags',
+	jqelem     : '../../js/jqelem',
+	jqmenu     : '../../js/jqmenu',
+	tabmenu    : '../../js/tabmenu',
+	jqtags     : '../../js/jqtags',
 	webuploader: '../../lib/webuploader',
-	echarts    : '../../lib/echarts'
+	echarts    : '../../lib/echarts',
+	toastr     : '../../js/toastr',
+	wulaui     : '../../js/wulaui'
+});
+layui.data('wulaui', {
+	key  : 'config',
+	value: {
+		base  : '/demo/',
+		assets: '/demo/',
+		medias: [],
+		groups: {char: [], prefix: []},
+		ids   : {}
+	}
 });

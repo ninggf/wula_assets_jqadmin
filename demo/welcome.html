@@ -28,8 +28,7 @@
 						<h1>10</h1>
 					</a>
 
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户总量"> <i
-						class="iconfont " data-icon='&#xe672;'></i><span>用户总量</span></a>
+					<a href="form.html" title="表单演示" data-tab="&#xe672;"><span>表单演示</span></a>
 
 				</div>
 			</section>
@@ -43,10 +42,7 @@
 						class="iconfont " data-icon='&#xe674;'></i>
 						<h1>10</h1>
 					</a>
-
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="今日注册"> <i
-						class="iconfont " data-icon='&#xe674;'></i><span>今日注册</span></a>
-
+					<a href="welcome.html" data-dialog data-title="打开对话框"><span>打开对话框</span></a>
 				</div>
 			</section>
 		</div>
@@ -60,8 +56,7 @@
 						class="iconfont " data-icon='&#xe6bc;'></i>
 						<h1>10</h1>
 					</a>
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="文章总数"> <i
-						class="iconfont " data-icon='&#xe6bc;'></i><span>文章总数</span></a>
+					<a href="data/ok.json" data-ajax data-title="文章总数"><span>文章总数</span></a>
 				</div>
 			</section>
 		</div>
@@ -75,8 +70,7 @@
 						class="iconfont " data-icon='&#xe649;'></i>
 						<h1>10</h1>
 					</a>
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="今日新增"> <i
-						class="iconfont " data-icon='&#xe649;'></i><span>今日新增</span></a>
+					<a href="user-info.html" data-ajax="dialog" data-title="今日新增"><span>打开对话框</span></a>
 				</div>
 			</section>
 		</div>
@@ -90,8 +84,8 @@
 						class="iconfont " data-icon='&#xe638;'></i>
 						<h1>10</h1>
 					</a>
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="评论总数"> <i
-						class="iconfont " data-icon='&#xe638;'></i><span>评论总数</span></a>
+					<a href="data/ok1.json" data-ajax data-title="删除用户"
+					   data-confirm="用户删除后不可恢复，你确定要删除吗？"><span>删除用户确认</span></a>
 				</div>
 			</section>
 		</div>
@@ -113,12 +107,8 @@
 
 	</div>
 	<div class="layui-row">
-		<div class="layui-xs12">
-
-			<blockquote class="layui-elem-quote">
-				鉴于好群兄弟的需求，在2.0的基础上分支出一个精简版本，该版本只保留了模板框架所需的基本js，并更新到了layui2.1.7版，表格用的得layui的原生表格，数据也由表格内置的方法获取,用不习惯现有的2.0版本或者觉得不用好的兄弟，可以下载simple版试下，没有太多的东西，只界面的与菜单的纯html模板。不要问我表格为什么这么丑，我也回答不了..哇咔咔，另外，请把文件放到服务器环境中使用，因为表格数据都是ajax获取的
-			</blockquote>
-
+		<div class="layui-xs12 wulaui">
+			<blockquote class="layui-elem-quote" data-load="data/tip.html" data-auto></blockquote>
 		</div>
 	</div>
 	<div class="layui-row layui-col-space10">
@@ -260,8 +250,8 @@
 </body>
 <script type="text/javascript" src="../layui.js?v=2.2.2"></script>
 <script type="text/javascript" src="./modules.js?v=2.0.1"></script>
-<script src="./js/common.js?v=2.0.1"></script>
 <script>
-	layui.use(['main', 'echart']);
+	layui.use(['wulaui'], function (ui) {
+	});
 </script>
 </html>

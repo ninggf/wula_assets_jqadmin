@@ -6,8 +6,8 @@
   border-bottom: 4px solid #3164AC;
 }
 .layui-bg-black {
-  background-color: #FFF!important;
-  color: #c2c2c2!important;
+  background-color: #FFF !important;
+  color: #c2c2c2 !important;
 }
 /** 导航菜单 **/
 .layui-nav {
@@ -67,8 +67,10 @@
 }
 /* 垂直导航菜单 */
 .layui-nav-tree .layui-nav-item a:hover {
-  background-color: #FFF;
   background-color: #1E9FFF;
+}
+.layui-nav-tree .layui-nav-item a.nav-collapse {
+  border-bottom: 1px solid #ccc;
 }
 .layui-nav-tree .layui-this,
 .layui-nav-tree .layui-this > a,

@@ -33,3 +33,9 @@
 .tab-move-btn {
   box-sizing: border-box;
 }
+.layui-nav-tree .layui-nav-item a:hover {
+  background-color: #009688;
+}
+.layui-nav-tree .layui-nav-item a.nav-collapse {
+  border-bottom: 1px solid #1AA094;
+}
