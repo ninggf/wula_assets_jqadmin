@@ -102,9 +102,18 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			});
 		}
 	};
-	WulaUI.prototype.dialog  = function (opts) {
-		let _area = ["auto", "auto"];
+	WulaUI.prototype.dialog  = function (opts, e) {
+		let _area = ["auto", "auto"], ajax = false;
+		if (e) {
+			let be     = $.Event('before.dialog');
+			be.options = opts;
+			e.trigger(be);
+		}
 		if (parseInt(opts.type) === 2) {
+			if (opts.data)
+				opts.content = opts.content + "?" + opts.data;
+		} else if (opts.type === 'ajax') {
+			ajax = true;
 			if (opts.data)
 				opts.content = opts.content + "?" + opts.data;
 		} else {
@@ -123,13 +132,38 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 				_area[1] = (maxHeight) + "px";
 			}
 		}
-
-		if (!opts.area) {
-			let l = layer.open(opts);
-			layer.full(l);
+		if (ajax) {
+			opts.type    = 1;
+			opts.success = function (o) {
+				wulaui.init(o);
+				opts.$content = o;
+			};
+			opts.end     = function () {
+				wulaui.destroy(opts.$content);
+			};
+			wulaui.ajax.ajax(opts.content, {
+				element : e || $('body'),
+				dataType: 'html',
+				method  : 'get'
+			}).done(data => {
+				opts.type    = 1;
+				opts.content = data;
+				if (!opts.area) {
+					let l = layer.open(opts);
+					layer.full(l);
+				} else {
+					opts.area = _area;
+					layer.open(opts);
+				}
+			});
 		} else {
-			opts.area = _area;
-			layer.open(opts);
+			if (!opts.area) {
+				let l = layer.open(opts);
+				layer.full(l);
+			} else {
+				opts.area = _area;
+				layer.open(opts);
+			}
 		}
 	};
 	WulaUI.prototype.params  = getParams;
@@ -175,14 +209,21 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 		}
 		return false;
 	}).on('click', '[data-dialog]', function () {
-		let that  = $(this), opts = {
-			type   : 2,
-			title  : that.attr('title') || that.data('title') || that.text(),
-			content: that.attr('href') || that.data('url'),
-			area   : ''
-		}, params = getParams(that, 'params');
-		opts      = $.extend({}, opts, params);
-		wulaui.dialog(opts);
+		try {
+			let that  = $(this), opts = {
+				type   : that.data('dialog') || 2,
+				title  : that.attr('title') || that.data('title') || that.text(),
+				content: that.attr('href') || that.data('url'),
+				area   : ''
+			}, params = getParams(that, 'params'), area = that.data('area');
+			opts      = $.extend({}, opts, params);
+			if (area) {
+				opts.area = area;
+			}
+			wulaui.dialog(opts, that);
+		} catch (e) {
+			console.log(e);
+		}
 		return false;
 	});
 

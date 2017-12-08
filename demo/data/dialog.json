@@ -1,0 +1,10 @@
+{
+  "code": 200,
+  "action": "dialog",
+  "args": {
+	"title": "I'm a dialog",
+	"content": "data/dialog.html",
+	"area": "500px,300px",
+	"type": "ajax"
+  }
+}

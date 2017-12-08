@@ -70,7 +70,8 @@
 						class="iconfont " data-icon='&#xe649;'></i>
 						<h1>10</h1>
 					</a>
-					<a href="user-info.html" data-ajax="dialog" data-title="今日新增"><span>打开对话框</span></a>
+					<a href="data/dialog.html" data-ajax="dialog" data-area="500px,300px"
+					   data-title="今日新增"><span>打开对话框</span></a>
 				</div>
 			</section>
 		</div>
@@ -99,151 +100,14 @@
 						class="iconfont " data-icon='&#xe669;'></i>
 						<h1>10</h1>
 					</a>
-					<a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="今日评论"> <i
-						class="iconfont " data-icon='&#xe669;'></i><span>今日评论</span></a>
+					<a href="data/dialog.json" data-ajax id="dialogtext" title="ajax对话框"><span>ajax对话框</span></a>
 				</div>
 			</section>
 		</div>
-
 	</div>
 	<div class="layui-row">
 		<div class="layui-xs12 wulaui">
 			<blockquote class="layui-elem-quote" data-load="data/tip.html" data-auto></blockquote>
-		</div>
-	</div>
-	<div class="layui-row layui-col-space10">
-		<div class="layui-col-xs12 layui-col-sm12 layui-col-md6">
-
-			<section class="panel log">
-				<div class="panel-heading">
-					更新日志
-					<a href="javascript:;" class="pull-right panel-toggle"><i class="iconfont">&#xe604;</i></a>
-				</div>
-				<div class="panel-body">
-					<h2>jQadmin后台模板v2.0.1-simple 2017-11-12</h2>
-					<ul>
-						<li>更新layui到2.2.0版</li>
-					</ul>
-					<h2>jQadmin后台模板v2.0.0-simple 2017-11-12</h2>
-					<ul>
-						<li> 精简代码，去除所有异步提交的js，保留模板最基本的js</li>
-						<li> 增加两个主题</li>
-						<li> 优化了菜单</li>
-					</ul>
-					<h2>jQadmin后台模板v2.0.0 2017-07-29</h2>
-					<ul>
-						<li> 重构代码，修复一些BUG</li>
-						<li> 使用json数据模拟真实操作</li>
-						<li> 页面更简化</li>
-						<li> 支持客户端或服务端分页</li>
-						<li> 加入省市区联动选择</li>
-						<li> 更新权限选择模块</li>
-						<li> 添加了一些钩子函数</li>
-						<li> 更新的太多，不记得了，自己体验吧</li>
-					</ul>
-					<h2>jQadmin后台模板v1.3.4r2 2017-05-09</h2>
-					<ul>
-						<li> 修复弹窗过高，挣出屏幕BUG</li>
-					</ul>
-
-					<h2>jQadmin后台模板v1.3.4r1 2017-05-08</h2>
-					<ul>
-						<li> 修复火狐刷新打开菜单列表出错BUG</li>
-					</ul>
-
-					<p>更多帮助文档请移步到 <a href="http://www.kancloud.cn/jqcool/jqadmin" target="_blank"
-									 class="layui-btn layui-btn-sm">使用手册</a></p>
-				</div>
-			</section>
-		</div>
-
-		<div class="layui-col-xs12 layui-col-sm12 layui-col-md6">
-			<section class="panel">
-				<div class="panel-heading">
-					网站信息
-					<a href="javascript:;" class="pull-right panel-toggle"><i class="iconfont">&#xe604;</i></a>
-				</div>
-				<div class="panel-body">
-					<table class="layui-table">
-						<tbody>
-						<tr>
-							<td>
-								<strong>软件名称</strong>：
-
-							</td>
-							<td>
-								<a href="http://jqadmin.jqcool.net">jqadmin后台模板</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>软件版本</strong>：
-
-							</td>
-							<td>
-								V2.0.0
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>开发作者</strong>：
-							</td>
-							<td>Paco</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>使用手册</strong>：
-							</td>
-							<td>
-								<a class="layui-btn  layui-btn-sm  layui-btn-primary"
-								   href="http://www.kancloud.cn/jqcool/jqadmin" target="_blank">使用手册1.3.4</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>模板下载</strong>：
-							</td>
-							<td><a href="https://git.oschina.net/jqcool/jqadmin" target="_blank"
-								   class="layui-btn layui-btn-primary layui-btn-sm">码云下载</a>
-								<a href="https://jqadmin.jqcool.net/jqadmin-2.0.0.zip" target="_blank"
-								   class="layui-btn layui-btn-primary layui-btn-sm">2.0.0版</a>
-
-								<a href="https://jqadmin.jqcool.net/jqadmin-2.0.0-simple.zip" target="_blank"
-								   class="layui-btn layui-btn-primary layui-btn-sm">2.0.1-simple版</a>
-
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>QQ讨论群</strong>：
-							</td>
-							<td>
-								<a target="_blank"
-								   href="//shang.qq.com/wpa/qunwpa?idkey=bb0dbfcf87d269f825807a1ba7ff6a1c09d07b98b724192ed325e840284b4821"><img
-									border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="jQ酷" title="jQ酷"></a>
-								入群答案：jqadmin
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>服务器环境</strong>：
-							</td>
-							<td>windows</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-			</section>
-			<section class="panel">
-				<div class="panel-heading">
-					数据统计
-					<a href="javascript:;" class="pull-right panel-toggle"><i class="iconfont">&#xe604;</i></a>
-				</div>
-				<div class="panel-body">
-					<div class="echarts" id="echarts"></div>
-				</div>
-			</section>
-
 		</div>
 	</div>
 </div>
@@ -251,7 +115,24 @@
 <script type="text/javascript" src="../layui.js?v=2.2.2"></script>
 <script type="text/javascript" src="./modules.js?v=2.0.1"></script>
 <script>
-	layui.use(['wulaui'], function (ui) {
+	layui.use(['jquery', 'layer', 'wulaui'], function ($, layer, ui) {
+		var s = 0;
+		$('#dialogtext').on('before.dialog', function (e) {
+			e.options.btn  = ['关不掉', '最大化'];
+			e.options.yes  = function (index, layero) {
+				console.log([index, 'ok', layero]);
+				return false;
+			};
+			e.options.btn2 = function (index) {
+				if (s) {
+					layer.restore(index);
+				} else {
+					layer.full(index);
+				}
+				s = !s;
+				return false;
+			}
+		});
 	});
 </script>
 </html>

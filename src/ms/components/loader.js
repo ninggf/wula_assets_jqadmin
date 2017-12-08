@@ -1,4 +1,4 @@
-;(($, wui) => {
+(($, wui) => {
 	let ajax                = wui.ajax;
 	//自动加载
 	$.fn.wulauiLoad         = function () {

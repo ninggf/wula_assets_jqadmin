@@ -1,4 +1,4 @@
-;(($, layer, wulaui) => {
+(($, layer, wulaui) => {
 	"use strict";
 	let wulajax = $.ajax,
 		toast   = wulaui.toast;
@@ -33,9 +33,6 @@
 		let e     = new $.Event('ajax.send');
 		e.element = opts.element;
 		opts.element.trigger(e, [opts, xhr]);
-		if (opts.element.hasClass('data-loading-text')) {
-			opts.element.button('loading');
-		}
 		xhr.setRequestHeader('X-AJAX-TYPE', opts.dataType);
 	});
 
@@ -117,8 +114,8 @@
 			}
 		});
 	};
-	const dialog        = function (opts) {
-		wulaui.dialog(opts);
+	const dialog        = function (opts, e) {
+		wulaui.dialog(opts, e);
 	};
 	// ajax 请求
 	const doAjaxRequest = function (e) {
@@ -150,13 +147,14 @@
 				be.opts.action   = 'update';
 				be.opts.target   = $this.attr('target') || $this.data('target');
 			} else if (be.opts.method === 'DIALOG') {
-				be.opts.method   = 'GET';
-				be.opts.dataType = 'html';
-				be.opts.action   = 'dialog';
-				be.opts.title    = $this.attr('title') || $this.data('title') || false;
-				be.opts.dialog   = $.extend({}, wulaui.params($this, 'params'));
-				let dialogE      = $.Event('build.dialog');
-				dialogE.btn      = null;
+				be.opts.method      = 'GET';
+				be.opts.dataType    = 'html';
+				be.opts.action      = 'dialog';
+				be.opts.title       = $this.attr('title') || $this.data('title') || false;
+				be.opts.dialog      = $.extend({}, wulaui.params($this, 'params'));
+				be.opts.dialog.type = types.length === 2 ? 2 : 'ajax';
+				let dialogE         = $.Event('build.dialog');
+				dialogE.btn         = null;
 				$this.trigger(dialogE);
 				if (dialogE.btn) {
 					be.opts.btn = dialogE.btn;
@@ -189,11 +187,10 @@
 						content: be.opts.url,
 						title  : be.opts.title,
 						area   : be.opts.area || '',
-						type   : be.opts.type || 2,
 						btn    : be.opts.btn || null,
 						data   : be.opts.data
 					}, be.opts.dialog);
-					dialog(ops);
+					dialog(ops, $this);
 				} else if ($this.data('confirm') !== undefined) {
 					let content   = $this.data('confirm'),
 						autoClose = parseInt($this.data('auto'), 0) || 0,
@@ -213,23 +210,27 @@
 		}
 		return false;
 	};
+	const getMsg        = function (rq) {
+		let t = rq.responseText;
+		if (rq.getResponseHeader('ajax')) {
+			try {
+				let data = $.parseJSON(t);
+				return data.message;
+			} catch (e) {
+				t = '数据转换异常';
+			}
+		} else if (t.indexOf('</body>') > 0) {
+			t = t.substr(0, t.indexOf('</body>'));
+			t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
+		} else if (rq.statusText === 'error') {
+			t = '出错啦';
+		}
+		return t;
+	};
 	//处理数据返回错误
 	const deal500       = function (xhr, title) {
 		// 处理500错误
-		let message = ((rq) => {
-			let t = rq.responseText;
-			if (rq.getResponseHeader('ajax')) {
-				try {
-					let data = $.parseJSON(t);
-					return data.message;
-				} catch (e) {
-				}
-			} else if (t.indexOf('</body>')) {
-				t = t.substr(0, t.indexOf('</body>'));
-				t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-			}
-			return t;
-		})(xhr);
+		let message = getMsg(xhr);
 		layer.full(layer.open({
 			type   : 0,
 			title  : title,
@@ -322,7 +323,7 @@
 				}
 				break;
 			case 'dialog':
-
+				dialog(data.args, opts.element);
 				break;
 			case 'validate':
 				//表单验证
@@ -379,19 +380,7 @@
 	};
 	//显示http返回异常码是提示
 	const showNotice    = (xhr) => {
-		let message = (t => {
-			if (xhr.getResponseHeader('ajax')) {
-				try {
-					let data = $.parseJSON(t);
-					return data.message;
-				} catch (e) {
-				}
-			} else if (t.indexOf('</body>')) {
-				t = t.substr(0, t.indexOf('</body>'));
-				t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-			}
-			return t;
-		})(xhr.responseText);
+		let message = getMsg(xhr);
 		toast.error(message);
 	};
 

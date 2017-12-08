@@ -106,9 +106,18 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			});
 		}
 	};
-	WulaUI.prototype.dialog = function (opts) {
-		var _area = ["auto", "auto"];
+	WulaUI.prototype.dialog = function (opts, e) {
+		var _area = ["auto", "auto"],
+		    ajax = false;
+		if (e) {
+			var be = $.Event('before.dialog');
+			be.options = opts;
+			e.trigger(be);
+		}
 		if (parseInt(opts.type) === 2) {
+			if (opts.data) opts.content = opts.content + "?" + opts.data;
+		} else if (opts.type === 'ajax') {
+			ajax = true;
 			if (opts.data) opts.content = opts.content + "?" + opts.data;
 		} else {
 			opts.content = $(opts.content);
@@ -126,13 +135,38 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 				_area[1] = maxHeight + "px";
 			}
 		}
-
-		if (!opts.area) {
-			var l = layer.open(opts);
-			layer.full(l);
+		if (ajax) {
+			opts.type = 1;
+			opts.success = function (o) {
+				wulaui.init(o);
+				opts.$content = o;
+			};
+			opts.end = function () {
+				wulaui.destroy(opts.$content);
+			};
+			wulaui.ajax.ajax(opts.content, {
+				element: e || $('body'),
+				dataType: 'html',
+				method: 'get'
+			}).done(function (data) {
+				opts.type = 1;
+				opts.content = data;
+				if (!opts.area) {
+					var l = layer.open(opts);
+					layer.full(l);
+				} else {
+					opts.area = _area;
+					layer.open(opts);
+				}
+			});
 		} else {
-			opts.area = _area;
-			layer.open(opts);
+			if (!opts.area) {
+				var l = layer.open(opts);
+				layer.full(l);
+			} else {
+				opts.area = _area;
+				layer.open(opts);
+			}
 		}
 	};
 	WulaUI.prototype.params = getParams;
@@ -178,21 +212,29 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 		}
 		return false;
 	}).on('click', '[data-dialog]', function () {
-		var that = $(this),
-		    opts = {
-			type: 2,
-			title: that.attr('title') || that.data('title') || that.text(),
-			content: that.attr('href') || that.data('url'),
-			area: ''
-		},
-		    params = getParams(that, 'params');
-		opts = $.extend({}, opts, params);
-		wulaui.dialog(opts);
+		try {
+			var that = $(this),
+			    opts = {
+				type: that.data('dialog') || 2,
+				title: that.attr('title') || that.data('title') || that.text(),
+				content: that.attr('href') || that.data('url'),
+				area: ''
+			},
+			    params = getParams(that, 'params'),
+			    area = that.data('area');
+			opts = $.extend({}, opts, params);
+			if (area) {
+				opts.area = area;
+			}
+			wulaui.dialog(opts, that);
+		} catch (e) {
+			console.log(e);
+		}
 		return false;
 	});
 
 	//引入wulaui扩展
-	;(function ($, layer, wulaui) {
+	(function ($, layer, wulaui) {
 		"use strict";
 
 		var wulajax = $.ajax,
@@ -228,9 +270,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			var e = new $.Event('ajax.send');
 			e.element = opts.element;
 			opts.element.trigger(e, [opts, xhr]);
-			if (opts.element.hasClass('data-loading-text')) {
-				opts.element.button('loading');
-			}
 			xhr.setRequestHeader('X-AJAX-TYPE', opts.dataType);
 		});
 
@@ -311,8 +350,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 				}
 			});
 		};
-		var dialog = function dialog(opts) {
-			wulaui.dialog(opts);
+		var dialog = function dialog(opts, e) {
+			wulaui.dialog(opts, e);
 		};
 		// ajax 请求
 		var doAjaxRequest = function doAjaxRequest(e) {
@@ -349,6 +388,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 					be.opts.action = 'dialog';
 					be.opts.title = $this.attr('title') || $this.data('title') || false;
 					be.opts.dialog = $.extend({}, wulaui.params($this, 'params'));
+					be.opts.dialog.type = types.length === 2 ? 2 : 'ajax';
 					var dialogE = $.Event('build.dialog');
 					dialogE.btn = null;
 					$this.trigger(dialogE);
@@ -384,11 +424,10 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 							content: be.opts.url,
 							title: be.opts.title,
 							area: be.opts.area || '',
-							type: be.opts.type || 2,
 							btn: be.opts.btn || null,
 							data: be.opts.data
 						}, be.opts.dialog);
-						dialog(ops);
+						dialog(ops, $this);
 					} else if ($this.data('confirm') !== undefined) {
 						var content = $this.data('confirm'),
 						    autoClose = parseInt($this.data('auto'), 0) || 0,
@@ -408,22 +447,27 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			}
 			return false;
 		};
+		var getMsg = function getMsg(rq) {
+			var t = rq.responseText;
+			if (rq.getResponseHeader('ajax')) {
+				try {
+					var data = $.parseJSON(t);
+					return data.message;
+				} catch (e) {
+					t = '数据转换异常';
+				}
+			} else if (t.indexOf('</body>') > 0) {
+				t = t.substr(0, t.indexOf('</body>'));
+				t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
+			} else if (rq.statusText === 'error') {
+				t = '出错啦';
+			}
+			return t;
+		};
 		//处理数据返回错误
 		var deal500 = function deal500(xhr, title) {
 			// 处理500错误
-			var message = function (rq) {
-				var t = rq.responseText;
-				if (rq.getResponseHeader('ajax')) {
-					try {
-						var data = $.parseJSON(t);
-						return data.message;
-					} catch (e) {}
-				} else if (t.indexOf('</body>')) {
-					t = t.substr(0, t.indexOf('</body>'));
-					t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-				}
-				return t;
-			}(xhr);
+			var message = getMsg(xhr);
 			layer.full(layer.open({
 				type: 0,
 				title: title,
@@ -518,7 +562,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 					}
 					break;
 				case 'dialog':
-
+					dialog(data.args, opts.element);
 					break;
 				case 'validate':
 					//表单验证
@@ -576,18 +620,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 		};
 		//显示http返回异常码是提示
 		var showNotice = function showNotice(xhr) {
-			var message = function (t) {
-				if (xhr.getResponseHeader('ajax')) {
-					try {
-						var data = $.parseJSON(t);
-						return data.message;
-					} catch (e) {}
-				} else if (t.indexOf('</body>')) {
-					t = t.substr(0, t.indexOf('</body>'));
-					t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
-				}
-				return t;
-			}(xhr.responseText);
+			var message = getMsg(xhr);
 			toast.error(message);
 		};
 
@@ -599,7 +632,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			ajax: $.ajax
 		};
 	})($, layer, wulaui);
-	;(function ($, wui) {
+	(function ($, wui) {
 		var ajax = wui.ajax;
 		//自动加载
 		$.fn.wulauiLoad = function () {
