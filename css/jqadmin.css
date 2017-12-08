@@ -401,6 +401,14 @@ body {
   width: 200px;
   padding: 0;
 }
+.valid-error {
+  color: red;
+  vertical-align: -webkit-baseline-middle;
+  white-space: nowrap;
+}
+.d-f {
+  display: flex;
+}
 .toast-title {
   font-weight: bold;
 }
