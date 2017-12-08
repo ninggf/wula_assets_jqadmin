@@ -110,12 +110,56 @@
 			<blockquote class="layui-elem-quote" data-load="data/tip.html" data-auto></blockquote>
 		</div>
 	</div>
+	<div class="layui-row layui-col-space10 wulaui">
+		<div class="layui-col-sm4">
+			<div class="panel">
+				<div class="panel-heading">自动加载的树</div>
+				<div class="panel-body">
+					<div data-ztree="data/tree.json"></div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="panel">
+				<div class="panel-heading">可以编辑的树</div>
+				<div class="panel-body">
+					<div id="lazy-tree" data-lazy data-ztree="data/tree.json"></div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="panel">
+				<div class="panel-heading">可以选择的树</div>
+				<div class="panel-body">
+					<div id="lazy-tree1" data-lazy data-ztree="data/tree.json"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row layui-col-space10 wulaui">
+		<div class="layui-col-sm4">
+			<div class="panel">
+				<div class="panel-heading">文件上传器</div>
+				<div class="panel-body">
+					<div data-uploader="data/tree.json"></div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="panel">
+				<div class="panel-heading">select2</div>
+				<div class="panel-body">
+					<div data-combox="data/tree.json"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </body>
 <script type="text/javascript" src="../layui.js?v=2.2.2"></script>
 <script type="text/javascript" src="./modules.js?v=2.0.1"></script>
 <script>
-	layui.use(['jquery', 'layer', 'wulaui'], function ($, layer, ui) {
+	layui.use(['jquery', 'wulaui'], function ($) {
 		var s = 0;
 		$('#dialogtext').on('before.dialog', function (e) {
 			e.options.btn  = ['关不掉', '最大化'];
@@ -133,6 +177,30 @@
 				return false;
 			}
 		});
+		$('#lazy-tree').on('ztree.init', function (e) {
+			$.extend(true, e.tree, {
+				settings: {
+					edit    : {
+						enable       : true,
+						showRemoveBtn: false
+					},
+					callback: {
+						onRename: function () {
+							alert('你修改了我哦');
+						}
+					}
+				}
+			});
+		}).wulatree('load');
+		$('#lazy-tree1').on('ztree.init', function (e) {
+			$.extend(true, e.tree, {
+				settings: {
+					check: {
+						enable: true
+					}
+				}
+			});
+		}).wulatree('load');
 	});
 </script>
 </html>

@@ -10,6 +10,7 @@ import babel from "gulp-babel";
 import minimist from "minimist";
 import webserver from "gulp-webserver";
 import include from "gulp-include";
+import cssBase64 from "gulp-css-base64";
 
 let knownOptions = {
 	string : 'env',
@@ -40,9 +41,20 @@ gulp.task('build', ['css', 'jqa', 'js'], function () {
 });
 
 // 编译less文件
-gulp.task('css', [], function () {
-	let ccss = gulp.src(['less/jqadmin.less', 'less/login.less', 'less/*/*.less'])
+gulp.task('css', ['icss'], function () {
+	let ccss = gulp.src(['less/jqadmin.less', 'less/login.less', 'less/select2.less', 'less/b*/*.less'])
 		.pipe(less())
+		.pipe(gulp.dest('css'));
+
+	if (options.env === 'pro')
+		return ccss.pipe(cssmin())
+			.pipe(gulp.dest('css'));
+});
+
+gulp.task('icss', [], function () {
+	let ccss = gulp.src(['less/ztree.less'])
+		.pipe(less())
+		.pipe(cssBase64())
 		.pipe(gulp.dest('css'));
 
 	if (options.env === 'pro')

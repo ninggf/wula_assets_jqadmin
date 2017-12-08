@@ -231,6 +231,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 	//=require components/ajax.js
 	//=require components/loader.js
 	//=require components/form.js
+	//=require components/uploader.js
+	//=require components/select2.js
+	//=require components/tree.js
 	//end
 	wulaui.init();
 	exports('wulaui', wulaui)

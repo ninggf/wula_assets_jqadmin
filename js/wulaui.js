@@ -1068,6 +1068,587 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			$(this).find('[data-validate]').wulaform();
 		});
 	})($, layer, wulaui);
+	(function ($) {
+		var defaultOpts = {
+			c: false,
+			runtimes: 'html5',
+			max_file_count: 1,
+			chunk_size: '256k',
+			chunks: true,
+			multi_selection: false,
+			max_file_size: '28mb',
+			filters: [{
+				title: "*.*",
+				extensions: "jpg,gif,png,jpeg"
+			}]
+		};
+		//预览文件
+		var PreviewFile = function PreviewFile(file, id) {
+			this.file = file;
+			this.id = id;
+			this.name = file.name;
+			this.previewable = /.+\.(png|gif|jpg|jpeg|bmp)/i.test(this.name);
+			if (this.previewable) {
+				var img = $(this.id).get(0);
+				var reader = new FileReader();
+				reader.onload = function (evt) {
+					img.src = evt.target.result;
+				};
+				reader.readAsDataURL(this.file);
+			} else {
+				$(this.id).attr('src', $.wulaUI.appConfig.assets + 'dat.jpg');
+			}
+		};
+
+		//文件上传器
+		var nuiUploader = function nuiUploader(elem) {
+			elem.data('uploaderObj', this);
+			var $this = this;
+			this.element = elem;
+			this.value = elem.data('value');
+			this.varName = elem.data('name');
+			this.auto = elem.data('auto') !== undefined;
+			this.extensions = elem.data('exts');
+			this.width = elem.data('width') || 90;
+			this.height = elem.data('height') || this.width;
+			this.readonly = elem.data('readonly') !== undefined;
+			this.whstyle = 'width:' + this.width + 'px;height:' + this.height + 'px;';
+			var opts = {};
+			if (this.extensions) {
+				opts.filters = {
+					title: '*.*',
+					extensions: this.extensions
+				};
+			}
+			var cnt = elem.data('multi');
+			this.multi = parseInt(cnt ? cnt : 1, 10) || 1;
+			if (this.multi > 1) {
+				opts.max_file_count = this.multi;
+				opts.chunks = true;
+				opts.chunk_size = '512k';
+				opts.multi_selection = true;
+				this.varName += '[]';
+			} else {
+				this.multi = 1;
+			}
+
+			this.mfs = elem.data('maxFileSize');
+			if (this.mfs) {
+				opts.max_file_size = this.mfs;
+			}
+
+			var resize = elem.data('resize');
+			if (resize) {
+				var rss = resize.split(',');
+				opts.resize = {};
+				opts.resize.width = rss[0];
+				opts.resize.height = rss[0];
+				opts.resize.preserve_headers = false;
+				if (rss.length >= 2 && rss[1]) {
+					opts.resize.height = rss[1];
+				}
+				if (rss.length >= 3 && rss[2]) {
+					opts.resize.quality = rss[2];
+				}
+				if (rss.length >= 4 && rss[3]) {
+					opts.resize.crop = true;
+				}
+			}
+			this.opts = $.extend({}, defaultOpts, opts);
+
+			this.noWatermark = elem.data('noWater'); //强制不添加水印
+			if (this.noWatermark !== undefined) {
+				this.opts.multipart_params = {
+					nowater: 1
+				};
+			}
+
+			// 删除文件
+			var removeFile = function removeFile() {
+				var up = $this.uploader;
+				var parent = $(this).parent();
+				var fileId = parent.find('input').attr('id');
+				var f = up.getFile(fileId);
+				if (f) {
+					up.removeFile(f);
+					$this.newFile--;
+				}
+				var url = parent.find('input').val();
+				if (url) {
+					var e = $.Event('uploader.remove');
+					$this.element.trigger(e, [url]);
+					if (!e.isDefaultPrevented()) {
+						parent.remove();
+						$this.uploadBtn.show();
+					}
+				} else {
+					parent.remove();
+					$this.uploadBtn.show();
+				}
+				if ($this.wrapper.find('input').length === 0) {
+					$this.uploadBtn.append('<input type="hidden" id="empty-f-' + $this.id + '" name="' + $this.varName + '" value=""/>');
+				}
+			};
+			//销毁
+			var destroy = function destroy() {
+				elem.off('form.placement');
+				if ($this.uploader) {
+					$this.uploader.destroy();
+					$this.wrapper = null;
+					elem.data('uploaderObj', null);
+					$(this).off('wulaui.widgets.destroy', destroy);
+					delete $this.uploader;
+				}
+			};
+			this.id = elem.attr('id');
+			this.btnId = 'uploadimg-' + this.id;
+			this.wrapper = $('<ul class="upload-img-box clearfix"><li class="uploadimg-btn"><a href="javascript:void(0);" style="' + this.whstyle + '" id="' + this.btnId + '"></a></li></ul>');
+			elem.append(this.wrapper);
+			this.uploadBtn = this.wrapper.find('.uploadimg-btn');
+			this.opts.browse_button = 'uploadimg-' + elem.attr('id');
+			this.opts.url = elem.data('uploader') || '';
+			var uploader = new plupload.Uploader(this.opts);
+			this.uploader = uploader;
+			this.newFile = 0;
+			//有值
+			if (this.value) {
+				if (this.multi === 1) {
+					this.value = [this.value];
+				}
+				if ($.isArray(this.value)) {
+					$.each(this.value, function (i, e) {
+						var html = '<li id="up-file' + i + '">';
+						html += '<img id="img_file' + i + '" src="' + wulamedia(e) + '" style="' + $this.whstyle + '"/>';
+						if (!$this.readonly) {
+							html += '<i>×</i>';
+						}
+						html += '<input type="hidden" id="old-file' + i + '" name="' + $this.varName + '" value="' + e + '"/>';
+						html += '</li>';
+						var imgEle = $(html);
+						$this.uploadBtn.before(imgEle);
+						imgEle.on('click', 'i', removeFile);
+					});
+					var imgNum = $this.wrapper.find('input').length;
+					if (imgNum >= $this.multi) {
+						$this.uploadBtn.hide();
+					}
+				}
+			} else {
+				this.uploadBtn.append('<input type="hidden" id="empty-f-' + this.id + '" name="' + this.varName + '" value=""/>');
+			}
+			if (this.readonly) {
+				this.uploadBtn.remove();
+			}
+			uploader.init();
+
+			uploader.bind('BeforeUpload', function (up, file) {
+				var id = '#up-' + file.id;
+				$(id + ' .progress').show();
+			});
+
+			//添加文件
+			uploader.bind('FilesAdded', function (up, files) {
+				var fileInput = document.getElementById(up.id + '_' + up.runtime),
+				    imgNum = void 0;
+				$this.uploadBtn.find('input').remove();
+
+				if ($this.auto) {
+					up.disableBrowse(true);
+				}
+
+				for (var i in files) {
+					imgNum = $this.wrapper.find('input').length;
+					if (imgNum + 1 > $this.multi) {
+						up.splice($this.newFile);
+						break;
+					}
+					var file = files[i],
+					    rfile = null;
+					for (var j in fileInput.files) {
+						if (fileInput.files[j].name === file.name && fileInput.files[j].size === file.size) {
+							rfile = fileInput.files[j];
+						}
+					}
+					if (!rfile) {
+						continue;
+					}
+					$this.newFile++;
+
+					var html = '<li id="up-' + file.id + '">';
+					html += '<img id="img_' + file.id + '" src="' + $.wulaUI.appConfig.assets + 's.gif" style="' + $this.whstyle + '"/>';
+					html += '<div class="progress progress-xs" style="display:none;width: ' + $this.width + 'px"><div class="progress-bar progress-bar-info"></div></div>';
+					html += '<span>' + (file.size / 1000).toFixed(1) + 'K</span>';
+					html += '<i>×</i>';
+					html += '<input type="hidden" id="' + file.id + '" name="' + $this.varName + '"/>';
+					html += '</li>';
+					var imgEle = $(html);
+					$this.uploadBtn.before(imgEle);
+					new PreviewFile(rfile, '#img_' + file.id);
+					imgEle.on('click', 'i', removeFile);
+				}
+				if (++imgNum >= $this.multi) {
+					$this.uploadBtn.hide();
+				}
+				if ($this.auto && $this.newFile > 0) {
+					up.start();
+				}
+			});
+			//上传进度
+			uploader.bind('UploadProgress', function (up, file) {
+				var id = '#up-' + file.id;
+				$(id + ' .progress-bar').css('width', file.percent + '%');
+			});
+			// 上传完成
+			uploader.bind('FileUploaded', function (up, file, resp) {
+				var id = file.id,
+				    idx = '#up-' + id;
+				if (file.status === plupload.DONE) {
+					$(idx + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-success');
+					try {
+						var result = $.parseJSON(resp.response);
+						var rst = result.result;
+						if (rst) {
+							$(idx + ' input').val(rst.url);
+							try {
+								$this.element.trigger('uploader.uploaded', [rst]);
+							} catch (ee) {}
+						} else {
+							$(idx + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+						}
+					} catch (e) {
+						$('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+						$.notifyD(e.message);
+					}
+				} else {
+					$('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+				}
+			});
+			//全部上传完全
+			uploader.bind('UploadComplete', function (up) {
+				up.disableBrowse(false);
+				$this.newFile = 0;
+				up.splice(0);
+				up.refresh();
+				$this.element.trigger('uploader.done');
+			});
+			//上传失败
+			uploader.bind('Error', function (up, file) {
+				up.disableBrowse(false);
+				var id = file.file ? file.file.id : file.id;
+				$('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+				if (file.response) {
+					try {
+						var result = eval('(' + file.response + ')');
+						var rst = result.error;
+						$.notifyD(rst.message);
+					} catch (e) {
+						console.log(e);
+					}
+				} else if (file.message) {
+					$.notifyD(file.message);
+				}
+				$this.element.trigger('uploader.error');
+			});
+
+			elem.closest('.wulaui').on('wulaui.widgets.destroy', destroy);
+		};
+
+		nuiUploader.prototype.start = function () {
+			if (this.newFile > 0) {
+				this.uploader.start();
+			}
+		};
+
+		nuiUploader.prototype.stop = function () {
+			this.uploader.stop();
+		};
+		nuiUploader.prototype.clear = function () {
+			this.wrapper.find('li').not(this.uploadBtn).find('i').click();
+			this.uploader.splice(0);
+			this.uploader.refresh();
+			this.uploader.disableBrowse(false);
+			this.uploadBtn.show();
+		};
+		$.fn.wulauploader = function () {
+			var args = Array.apply(null, arguments);
+			args.shift();
+			return $(this).each(function (i, elm) {
+				var table = $(elm);
+				if (!table.data('uploaderObj')) {
+					new nuiUploader(table);
+				} else {
+					var data = table.data('uploaderObj');
+					if (typeof option === 'string' && typeof data[option] === 'function') {
+						data[option].apply(data, args);
+					}
+				}
+			});
+		};
+
+		$('body').on('wulaui.widgets.init', '.wulaui', function (e) {
+			e.stopPropagation();
+			var that = $(this).find('[data-uploader]');
+			if (that.length > 0) {
+				layui.use('plupload', function () {
+					console.log('plupload done');
+					that.wulauploader();
+				});
+			}
+		});
+	})($);
+	(function ($) {
+		var nuiCombox = function nuiCombox(combox) {
+			var me = this;
+			this.combox = combox;
+			combox.data('comboxObj', this);
+			var opts = {
+				allowClear: true
+			};
+			this.isTagMode = combox.data('tagMode') !== undefined;
+			this.parent = combox.data('parent');
+			this.url = combox.data('combox');
+			this.multiple = combox.data('multi') !== undefined;
+			if (this.multiple && combox.data('multi')) {
+				opts.maximumSelectionSize = parseInt(combox.data('multi'), 10);
+			}
+			opts.placeholder = combox.attr('placeholder') || '';
+			opts.allowClear = combox.data('allowClear') === 'false' ? false : opts.allowClear;
+			opts.minimumInputLength = combox.data('mnl') ? parseInt(combox.data('mnl'), 10) : 0;
+
+			if (this.isTagMode && this.multiple) {
+				opts.separator = ',';
+				opts.tokenSeparators = [',', ' '];
+				opts.tokenizer = function (input, selection, selectCallback, opts) {
+					if (input.length > 1) {
+						var len = input.length,
+						    token = input.substring(len - 1, len);
+						if (token === ',' || token === ' ') {
+							var sl = selection.length;
+							input = input.replace(/[, ]+$/g, '');
+							for (var i = 0; i < sl; i++) {
+								if (input === selection[i].id) {
+									me.comboxObj.select2('close');
+									return;
+								}
+							}
+							selectCallback({
+								id: input,
+								text: input
+							});
+						}
+					}
+				};
+			}
+			if (!combox.is('select')) {
+				opts.multiple = this.multiple;
+				opts.initSelection = function (element, callback) {
+					var vars = $(element).val(),
+					    data = null,
+					    svar = void 0,
+					    values = [];
+					if (me.multiple) {
+						data = [{
+							id: '',
+							text: ''
+						}];
+					} else {
+						data = {
+							id: '',
+							text: ''
+						};
+					}
+					if (vars) {
+						if (me.multiple) {
+							vars = vars.split(',');
+							data = [];
+							for (var i in vars) {
+								svar = vars[i].split(':');
+								if (svar.length > 1) {
+									data.push({
+										id: svar[0],
+										text: svar[1]
+									});
+								} else {
+									data.push({
+										id: svar[0],
+										text: svar[0]
+									});
+								}
+								values.push(svar[0]);
+							}
+						} else {
+							vars = vars.split(':');
+							if (vars.length > 1) {
+								data = {
+									id: vars[0],
+									text: vars[1]
+								};
+							} else {
+								data = {
+									id: vars[0],
+									text: vars[0]
+								};
+							}
+							values.push(vars[0]);
+						}
+						$(element).attr('value', values.join(','));
+					}
+					callback(data);
+				};
+			}
+
+			if (this.url) {
+				opts.ajax = {
+					quietMillis: 100,
+					cache: true,
+					data: function data(term, page) {
+						var data = {
+							q: term,
+							_cp: page
+						};
+						if (me.parent) {
+							data.p = $('#' + me.parent).val();
+						}
+						return data;
+					},
+					dataType: 'json',
+					url: this.url,
+					results: function results(data, page) {
+						if (data.results) {
+							return data;
+						} else {
+							return { results: data, more: false };
+						}
+					}
+				};
+			}
+			this.options = opts;
+			this.comboxObj = combox.select2(this.options);
+			if (this.parent) {
+				var pCombox = $('#' + this.parent);
+				if (pCombox.length > 0) {
+					pCombox.change(function () {
+						me.setValue();
+					});
+				}
+			}
+		};
+		nuiCombox.prototype.getComboxObj = function () {
+			return this.comboxObj;
+		};
+		nuiCombox.prototype.getCombox = function () {
+			return this.combox;
+		};
+		nuiCombox.prototype.setValue = function (value) {
+			if (!value) {
+				value = this.multiple ? null : '';
+			}
+			this.combox.select2('val', value, true);
+		};
+
+		$.fn.wulauiCombox2 = function () {
+			return $(this).each(function (i, e) {
+				var $this = $(e),
+				    inited = $this.data('comboxObj');
+				if (inited) {
+					return;
+				}
+				new nuiCombox($this);
+			});
+		};
+
+		//初始化combox
+		$('body').on('wulaui.widgets.init', '.wulaui', function (e) {
+			e.stopPropagation();
+			var that = $(this).find('[data-combox]');
+			if (that.length > 0) layui.use('select2', function () {
+				that.wulauiCombox2();
+			});
+		});
+	})($);
+	(function ($) {
+		var WulaTree = function WulaTree(element) {
+			var me = this;
+			this.settings = {
+				view: {},
+				callback: {},
+				edit: {
+					drap: {}
+				},
+				data: {
+					keep: {},
+					key: {},
+					simpleData: {}
+				},
+				check: {}
+			};
+			this.url = element.data('ztree');
+			this.lazy = element.data('lazy') !== undefined;
+			element.addClass('ztree');
+			if (this.url) {
+				this.settings.async = {
+					enable: true,
+					url: this.url,
+					type: 'get',
+					dataType: 'json',
+					autoParam: ["id"]
+				};
+			}
+
+			element.on('ztree.setting.load', function () {
+				var e = $.Event('ztree.init');
+				e.tree = me;
+				element.trigger(e);
+				me.settings = e.tree.settings;
+				me.nodes = e.tree.nodes;
+				if (!e.isDefaultPrevented()) {
+					me.treeObj = $.fn.zTree.init(element, me.settings, me.nodes);
+					element.trigger('ztree.inited', [me.treeObj]);
+				}
+				element.off('ztree.setting.load');
+			}).closest('.wulaui').on('wulaui.widgets.destroy', me.destroy);
+
+			if (!this.lazy) {
+				element.trigger('ztree.setting.load');
+			}
+		};
+
+		WulaTree.prototype.destroy = function () {
+			if (this.treeObj) {
+				this.treeObj.destroy();
+				delete this.treeObj;
+				$(this).off('wulaui.widgets.destroy', this.destroy);
+			}
+		};
+
+		$.fn.wulatree = function (option) {
+			return $(this).each(function () {
+				var me = $(this);
+				if (option === 'load') {
+					me.trigger('ztree.setting.load');
+				} else if (option === 'destroy') {
+					var treeObj = me.data('treeObj');
+					if (treeObj) {
+						me.data('treeObj', null);
+						treeObj.destroy();
+						treeObj = null;
+					}
+				} else if (!me.data('treeObj')) {
+					me.data('treeObj', new WulaTree(me));
+				}
+			});
+		};
+
+		$('body').on('wulaui.widgets.init', '.wulaui', function (e) {
+			e.stopPropagation();
+			var that = $(this).find('[data-ztree]');
+			if (that.length > 0) {
+				layui.use('ztree', function () {
+					that.wulatree();
+				});
+			}
+		});
+	})($);
 	//end
 	wulaui.init();
 	exports('wulaui', wulaui);
