@@ -493,5 +493,71 @@ body {
 .d-f {
   display: flex;
 }
+.jqadmin-foot,.layui-layout-admin .layui-side,.layui-body,.layui-side-scroll,.layui-nav-tree{
+  -webkit-transition:all 300ms;
+}
+.left-off .layui-layout-admin .layui-side,.left-off .layui-side-scroll,.left-off .layui-nav-tree{
+      width: 50px;
+      
+    }
+.left-off .layui-body{
+  left: 50px;
+  padding-left: 0;
 
+}
+
+.left-off .layui-nav .layui-nav-item a span{
+  display: none;
+}
+.left-off .jqadmin-foot{
+  left: 50px;
+}
+.left-off .sub-menu .layui-nav-item dl dd a,.left-off .layui-nav-tree .layui-nav-item a{
+  padding-left: 4px;
+  i{
+    font-size: 16px;
+  }
+  em{
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid dashed dashed;
+    cursor: pointer;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    position: absolute;
+    margin-top: -3px;
+    border-width: 6px;
+    border-style: dashed dashed solid;
+    margin: 0;
+    right: 10px;
+  }
+}
+.left-off #submenu ul li dl dd{
+  text-indent: 8px;
+}
+.left-miss .layui-layout-admin .layui-side,.left-miss .layui-side-scroll,.left-miss .layui-nav-tree{
+    width: 0px;
+}
+.left-miss .layui-body{
+  left: 0px;
+  padding-left: 0;
+
+}
+.layui-nav.jqadmin-header-item.right-menu .layui-nav-item a span{
+  display: block;
+}
+@media screen and (max-width: 750px) {
+    .left-off .layui-layout-admin .layui-side,.left-off .layui-side-scroll,.left-off .layui-nav-tree{
+        width: 0px;
+    }
+    .left-off .layui-body{
+      left: 0px;
+      padding-left: 0;
+
+    }
+    .left-off .jqadmin-foot{
+      left: 0px;
+    }
+}
 @import "toastr";
