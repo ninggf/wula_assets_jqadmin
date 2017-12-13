@@ -25,6 +25,8 @@ gulp.task('clean', [], function () {
 	return gulp.src([
 			"css/jqadmin*.css",
 			"css/login.css",
+			"css/ztree.css",
+			"css/select2.css",
 			"css/black/theme*.css",
 			"css/blue/theme*.css",
 			'js/*.js'
@@ -43,51 +45,55 @@ gulp.task('build', ['css', 'jqa', 'js'], function () {
 // 编译less文件
 gulp.task('css', ['icss'], function () {
 	let ccss = gulp.src(['less/jqadmin.less', 'less/login.less', 'less/select2.less', 'less/b*/*.less'])
-		.pipe(less())
-		.pipe(gulp.dest('css'));
+		.pipe(less());
 
 	if (options.env === 'pro')
-		return ccss.pipe(cssmin())
-			.pipe(gulp.dest('css'));
+		ccss.pipe(cssmin());
+
+	return ccss.pipe(gulp.dest('css'));
 });
 
 gulp.task('icss', [], function () {
 	let ccss = gulp.src(['less/ztree.less'])
 		.pipe(less())
-		.pipe(cssBase64())
-		.pipe(gulp.dest('css'));
+		.pipe(cssBase64());
 
 	if (options.env === 'pro')
-		return ccss.pipe(cssmin())
-			.pipe(gulp.dest('css'));
+		ccss.pipe(cssmin());
+
+	return ccss.pipe(gulp.dest('css'));
 });
 // 编译js文件
 gulp.task('js', [], function () {
 	let js = gulp.src([
 		'src/ms/*.js'
-	]).pipe(include()).pipe(babel({
-		presets: ['env']
-	})).pipe(jsvalidate())
-		.on('error', notify.onError(e => e.message))
-		.pipe(gulp.dest('js'));
+	]).pipe(include())
+		.pipe(babel())
+		.pipe(jsvalidate())
+		.on('error', notify.onError(e => e.message));
 
 	if (options.env === 'pro')
-		return js.pipe(uglify())
-			.pipe(gulp.dest('js'));
+		js.pipe(uglify()).on('error', function (err) {
+			console.error('Error in compress task', err.toString());
+		});
+
+	return js.pipe(gulp.dest('js'));
 });
 // 编译jqadmin文件
 gulp.task('jqa', [], function () {
 	let js = gulp.src([
 		'src/jqa/*.js'
-	]).pipe(gulp.dest('js'));
+	]);
 
 	if (options.env === 'pro')
-		return js.pipe(uglify())
-			.pipe(gulp.dest('js'));
+		js.pipe(uglify()).on('error', function (err) {
+			console.error('Error in compress task', err.toString());
+		});
 
+	return js.pipe(gulp.dest('js'));
 });
+
 gulp.task('watch', ['build'], function () {
-	options.env = 'dev';
 	gulp.watch(['less/**'], ['css']);
 	gulp.watch(['src/ms/**'], ['js']);
 	gulp.watch(['src/jqa/**'], ['jqa']);
