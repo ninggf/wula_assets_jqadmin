@@ -16,6 +16,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		element = layui.jqelem,
 		layer   = layui.layer,
 		init    = true,
+		cloneTemp    = false,
 		tabmenu = layui.tabmenu(),
 		jqmenu  = function () {
 			this.options = {
@@ -34,6 +35,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		element.init();
 		//加载默认tab
 		tabmenu.effect(0);
+
 		if ($('iframe[data-id=0]').length > 0) {
 			$('iframe[data-id=0]').attr('src', $('[lay-id=0]').find('em').data('href'));
 		}
@@ -77,9 +79,15 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			_this.menuSetOption($(this));
 		});
 
+
 		//绑定主菜单单击事件，点击时显示相应的菜单
 		element.on('nav(main-menu)', function (elem) {
 			var index = (elem.index());
+			// console.log([index,elem]);
+			if((elem[0].className).indexOf('e-mail')!=-1) return;
+			
+			console.log(elem.context);
+			// if (elem.context) {};
 			$('.sub-menu').slideUp().eq(index).slideDown();
 		});
 		//绑定更多按钮事件
@@ -214,11 +222,14 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}
 	}
 
-	jqmenu.prototype.menuShowType = function () {
+	jqmenu.prototype.menuShowType = function (type) {
 		var oHtml = document.documentElement;
-		var screenWidth = oHtml.clientWidth;
-		if (window.localStorage) {
-			var storage  = window.localStorage,
+		var screenWidth = oHtml.clientWidth,showType=0;
+		if (type=='close') {
+			showType=1;
+		};
+		if (type != 'open' && type != 'close' && window.localStorage) {
+			var storage  = window.localStorage;
 				showType = storage.getItem("showType");
 
 			if ($('body').hasClass('left-off')) {
@@ -227,7 +238,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				showType = 1;
 			}
 		}
-
+		// console.log(['show',showType]);
 		var bar      = $('.jqamdin-left-bar'),
 			_this    = this,
 			showIcon = $(".menu-type").find("i"),
@@ -277,14 +288,18 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			oHtml = document.documentElement;
 		var screenWidth = oHtml.clientWidth;
 		if (screenWidth<750) {
-			$('body').addClass('left-miss left-off');
-			$('.jqadmin-main-menu .layui-nav .layui-nav-item a span').hide();
+			$('.jqadmin-main-menu').hide();
+			$('body').addClass('left-miss left-off minWidth');
+			$('.jqadmin-main-menu .layui-nav .layui-nav-item a span').show();
 			$('#submenu').find("ul li").find("a").off('mouseenter');
 			$('.layui-header .header-right .right-menu').hide();
+			
+			
 		}else if (screenWidth < 970) {
+			$('.jqadmin-main-menu').show();
 			$('.jqadmin-main-menu .layui-nav .layui-nav-item a span').hide();
 			$('.layui-header .header-right .right-menu').show();
-			$('body').removeClass('left-miss');
+			$('body').removeClass('left-miss minWidth');
 			$('body').addClass('left-off');
 			$('#submenu').find("ul li").children("a").each(function () {
 				$(this).addClass('nav-collapse');
@@ -300,17 +315,55 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			});
 
 			showIcon.html('&#xe683;');
+			$('.jqadmin-main-menu .cloneDom').remove();
+			cloneTemp = false;
 
 		} else {
+			$('.jqadmin-main-menu').show();
 			$('.jqadmin-main-menu .layui-nav .layui-nav-item a span').show();
 			$('.layui-header .header-right .right-menu').show();
-			$('body').removeClass('left-off');
+			$('body').removeClass('left-off minWidth');
 			$('#submenu').find("ul li").find("a").off('mouseenter');
 			showIcon.html('&#xe61a;');
+			$('.jqadmin-main-menu .cloneDom').remove();
+			cloneTemp = false;
 		}
 	}
 	window.onresize = getSize;
 	getSize();
+	// 移动端点击左上角下拉菜单
+	$('.minWidth li.first').click(function(event){
+		$('.minWidth #menu .head-nav-item').removeClass('layui-this');
+		$('#menu li.first dl').removeClass('layui-show');
+		$(this).siblings('.first').find('dl').hide();
+		$(this).find('span').toggleClass('layui-nav-mored');
+		$(this).find('dl').toggle();
+	})
+	$('.jqadmin-auxiliary-btn').click(function(event) {
+		$(this).toggleClass('xz');
+		if(!cloneTemp){
+			var cloneItems = $('.minWidth .layui-header .header-right .right-menu li').clone(true);
+			$('.minWidth .layui-header .header-right .right-menu').hide();
+			cloneItems.appendTo('#menu');
+		}
+		$('.minWidth .jqadmin-main-menu').slideToggle();
 
+		cloneTemp = true;
+	});
+
+
+	$('.minWidth .first dd').click(function(event) {
+		$('.minWidth .jqadmin-main-menu').slideUp();
+	});
+	$('.minWidth .head-nav-item').click(function(event){
+		$('.minWidth .jqadmin-main-menu').slideUp();
+		top.global.menu.menuShowType('open');
+	});
+	$('.minWidth .tab-menu').unbind('click');
+	$('.minWidth .tab-menu').click(function(event) {
+		$('.minWidth .jqadmin-main-menu').slideUp();
+	});
+	// 移动端下拉菜单功能调整
+	
 	exports('jqmenu', jqmenu);
 });

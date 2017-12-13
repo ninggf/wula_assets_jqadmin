@@ -27,6 +27,9 @@
 </ul>
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header">
+		<div class="jqadmin-auxiliary-btn">
+			<i class="layui-icon">&#xe671;</i>
+		</div>
 		<!-- logo区域 -->
 		<div class="jqadmin-logo-box">
 			<a class="logo" href="." title="jQAdmin">
@@ -34,18 +37,18 @@
 			</a>
 		</div>
 		<!-- 主菜单区域 -->
-		<div class="jqadmin-main-menu">
+		<div class="jqadmin-main-menu" id="hd-left-top">
 			<ul class="layui-nav clearfix" id="menu" lay-filter="main-menu">
-				<li class="layui-nav-item layui-this">
+				<li class="layui-nav-item head-nav-item layui-this">
 					<a href="javascript:;" data-title="内容管理"><i class="iconfont">&#xe637;</i><span>内容管理</span></a>
 				</li>
-				<li class="layui-nav-item">
+				<li class="layui-nav-item head-nav-item">
 					<a href="javascript:;" data-title="产品管理"><i class="iconfont">&#xe631;</i><span>产品管理</span></a>
 				</li>
-				<li class="layui-nav-item">
+				<li class="layui-nav-item head-nav-item">
 					<a href="javascript:;" data-title="会员管理"><i class="iconfont">&#xe672;</i><span>会员管理</span></a>
 				</li>
-				<li class="layui-nav-item">
+				<li class="layui-nav-item head-nav-item">
 					<a href="javascript:;" data-title="网站设置"><i class="iconfont">&#xe689;</i><span>网站设置</span></a>
 				</li>
 			</ul>
@@ -53,8 +56,8 @@
 		</div>
 		<!-- 头部右侧导航 -->
 		<div class="header-right">
-			<ul class="layui-nav jqadmin-header-item right-menu">
-				<li class="layui-nav-item first">
+			<ul class="layui-nav jqadmin-header-item right-menu cloneDom">
+				<li class="layui-nav-item first cloneDom">
 					<a href="javascript:;">
 						<cite> 主题 </cite>
 						<span class="layui-nav-more"></span>
@@ -68,7 +71,7 @@
 						</dd>
 					</dl>
 				</li>
-				<li class="layui-nav-item first">
+				<li class="layui-nav-item first cloneDom">
 					<a href="javascript:;">
 						<cite> admin</cite>
 						<span class="layui-nav-more"></span>
@@ -83,7 +86,7 @@
 						</dd>
 					</dl>
 				</li>
-				<li class="layui-nav-item tab-menu"><a class="msg" href="javascript:;" data-url="msg.html"
+				<li class="layui-nav-item tab-menu cloneDom e-mail"><a class="msg" href="javascript:;" data-url="msg.html"
 													   data-title="站内信息"><i class="iconfont" data-icon='&#xe63c;'>&#xe63c; </i><span
 					class="msg-num">1</span></a></li>
 			</ul>
