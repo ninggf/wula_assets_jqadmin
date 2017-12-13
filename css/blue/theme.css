@@ -114,3 +114,8 @@
 .tab-move-btn.open {
   border-color: #e6e6e6;
 }
+@media screen and (max-width: 750px) {
+  .layui-layout-admin .jqadmin-main-menu {
+    background: gray;
+  }
+}

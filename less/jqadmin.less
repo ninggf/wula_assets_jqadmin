@@ -493,7 +493,7 @@ body {
 .d-f {
   display: flex;
 }
-.jqadmin-foot,.layui-layout-admin .layui-side,.layui-body,.layui-side-scroll,.layui-nav-tree{
+.jqadmin-foot,.layui-layout-admin .layui-side,.layui-body,.layui-side-scroll,.layui-nav-tree,.jqadmin-auxiliary-btn{
   -webkit-transition:all 300ms;
 }
 .left-off .layui-layout-admin .layui-side,.left-off .layui-side-scroll,.left-off .layui-nav-tree{
@@ -545,7 +545,21 @@ body {
 
 }
 .layui-nav.jqadmin-header-item.right-menu .layui-nav-item a span{
-  display: block;
+  display: inline-block;
+}
+
+// 顶部导航
+.jqadmin-auxiliary-btn{
+  float: left;
+  width: 36px;
+  height: 30px;
+  margin-top: 12px;
+  color: #fff;
+  line-height: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  display: none;
 }
 @media screen and (max-width: 750px) {
     .left-off .layui-layout-admin .layui-side,.left-off .layui-side-scroll,.left-off .layui-nav-tree{
@@ -558,6 +572,42 @@ body {
     }
     .left-off .jqadmin-foot{
       left: 0px;
+    }
+    // 顶部导航自适应
+    .jqadmin-auxiliary-btn{
+      display: block;
+    }
+    .layui-header .jqadmin-logo-box{
+      position: absolute;
+      left: 50%;
+      transform:translateX(-50%);
+      -webkit-transform:translateX(-50%);
+      h1{
+        padding: 0;
+      }
+    }
+    .layui-layout-admin .jqadmin-main-menu{
+      background: #23262E;
+      max-width: 120px;
+      position: absolute;
+      left: 0;
+      top: 54px;
+      display: none;
+      li{
+        width: 100%;
+      }
+    }
+    .layui-layout-admin .jqadmin-main-menu .cloneDom span{
+      display: inline-block!important;
+    }
+    .xz{
+      transform:rotate(90deg);
+    }
+    .hd{
+      display: none;
+    }
+    .show{
+      display: block;
     }
 }
 @import "toastr";

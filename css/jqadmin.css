@@ -413,7 +413,8 @@ body {
 .layui-layout-admin .layui-side,
 .layui-body,
 .layui-side-scroll,
-.layui-nav-tree {
+.layui-nav-tree,
+.jqadmin-auxiliary-btn {
   -webkit-transition: all 300ms;
 }
 .left-off .layui-layout-admin .layui-side,
@@ -468,7 +469,19 @@ body {
   padding-left: 0;
 }
 .layui-nav.jqadmin-header-item.right-menu .layui-nav-item a span {
-  display: block;
+  display: inline-block;
+}
+.jqadmin-auxiliary-btn {
+  float: left;
+  width: 36px;
+  height: 30px;
+  margin-top: 12px;
+  color: #fff;
+  line-height: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  display: none;
 }
 @media screen and (max-width: 750px) {
   .left-off .layui-layout-admin .layui-side,
@@ -482,6 +495,41 @@ body {
   }
   .left-off .jqadmin-foot {
     left: 0px;
+  }
+  .jqadmin-auxiliary-btn {
+    display: block;
+  }
+  .layui-header .jqadmin-logo-box {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+  .layui-header .jqadmin-logo-box h1 {
+    padding: 0;
+  }
+  .layui-layout-admin .jqadmin-main-menu {
+    background: #23262E;
+    max-width: 120px;
+    position: absolute;
+    left: 0;
+    top: 54px;
+    display: none;
+  }
+  .layui-layout-admin .jqadmin-main-menu li {
+    width: 100%;
+  }
+  .layui-layout-admin .jqadmin-main-menu .cloneDom span {
+    display: inline-block !important;
+  }
+  .xz {
+    transform: rotate(90deg);
+  }
+  .hd {
+    display: none;
+  }
+  .show {
+    display: block;
   }
 }
 .toast-title {
