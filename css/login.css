@@ -72,6 +72,8 @@ body {
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 .for-btn {
   text-align: right;
@@ -142,6 +144,9 @@ body {
   color: #fff;
   font-size: 13px;
 }
+.login-space {
+  margin: 0;
+}
 @media screen and (min-width: 760px) {
   .banner {
     padding: 80px 20px;
@@ -160,5 +165,11 @@ body {
 @media screen and (max-width: 760px) {
   .row {
     margin-left: 0;
+  }
+  .layui-col-space15 > * {
+    padding-right: 0;
+  }
+  .main > .container > .sign-in.form-inline {
+    padding: 0 18px;
   }
 }
