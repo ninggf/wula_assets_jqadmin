@@ -72,7 +72,6 @@ body {
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 18px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -169,5 +168,8 @@ body {
   }
   .layui-col-space15 > * {
     padding-right: 0;
+  }
+  .main > .container > .sign-in.form-inline {
+    padding: 0 18px;
   }
 }
