@@ -247,17 +247,37 @@
 			}
 			switch (data.code) {
 				case 500://ERROR
-					notice ? toast.error(data.message) : layer.alert(data.message, {icon: 5});
+					notice ? toast.error(data.message) : layer.alert(data.message, {
+						icon      : 5,
+						title     : null,
+						btn       : null,
+						shadeClose: !0
+					});
 					break;
 				case 400://WARNING
-					notice ? toast.warning(data.message) : layer.alert(data.message, {icon: 2});
+					notice ? toast.warning(data.message) : layer.alert(data.message, {
+						icon      : 2,
+						title     : null,
+						btn       : null,
+						shadeClose: !0
+					});
 					break;
 				case 300://INFO
-					notice ? toast.info(data.message) : layer.alert(data.message, {icon: 1});
+					notice ? toast.info(data.message) : layer.alert(data.message, {
+						icon      : 1,
+						title     : null,
+						btn       : null,
+						shadeClose: !0
+					});
 					break;
 				case 200://SUCCESS
 				default:
-					notice ? toast.success(data.message) : layer.alert(data.message, {icon: 6});
+					notice ? toast.success(data.message) : layer.alert(data.message, {
+						icon      : 6,
+						title     : null,
+						btn       : null,
+						shadeClose: !0
+					});
 					break;
 			}
 		}

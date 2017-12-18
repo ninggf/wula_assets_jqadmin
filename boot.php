@@ -20,7 +20,6 @@ function smarty_function_loaduicss($styles = false) {
 	$base = WWWROOT_DIR . ASSETS_DIR;
 	$css  = <<<EOF
 	<link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/font.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/jqadmin.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/layui.css" media="all"/>
     	
 EOF;

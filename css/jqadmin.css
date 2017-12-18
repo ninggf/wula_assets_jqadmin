@@ -27,6 +27,9 @@ body {
 .layui-nav * {
   font-size: 14px;
 }
+.layui-nav * i {
+  font-size: 16px;
+}
 .layui-nav .layui-nav-item {
   position: relative;
   display: inline-block;
@@ -113,11 +116,20 @@ body {
   font-size: 1.5rem;
   color: #999;
   text-align: center;
-  line-height: 54px;
-  font-style: italic;
+  line-height: 45px;
   float: left;
   width: 100%;
   padding: 0 10px;
+}
+.layui-header .jqadmin-logo-box h1 b {
+  font-weight: normal;
+}
+.layui-header .jqadmin-logo-box h1 sub,
+.layui-header .jqadmin-logo-box h1 sup {
+  font-size: 14px;
+}
+.layui-header .jqadmin-logo-box h1 sub {
+  margin-left: -5px;
 }
 .menu-type {
   padding: 0 14px;
@@ -311,14 +323,12 @@ body {
 *底部
 */
 .layui-layout-admin .jqadmin-foot {
-  height: 34px;
-  padding: 5px 0;
+  height: 30px;
   line-height: 30px;
   text-align: center;
   color: #666;
   font-weight: 300;
   border-top: 1px solid #CCC;
-  border-left: 1px solid #CCC;
   z-index: 998;
 }
 .jqadmin-foot .jqadmin-author {

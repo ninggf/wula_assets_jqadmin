@@ -1,6 +1,6 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports) {
+layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 	var $ = layui.$,
 	    layer = layui.layer,
 	    form = layui.form,
@@ -27,11 +27,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 		}
 		return params;
 	};
-	//修改模板
-	layui.laytpl.config({
-		open: '<%',
-		close: '%>'
-	});
 	WulaUI.prototype.toast = top.global && top.global.toast ? top.global.toast : layui.toastr;
 	WulaUI.prototype.layer = top.global && top.global.layer ? top.global.layer : layui.layer;
 	WulaUI.prototype.app = function (url) {
@@ -485,19 +480,39 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 				switch (data.code) {
 					case 500:
 						//ERROR
-						notice ? toast.error(data.message) : layer.alert(data.message, { icon: 5 });
+						notice ? toast.error(data.message) : layer.alert(data.message, {
+							icon: 5,
+							title: null,
+							btn: null,
+							shadeClose: !0
+						});
 						break;
 					case 400:
 						//WARNING
-						notice ? toast.warning(data.message) : layer.alert(data.message, { icon: 2 });
+						notice ? toast.warning(data.message) : layer.alert(data.message, {
+							icon: 2,
+							title: null,
+							btn: null,
+							shadeClose: !0
+						});
 						break;
 					case 300:
 						//INFO
-						notice ? toast.info(data.message) : layer.alert(data.message, { icon: 1 });
+						notice ? toast.info(data.message) : layer.alert(data.message, {
+							icon: 1,
+							title: null,
+							btn: null,
+							shadeClose: !0
+						});
 						break;
 					case 200: //SUCCESS
 					default:
-						notice ? toast.success(data.message) : layer.alert(data.message, { icon: 6 });
+						notice ? toast.success(data.message) : layer.alert(data.message, {
+							icon: 6,
+							title: null,
+							btn: null,
+							shadeClose: !0
+						});
 						break;
 				}
 			}

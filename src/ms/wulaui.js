@@ -1,8 +1,8 @@
-layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports) {
-	let $            = layui.$,
-		layer        = layui.layer,
-		form         = layui.form,
-		WulaUI       = function () {
+layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
+	let $                    = layui.$,
+		layer                = layui.layer,
+		form                 = layui.form,
+		WulaUI               = function () {
 			let cfg     = layui.data('wulaui');
 			this.config = $.extend({}, {
 				base  : '/',
@@ -11,7 +11,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 				groups: {char: [], prefix: []},
 				ids   : {}
 			}, cfg.config);
-		}, getParams = function (obj, attr) {
+		}, getParams         = function (obj, attr) {
 			let params = obj.data(attr) || obj.attr(attr);
 			if (params) {
 				if (typeof(params) === "string") {
@@ -24,11 +24,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'form', 'toastr'], function (exports)
 			}
 			return params;
 		};
-	//修改模板
-	layui.laytpl.config({
-		open : '<%',
-		close: '%>'
-	});
 	WulaUI.prototype.toast   = top.global && top.global.toast ? top.global.toast : layui.toastr;
 	WulaUI.prototype.layer   = top.global && top.global.layer ? top.global.layer : layui.layer;
 	WulaUI.prototype.app     = function (url) {

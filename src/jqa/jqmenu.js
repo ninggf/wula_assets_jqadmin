@@ -82,11 +82,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		//绑定主菜单单击事件，点击时显示相应的菜单
 		element.on('nav(main-menu)', function (elem) {
 			var index = (elem.index());
-			// console.log([index,elem]);
-			if ((elem[0].className).indexOf('e-mail') != -1) return;
-
-			console.log(elem.context);
-			// if (elem.context) {};
+			if ((elem[0].className).indexOf('tab-menu') != -1) return;
 			$('.sub-menu').slideUp().eq(index).slideDown();
 		});
 		//绑定更多按钮事件
@@ -125,6 +121,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			data  = {
 				href : href,
 				icon : icon,
+				cls  : $a.children('i:first').get(0).className,
 				title: title
 			}
 		this.menuOpen(data);
@@ -238,7 +235,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				showType = 1;
 			}
 		}
-		// console.log(['show',showType]);
 		var bar      = $('.jqamdin-left-bar'),
 			_this    = this,
 			showIcon = $(".menu-type").find("i"),
@@ -250,17 +246,17 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}
 		switch (parseInt(showType)) {
 			case 1:
-				$('#submenu').find("ul li").children("a").each(function () {
+				var subm = $('#submenu').find("ul li");
+				subm.children("a").each(function () {
 					$(this).addClass('nav-collapse');
 					if (!$(this).find("em").hasClass("layui-nav-more")) {
 						$(this).css("padding-left", "14px");
 					}
-				})
-				$('body').addClass('left-off').removeClass('left-miss');
-				$('#submenu').find("ul li").find("a").on('mouseenter', function () {
-					layer.tips($(this).data("title"), $(this));
 				});
-				$('#submenu').find("ul li").find("a").on('mouseleave', function () {
+				$('body').addClass('left-off').removeClass('left-miss');
+				subm.find("a").on('mouseenter', function () {
+					layer.tips($(this).data("title"), $(this));
+				}).on('mouseleave', function () {
 					layer.tips();
 				});
 
@@ -270,16 +266,13 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				showIcon.html('&#xe683;');
 				break;
 			default:
+				$('#submenu').find("ul li").find("a").off('mouseenter').removeClass('nav-collapse');
+				$('body').removeClass('left-off');
 				if (screenWidth < 750) {
-					$('body').removeClass('left-off');
 					$('body').removeClass('left-miss');
-					$('#submenu').find("ul li").find("a").off('mouseenter');
 					showIcon.html('&#xe61a;');
 				} else {
-					$('#submenu').find("ul li").find("a").off('mouseenter');
-					$('body').removeClass('left-off');
 					showIcon.html('&#xe61a;');
-
 				}
 		}
 	}

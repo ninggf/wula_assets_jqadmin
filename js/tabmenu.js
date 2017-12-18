@@ -78,7 +78,8 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 	tabMenu.prototype.tabAdd = function (data, fresh) {
 
 		var tab_index = this.exited(data),
-			_this     = this;
+			_this     = this,
+			cls       = data.cls || 'iconfont';
 		if (tab_index === -1) {
 			_this.beforeTabAdd(data, _this);
 			var layID   = data.layId ? data.layId : new Date().getTime();
@@ -87,9 +88,9 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 
 			// 如果icon有定义则添加到标题中
 			if (!_this.config.showIcon) {
-				title += '<i class="iconfont hide-icon">' + data.icon + '</i>';
+				title += '<i class="' + cls + ' hide-icon">' + data.icon + '</i>';
 			} else {
-				title += '<i class="iconfont">' + data.icon + '</i>';
+				title += '<i class="' + cls + '">' + data.icon + '</i>';
 			}
 			title += '<em data-href="' + data.href + '">' + data.title + '</em>';
 			if (this.config.closed) {
@@ -333,9 +334,13 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			var ml = navWidth - tab_all_width;
 			if (ml < 45) {
 				if (index >= 0) {
-					var current_tab_left = parseInt(objTab.titleBox.find('.layui-this').position().left),
-						curent_tab_ml    = parseInt(objTab.titleBox.css("marginLeft")),
-						curent_ml        = current_tab_left + parseInt(curent_tab_ml);
+					var current_tab_left = 0;
+					try {
+						current_tab_left = parseInt(objTab.titleBox.find('.layui-this').position().left);
+					} catch (e) {
+					}
+					var curent_tab_ml = parseInt(objTab.titleBox.css("marginLeft")),
+						curent_ml     = current_tab_left + parseInt(curent_tab_ml);
 
 					if (curent_ml <= 45) {
 						ml = 45 - current_tab_left;
