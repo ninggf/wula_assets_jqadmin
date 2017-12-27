@@ -296,9 +296,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			$('body').addClass('left-off');
 			$('#submenu').find("ul li").children("a").each(function () {
 				$(this).addClass('nav-collapse');
-				if (!$(this).find("em").hasClass("layui-nav-more")) {
-					$(this).css("padding-left", "14px");
-				}
 			})
 			$('#submenu').find("ul li").find("a").on('mouseenter', function () {
 				layer.tips($(this).data("title"), $(this));
@@ -316,7 +313,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			$('.jqadmin-main-menu .layui-nav .layui-nav-item a span').show();
 			$('.layui-header .header-right .right-menu').show();
 			$('body').removeClass('left-off minWidth left-miss');
-			$('#submenu').find("ul li").find("a").off('mouseenter');
+			$('#submenu').find("ul li").find("a").off('mouseenter').removeClass('nav-collapse');
 			showIcon.html('&#xe61a;');
 			$('.jqadmin-main-menu .cloneDom').remove();
 			cloneTemp = false;

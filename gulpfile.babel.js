@@ -24,6 +24,7 @@ gulp.task('clean', [], function () {
 	console.log("Clean all files in build folder");
 	return gulp.src([
 			"css/jqadmin*.css",
+			"css/frame.css",
 			"css/login.css",
 			"css/ztree.css",
 			"css/select2.css",
@@ -44,7 +45,7 @@ gulp.task('build', ['css', 'jqa', 'js'], function () {
 
 // 编译less文件
 gulp.task('css', ['icss'], function () {
-	let ccss = gulp.src(['less/jqadmin.less', 'less/login.less', 'less/select2.less', 'less/b*/*.less'])
+	let ccss = gulp.src(['less/jqadmin.less', 'less/frame.less', 'less/login.less', 'less/select2.less', 'less/b*/*.less'])
 		.pipe(less());
 
 	if (options.env === 'pro')
