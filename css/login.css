@@ -18,7 +18,7 @@ body {
   margin-bottom: 60px;
 }
 .banner > .logo {
-  background: transparent url(http://demo.wulacm.com/modules/dashboard/views/assets/logo.svg) no-repeat 50% 50%;
+  background: transparent url(../images/icon.png) no-repeat 50% 50%;
   -webkit-background-size: contain;
   background-size: contain;
   text-align: center;

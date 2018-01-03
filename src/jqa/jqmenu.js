@@ -60,12 +60,18 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	 *@todo 初始化菜单
 	 */
 	jqmenu.prototype.menuBind = function () {
-		var _this = this;
+		var _this = this, mm = $('#menu');
 		//初始化时显示第一个菜单
 
 		$('.sub-menu').eq(0).slideDown();
-		$('#menu li').removeClass("layui-this").eq(0).addClass("layui-this");
-
+		mm.find('li').removeClass("layui-this").eq(0).addClass("layui-this");
+		mm.find('a').on('mouseenter', function () {
+			layer.tips($(this).data("title"), $(this), {
+				tips: 3
+			});
+		}).on('mouseleave', function () {
+			layer.closeAll('tips')
+		});
 		//绑定左侧树菜单的单击事件
 		$('.sub-menu .layui-nav-item,.tab-menu,.menu-list li').bind("click", function () {
 			var obj = $(this);
@@ -249,15 +255,12 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				var subm = $('#submenu').find("ul li");
 				subm.children("a").each(function () {
 					$(this).addClass('nav-collapse');
-					if (!$(this).find("em").hasClass("layui-nav-more")) {
-						$(this).css("padding-left", "14px");
-					}
 				});
 				$('body').addClass('left-off').removeClass('left-miss');
 				subm.find("a").on('mouseenter', function () {
 					layer.tips($(this).data("title"), $(this));
 				}).on('mouseleave', function () {
-					layer.tips();
+					layer.closeAll('tips')
 				});
 
 				if (!_this.options.showIcon) {
@@ -301,7 +304,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				layer.tips($(this).data("title"), $(this));
 			});
 			$('#submenu').find("ul li").find("a").on('mouseleave', function () {
-				layer.tips();
+				layer.closeAll('tips');
 			});
 
 			showIcon.html('&#xe683;');
@@ -329,7 +332,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		$(this).siblings('.first').find('dl').hide();
 		$(this).find('span').toggleClass('layui-nav-mored');
 		$(this).find('dl').toggle();
-	})
+	});
 	$('.jqadmin-auxiliary-btn').click(function (event) {
 		$(this).toggleClass('xz');
 		if (!cloneTemp) {
@@ -349,11 +352,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		$('.minWidth .jqadmin-main-menu').slideUp();
 		top.global.menu.menuShowType('open');
 	});
-	$('.minWidth .tab-menu').unbind('click');
-	$('.minWidth .tab-menu').click(function (event) {
+	$('.minWidth .tab-menu').unbind('click').click(function (event) {
 		$('.minWidth .jqadmin-main-menu').slideUp();
 	});
 	// 移动端下拉菜单功能调整
-
 	exports('jqmenu', jqmenu);
 });
