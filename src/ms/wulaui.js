@@ -1,7 +1,6 @@
 layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 	let $                    = layui.$,
 		layer                = layui.layer,
-		form                 = layui.form,
 		WulaUI               = function () {
 			let cfg     = layui.data('wulaui');
 			this.config = $.extend({}, {
@@ -194,9 +193,11 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 			href  = that.attr('href') || that.data('url'),
 			title = that.attr('title') || that.data('title') || that.text() || '新窗口',
 			icon  = that.data('tab') || '&#xe621;',
+			cls   = that.data('cls') || null,
 			data  = {
 				href : href,
 				icon : icon,
+				cls  : cls,
 				title: title
 			};
 		if (href) {
@@ -221,16 +222,31 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 		}
 		return false;
 	});
-
+	$(document).on('click', '[data-toggle^="class"]', function (e) {
+		e && e.preventDefault();
+		let $this = $(e.target), $class, $target, $tmp, $classes, $targets;
+		!$this.data('toggle') && ($this = $this.closest('[data-toggle^="class"]'));
+		$class  = $this.data()['toggle'];
+		$target = $this.data('target') || $this.attr('href');
+		$class && ($tmp = $class.split(':')[1]) && ($classes = $tmp.split(','));
+		$target && ($targets = $target.split(','));
+		$targets && $targets.length && $.each($targets, function (index, e) {
+			(e !== '#') && $(e).toggleClass($classes[index]);
+		});
+		$this.toggleClass('active');
+	});
 	//引入wulaui扩展
 	//=require components/ajax.js
 	//=require components/loader.js
 	//=require components/form.js
+	//=require components/table.js
+	//=require components/table-plg-pager.js
+	//=require components/table-plg-searchform.js
 	//=require components/uploader.js
+	//=require components/popmenu.js
 	//=require components/select2.js
 	//=require components/tree.js
 	//end
 	wulaui.init();
 	exports('wulaui', wulaui)
 });
-

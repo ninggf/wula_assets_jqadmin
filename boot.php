@@ -19,14 +19,14 @@ define('JQ_VERSION', '1.0.0');
 function smarty_function_loaduicss($styles = false) {
 	$base = WWWROOT_DIR . ASSETS_DIR;
 	$css  = <<<EOF
-	<link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/font.css" media="all"/>
+	<link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/font.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="{$base}/wula/jqadmin/css/layui.css" media="all"/>
     	
 EOF;
 
 	if ($styles) {
 		foreach ($styles as $id => $style) {
-			$css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}/wula/jqadmin/css/{$style}\" media=\"all\"/>\n";
+			if ($style) $css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}/wula/jqadmin/css/{$style}\" media=\"all\"/>\n";
 		}
 	}
 
@@ -52,6 +52,9 @@ function smarty_function_initjq($config = false) {
 	$ms['tabmenu'] = 'js/tabmenu';
 	$ms['jqtags']  = 'js/jqtags';
 	// lib
+	$ms['bootstrap']  = 'lib/bootstrap';
+	$ms['highlight']  = 'lib/highlight';
+	$ms['fuelux']     = 'lib/fuelux/fuelux';
 	$ms['plupload']   = 'lib/plupload';
 	$ms['select2']    = 'lib/select2';
 	$ms['toastr']     = 'js/toastr';
@@ -63,7 +66,7 @@ function smarty_function_initjq($config = false) {
 	$jq[]             = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 	if ($config && isset($config['config'])) {
 		$groups = wulaphp\app\App::$prefix;
-		unset($groups['check']);
+		unset($groups['check'], $config['config']);
 		$config['key']             = 'config';
 		$config['value']['base']   = WWWROOT_DIR;
 		$config['value']['assets'] = WWWROOT_DIR . ASSETS_DIR . '/';
@@ -71,9 +74,9 @@ function smarty_function_initjq($config = false) {
 		$config['value']['ids']    = wulaphp\app\App::id2dir(null);
 		$config['value']['groups'] = $groups ? $groups : ['char' => []];
 		$cfg                       = json_encode($config, JSON_UNESCAPED_SLASHES);
-		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend({$modules});layui.data('wulaui',{$cfg})</script>";
+		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend({$modules}).data('wulaui',{$cfg});layui.data('wulaui',{key:'modules',value:{$modules}})</script>";
 	} else {
-		$jq[] = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend({$modules})</script>";
+		$jq[] = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend(layui.data('wulaui','modules'))</script>";
 	}
 	$ms = [];
 	if ($config && isset($config['modules']) && $config['modules']) {

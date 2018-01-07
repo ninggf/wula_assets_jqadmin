@@ -34,7 +34,7 @@
 	};
 	const _doLoad           = function (force) {
 		let ourl = this.url ? this.url : '';
-		this.url = this.element.data('load');
+		this.url = this.element.data('load') || this.element.attr('href');
 		if (!this.url || (!force && this.lazy && ourl === this.url)) {
 			return;
 		}

@@ -225,7 +225,6 @@ body {
 }
 .layui-layout-admin .jqadmin-body {
   overflow-y: hidden;
-  border-left: 1px solid #CCC;
   bottom: 31px;
 }
 .layui-tab-content {
@@ -239,6 +238,7 @@ body {
   margin: 0;
 }
 .layui-tab-content .layui-tab-item {
+  background: #fff;
   position: absolute;
   top: 46px;
   bottom: 0;

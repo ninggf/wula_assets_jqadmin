@@ -1,0 +1,90 @@
+.max-w-800 {
+  max-width: 800px;
+}
+
+
+.nav-pills > li > a {
+  margin: 0 3px;
+}
+
+.table-responsive {
+  overflow: auto !important;
+  height: 100%;
+}
+
+.markdown-body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  padding: 25px;
+}
+
+.upload-img-box {
+  padding: 0;
+  margin: 0;
+  li {
+    position: relative;
+    list-style: none;
+    outline: none;
+    float: left;
+    padding: 2px;
+    margin: 0 10px 10px 0;
+    img {
+      display: block;
+      border: none;
+      border-radius: 5px;
+    }
+    i {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border: 1px solid #fff;
+      background: #f7554a;
+      font-size: 16px;
+      color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      &:hover {
+        background: #ed4d42
+      }
+    }
+    span {
+      position: absolute;
+      bottom: 2px;
+      right: 5px;
+      color: #ffffff;
+    }
+    .progress {
+      margin-bottom: 0;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+  li.uploadimg-btn {
+    a {
+      display: block;
+      border: 1px dashed #dddddd;
+      border-radius: 5px;
+      background: transparent url("../img/up.png") no-repeat 50% 50%;
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+    &:after {
+      clear: right;
+    }
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@media (max-width: 767px) {
+  .markdown-body {
+    padding: 15px;
+  }
+}

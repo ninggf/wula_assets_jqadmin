@@ -284,51 +284,46 @@
 	};
 	//处理上ajax返回动作
 	const ajaxAction    = (data, opts) => {
-		let target;
+		let target, des;
 		switch (data.action) {
 			case 'update':
 				//更新内容
-				target = $(data.target);
-				if (target.length && data.args && data.args.content) {
-					let append = data.args.append;
-					if (append) {
-						let d = $(data.args.content);
-						target.append(d);
-						wulaui.init(d);
-					} else {
-						wulaui.destroy(target);
-						target.empty().html(data.args.content);
-						wulaui.init(target);
-					}
-					target.trigger('content.updated');
+				des = getTarget(data.target);
+				if (des[0] === 'parent' && parent.ajaxActions) {
+					parent.ajaxActions.update(des[1], data);
+				} else if (des[0] === 'top' && top.ajaxActions) {
+					top.ajaxActions.update(des[1], data);
+				} else {
+					ajaxActions.update(des[1], data);
 				}
 				break;
 			case 'reload':
 				//重新加载
-				if (!data.target || data.target === 'document') {
-					location.reload(true);
+				if (!data.target || data.target === 'document' || data.target === 'top') {
+					data.target === 'top' ? top.location.reload(true) : location.reload(true);
 					return;
 				}
 				try {
-					target = $(data.target);
-					if (target.length) {
-						let loader = target.data('loaderObj');
-						if (loader) {
-							loader.reload(null, true);
-						}
+					des = getTarget(data.target);
+					if (des[0] === 'parent' && parent.ajaxActions) {
+						parent.ajaxActions.reload(des[1]);
+					} else if (des[0] === 'top' && top.ajaxActions) {
+						top.ajaxActions.reload(des[1]);
+					} else {
+						ajaxActions.reload(des[1]);
 					}
 				} catch (e) {
 				}
 				break;
 			case 'click':
 				//点击
-				target = $(data.target);
-				if (target.length) {
-					if (/^#.+/.test(target.attr('href'))) {
-						window.location.hash = target.attr('href');
-					} else {
-						target.click();
-					}
+				des = getTarget(data.target);
+				if (des[0] === 'parent' && parent.ajaxActions) {
+					parent.ajaxActions.click(des[1]);
+				} else if (des[0] === 'top' && top.ajaxActions) {
+					top.ajaxActions.click(des[1]);
+				} else {
+					ajaxActions.click(des[1]);
 				}
 				break;
 			case 'redirect':
@@ -365,7 +360,13 @@
 					switch (op) {
 						case 'close':
 							if (args.length > 1) {
-								layer.close(layer.index);
+								if (args[1] === 'parent' && parent.layer) {
+									parent.layer.close(parent.layer.index);
+								} else if (args[1] === 'top' && top.layer) {
+									top.layer.close(top.layer.index);
+								} else {
+									layer.close(layer.index);
+								}
 							}
 							break;
 						case 'show':
@@ -403,15 +404,59 @@
 		let message = getMsg(xhr);
 		toast.error(message);
 	};
-
-	$('body')
-		.on('click', '[data-ajax]:not(form)', doAjaxRequest)
+	const getTarget     = (tag) => {
+		if (typeof tag === 'string') {
+			let target = tag.split(':');
+			if (target.length === 2) {
+				return target;
+			}
+		}
+		return ['me', tag]
+	};
+	$('body').on('click', '[data-ajax]:not(form)', doAjaxRequest)
 		.on('submit', 'form[data-ajax]', doAjaxRequest)
 		.on('change', 'select[data-ajax]', doAjaxRequest);
 	//挂载ajax方法
-	wulaui.ajax = {
+	wulaui.ajax        = {
 		confirm: confirmx,
 		dialog : dialog,
 		ajax   : $.ajax
+	};
+	window.ajaxActions = {
+		reload(target) {
+			target = $(target);
+			if (target.length) {
+				let loader = target.data('loaderObj');
+				if (loader) {
+					loader.reload(null, true);
+				}
+			}
+		},
+		update(target, data) {
+			target = $(target);
+			if (target.length && data.args && data.args.content) {
+				let append = data.args.append;
+				if (append) {
+					let d = $(data.args.content);
+					target.append(d);
+					wulaui.init(d);
+				} else {
+					wulaui.destroy(target);
+					target.empty().html(data.args.content);
+					wulaui.init(target);
+				}
+				target.trigger('content.updated');
+			}
+		},
+		click(target) {
+			target = $(target);
+			if (target.length) {
+				if (/^#.+/.test(target.attr('href'))) {
+					window.location.hash = target.attr('href');
+				} else {
+					target.click();
+				}
+			}
+		}
 	};
 })($, layer, wulaui);
