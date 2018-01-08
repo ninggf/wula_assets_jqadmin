@@ -1,5 +1,5 @@
 ($ => {
-	const prepareValidateRule    = function (rules) {
+	const prepareValidateRule      = function (rules) {
 		if ('object' !== typeof rules) {
 			try {
 				rules = $.parseJSON(rules);
@@ -20,7 +20,7 @@
 		}
 		return rules;
 	};
-	const errorPlacement         = function (error, element) {
+	const errorPlacement           = function (error, element) {
 		if (element.is('[type=checkbox]') || element.is('[type=radio]')) {
 			let wrap = element.closest('div');
 
@@ -41,7 +41,7 @@
 			}
 		}
 	};
-	const Validator              = function (form) {
+	const Validator                = function (form) {
 		this.form                 = form;
 		this.rules                = prepareValidateRule(form.data('validate'));
 		this.rules.errorPlacement = errorPlacement;
@@ -70,7 +70,7 @@
 		form.closest('.wulaui').on('wulaui.widgets.destroy', destroy);
 	};
 	//验证
-	Validator.prototype.validate = function (errors) {
+	Validator.prototype.validate   = function (errors) {
 		if (!this.validator) {
 			return false;
 		}
@@ -86,8 +86,11 @@
 		}
 		return this.form.valid();
 	};
+	Validator.prototype.showErrors = function (errors) {
+		this.validate(errors)
+	};
 	//销毁
-	Validator.prototype.destroy  = function () {
+	Validator.prototype.destroy    = function () {
 		if (this.validator) {
 			this.validator.destroy();
 			this.validator = null;

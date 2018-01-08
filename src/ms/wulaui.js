@@ -1,4 +1,4 @@
-layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
+layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	let $                    = layui.$,
 		layer                = layui.layer,
 		WulaUI               = function () {
@@ -132,7 +132,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 				wulaui.init(o);
 				opts.$content = o;
 			};
-			opts.end     = function () {
+			opts.beforeClose     = function () {
 				wulaui.destroy(opts.$content);
 			};
 			wulaui.ajax.ajax(opts.content, {

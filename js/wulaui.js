@@ -1,6 +1,6 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
+layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	var $ = layui.$,
 	    layer = layui.layer,
 	    WulaUI = function WulaUI() {
@@ -135,7 +135,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 				wulaui.init(o);
 				opts.$content = o;
 			};
-			opts.end = function () {
+			opts.beforeClose = function () {
 				wulaui.destroy(opts.$content);
 			};
 			wulaui.ajax.ajax(opts.content, {
@@ -1236,6 +1236,9 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 			}
 			return this.form.valid();
 		};
+		Validator.prototype.showErrors = function (errors) {
+			this.validate(errors);
+		};
 		//销毁
 		Validator.prototype.destroy = function () {
 			if (this.validator) {
@@ -1921,7 +1924,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 			}
 		});
 	})($);
-	(function ($) {
+	(function ($, wui) {
 		var defaultOpts = {
 			c: false,
 			runtimes: 'html5',
@@ -1949,7 +1952,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 				};
 				reader.readAsDataURL(this.file);
 			} else {
-				$(this.id).attr('src', $.wulaUI.appConfig.assets + 'dat.jpg');
+				$(this.id).attr('src', wui.config.assets + 'dat.jpg');
 			}
 		};
 
@@ -1974,7 +1977,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 				};
 			}
 			var cnt = elem.data('multi');
-			this.multi = parseInt(cnt ? cnt : 1, 10) || 1;
+			this.multi = parseInt(cnt ? cnt : '1', 10) || 1;
 			if (this.multi > 1) {
 				opts.max_file_count = this.multi;
 				opts.chunks = true;
@@ -2071,7 +2074,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 				if ($.isArray(this.value)) {
 					$.each(this.value, function (i, e) {
 						var html = '<li id="up-file' + i + '">';
-						html += '<img id="img_file' + i + '" src="' + wulamedia(e) + '" style="' + $this.whstyle + '"/>';
+						html += '<img id="img_file' + i + '" src="' + wui.media(e) + '" style="' + $this.whstyle + '"/>';
 						if (!$this.readonly) {
 							html += '<i>×</i>';
 						}
@@ -2128,7 +2131,7 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 					$this.newFile++;
 
 					var html = '<li id="up-' + file.id + '">';
-					html += '<img id="img_' + file.id + '" src="' + $.wulaUI.appConfig.assets + 's.gif" style="' + $this.whstyle + '"/>';
+					html += '<img id="img_' + file.id + '" src="' + wui.config.assets + 's.gif" style="' + $this.whstyle + '"/>';
 					html += '<div class="progress progress-xs" style="display:none;width: ' + $this.width + 'px"><div class="progress-bar progress-bar-info"></div></div>';
 					html += '<span>' + (file.size / 1000).toFixed(1) + 'K</span>';
 					html += '<i>×</i>';
@@ -2243,12 +2246,11 @@ layui.define(['jquery', 'layer', 'form', 'toastr'], function (exports) {
 			var that = $(this).find('[data-uploader]');
 			if (that.length > 0) {
 				layui.use('plupload', function () {
-					console.log('plupload done');
 					that.wulauploader();
 				});
 			}
 		});
-	})($);
+	})($, wulaui);
 	(function ($, wui) {
 
 		$.fn.wulapopmenu = function () {

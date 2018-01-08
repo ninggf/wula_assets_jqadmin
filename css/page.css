@@ -2987,7 +2987,7 @@ fieldset[disabled] .btn-gplus.active {
   display: block;
   border: 1px dashed #dddddd;
   border-radius: 5px;
-  background: transparent url("../img/up.png") no-repeat 50% 50%;
+  background: transparent url("../images/up.png") no-repeat 50% 50%;
 }
 .upload-img-box li.uploadimg-btn a:hover {
   background-color: #f1f1f1;
