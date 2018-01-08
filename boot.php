@@ -44,28 +44,29 @@ EOF;
  * @return string
  */
 function smarty_function_initjq($config = false) {
-	$ver           = JQ_VERSION;
-	$base          = WWWROOT_DIR . ASSETS_DIR;
-	$ms            = apply_filter('wula\jqadmin\reg_module', []);
-	$ms['jqelem']  = 'js/jqelem';
-	$ms['jqmenu']  = 'js/jqmenu';
-	$ms['tabmenu'] = 'js/tabmenu';
-	$ms['jqtags']  = 'js/jqtags';
-	// lib
-	$ms['bootstrap']  = 'lib/bootstrap';
-	$ms['highlight']  = 'lib/highlight';
-	$ms['fuelux']     = 'lib/fuelux/fuelux';
-	$ms['plupload']   = 'lib/plupload';
-	$ms['select2']    = 'lib/select2';
-	$ms['toastr']     = 'js/toastr';
-	$ms['ztree']      = 'js/ztree';
-	$ms['ztree.edit'] = 'js/ztree_edit';
-	$ms['ztree.hide'] = 'js/ztree_hide';
-	$ms['wulaui']     = 'js/wulaui';
-	$modules          = json_encode($ms, JSON_UNESCAPED_SLASHES);
-	$jq[]             = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
+	$ver  = JQ_VERSION;
+	$base = WWWROOT_DIR . ASSETS_DIR;
+	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 	if ($config && isset($config['config'])) {
-		$groups = wulaphp\app\App::$prefix;
+		$ms            = apply_filter('wula\jqadmin\reg_module', []);
+		$ms['jqelem']  = 'js/jqelem';
+		$ms['jqmenu']  = 'js/jqmenu';
+		$ms['tabmenu'] = 'js/tabmenu';
+		$ms['jqtags']  = 'js/jqtags';
+		// lib
+		$ms['bootstrap']  = 'lib/bootstrap';
+		$ms['highlight']  = 'lib/highlight';
+		$ms['fuelux']     = 'lib/fuelux/fuelux';
+		$ms['plupload']   = 'lib/plupload';
+		$ms['select2']    = 'lib/select2';
+		$ms['validate']   = 'lib/validate';
+		$ms['toastr']     = 'js/toastr';
+		$ms['ztree']      = 'js/ztree';
+		$ms['ztree.edit'] = 'js/ztree_edit';
+		$ms['ztree.hide'] = 'js/ztree_hide';
+		$ms['wulaui']     = 'js/wulaui';
+		$modules          = json_encode($ms, JSON_UNESCAPED_SLASHES);
+		$groups           = wulaphp\app\App::$prefix;
 		unset($groups['check'], $config['config']);
 		$config['key']             = 'config';
 		$config['value']['base']   = WWWROOT_DIR;

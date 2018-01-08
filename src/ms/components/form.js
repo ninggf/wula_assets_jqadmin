@@ -357,7 +357,7 @@
 		e.opts.data = $(this).serializeArray();
 	}).on('wulaui.widgets.init', '.wulaui', function (e) {
 		e.stopPropagation();
-		$(this).find('[data-validate]').wulaform();
+		$(this).find('form[data-verify]').wulaform();
 	});
 
 })($, layer, wulaui);
