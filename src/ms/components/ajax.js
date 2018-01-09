@@ -415,7 +415,20 @@
 	};
 	$('body').on('click', '[data-ajax]:not(form)', doAjaxRequest)
 		.on('submit', 'form[data-ajax]', doAjaxRequest)
-		.on('change', 'select[data-ajax]', doAjaxRequest);
+		.on('change', 'select[data-ajax]', doAjaxRequest)
+		.on('ajax.send', '[data-loading]', function (e) {
+			e.stopPropagation();
+			let me = e.element;
+			if (me.data('loading') !== undefined) {
+				me.data('loading', layer.load(2));
+			}
+		}).on('ajax.done', '[data-loading]', function (e) {
+		e.stopPropagation();
+		let me = e.element;
+		if (me.data('loading') !== undefined) {
+			layer.close(me.data('loading'))
+		}
+	});
 	//挂载ajax方法
 	wulaui.ajax        = {
 		confirm: confirmx,

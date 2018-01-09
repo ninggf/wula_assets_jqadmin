@@ -159,14 +159,14 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			objTab.contentBox.find('iframe[data-id=' + layID + ']').css({
 				"opacity"   : "0",
 				"margin-top": "50px"
-			}).delay(200).animate({opacity: '1', marginTop: "0"}, 500);
+			}).delay(200).animate({opacity: '1', marginTop: "0"}, 200);
 			layer.close(l);
 		} else {
 			objTab.contentBox.find('iframe[data-id=' + layID + ']').css({
 				"opacity"   : "0",
 				"margin-top": "50px"
 			}).load(function () {
-				$(this).delay(100).animate({opacity: '1', marginTop: "0"}, 500);
+				$(this).delay(100).animate({opacity: '1', marginTop: "0"}, 200);
 				layer.close(l);
 			});
 		}

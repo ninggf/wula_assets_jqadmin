@@ -230,7 +230,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		if (type == 'close') {
 			showType = 1;
 		}
-		;
 		if (type != 'open' && type != 'close' && window.localStorage) {
 			var storage = window.localStorage;
 			showType    = storage.getItem("showType");
@@ -241,15 +240,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				showType = 1;
 			}
 		}
-		var bar      = $('.jqamdin-left-bar'),
-			_this    = this,
-			showIcon = $(".menu-type").find("i"),
-			minWidth = 50,
+		var _this    = this,
+			showIcon = $(".menu-type").find("i");
 
-			maxWidth = 200;
-		if (!_this.options.showIcon) {
-			maxWidth = 160;
-		}
 		switch (parseInt(showType)) {
 			case 1:
 				var subm = $('#submenu').find("ul li");
