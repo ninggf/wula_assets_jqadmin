@@ -246,6 +246,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	//=require components/uploader.js
 	//=require components/popmenu.js
 	//=require components/select2.js
+	//=require components/datepicker.js
 	//=require components/tree.js
 	//end
 	wulaui.init();

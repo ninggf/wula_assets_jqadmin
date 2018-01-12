@@ -59,6 +59,7 @@ function smarty_function_initjq($config = false) {
 		$ms['fuelux']     = 'lib/fuelux/fuelux';
 		$ms['plupload']   = 'lib/plupload';
 		$ms['select2']    = 'lib/select2';
+		$ms['datepicker'] = 'lib/datepicker';
 		$ms['validate']   = 'lib/validate';
 		$ms['toastr']     = 'js/toastr';
 		$ms['ztree']      = 'js/ztree';
