@@ -2921,6 +2921,9 @@ fieldset[disabled] .btn-gplus.active {
     padding: 15px;
   }
 }
+.portlet {
+  min-height: 30px;
+}
 .max-w-800 {
   max-width: 800px;
 }

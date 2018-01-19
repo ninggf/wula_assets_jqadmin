@@ -227,8 +227,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			console.log(e);
 		}
 		return false;
-	});
-	$(document).on('click', '[data-toggle^="class"]', function (e) {
+	}).on('click', '[data-toggle^="class"]', function (e) {
 		e && e.preventDefault();
 		var $this = $(e.target),
 		    $class = void 0,
@@ -245,6 +244,20 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			e !== '#' && $(e).toggleClass($classes[index]);
 		});
 		$this.toggleClass('active');
+	}).on('focus', '[data-expend]', function () {
+		var $this = $(this),
+		    ow = $this.data('owidth') || $this.width(),
+		    nw = $this.data('expend');
+		$this.data('owidth', ow);
+		if (nw) {
+			$this.width(nw);
+		}
+	}).on('blur', '[data-expend]', function () {
+		var $this = $(this),
+		    ow = $this.data('owidth');
+		if (ow) {
+			$this.width(ow);
+		}
 	});
 	//引入wulaui扩展
 	(function ($, layer, wulaui) {
@@ -1762,8 +1775,8 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	})($, wulaui);
 
 	(function ($) {
-		var pagerTpl = '<section class="col-sm-12  col-md-7 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
-		var tipTpl = '<section class="col-sm-12  col-md-5 col-lg-4 visible-md-block visible-lg-block"><div class="m-t text-muted">每页&nbsp;<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
+		var pagerTpl = '<section class="col-sm-12 col-md-7 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
+		var tipTpl = '<section class="col-md-5 col-lg-4 visible-md-block visible-lg-block"><div class="m-t text-muted">每页&nbsp;<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
 		var nuiPager = function nuiPager(pager) {
 			var targetId = pager.data('tablePager');
 			if (targetId) {

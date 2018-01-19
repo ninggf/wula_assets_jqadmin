@@ -127,12 +127,12 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			}
 		}
 		if (ajax) {
-			opts.type    = 1;
-			opts.success = function (o) {
+			opts.type        = 1;
+			opts.success     = function (o) {
 				wulaui.init(o);
 				opts.$content = o;
 			};
-			opts.beforeClose     = function () {
+			opts.beforeClose = function () {
 				wulaui.destroy(opts.$content);
 			};
 			wulaui.ajax.ajax(opts.content, {
@@ -221,8 +221,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			console.log(e);
 		}
 		return false;
-	});
-	$(document).on('click', '[data-toggle^="class"]', function (e) {
+	}).on('click', '[data-toggle^="class"]', function (e) {
 		e && e.preventDefault();
 		let $this = $(e.target), $class, $target, $tmp, $classes, $targets;
 		!$this.data('toggle') && ($this = $this.closest('[data-toggle^="class"]'));
@@ -234,6 +233,17 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			(e !== '#') && $(e).toggleClass($classes[index]);
 		});
 		$this.toggleClass('active');
+	}).on('focus', '[data-expend]', function () {
+		let $this = $(this), ow = $this.data('owidth') || $this.width(), nw = $this.data('expend');
+		$this.data('owidth', ow);
+		if (nw) {
+			$this.width(nw);
+		}
+	}).on('blur', '[data-expend]', function () {
+		let $this = $(this), ow = $this.data('owidth');
+		if (ow) {
+			$this.width(ow);
+		}
 	});
 	//引入wulaui扩展
 	//=require components/ajax.js

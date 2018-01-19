@@ -61,6 +61,7 @@ function smarty_function_initjq($config = false) {
 		$ms['select2']    = 'lib/select2';
 		$ms['datepicker'] = 'lib/datepicker';
 		$ms['validate']   = 'lib/validate';
+		$ms['sortable']   = 'lib/sortable';
 		$ms['toastr']     = 'js/toastr';
 		$ms['ztree']      = 'js/ztree';
 		$ms['ztree.edit'] = 'js/ztree_edit';

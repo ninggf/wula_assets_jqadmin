@@ -1,6 +1,6 @@
 ($ => {
-	const pagerTpl            = '<section class="col-sm-12  col-md-7 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
-	const tipTpl              = '<section class="col-sm-12  col-md-5 col-lg-4 visible-md-block visible-lg-block"><div class="m-t text-muted">每页&nbsp;<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
+	const pagerTpl            = '<section class="col-sm-12 col-md-7 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
+	const tipTpl              = '<section class="col-md-5 col-lg-4 visible-md-block visible-lg-block"><div class="m-t text-muted">每页&nbsp;<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
 	const nuiPager            = function (pager) {
 		let targetId = pager.data('tablePager');
 		if (targetId) {
