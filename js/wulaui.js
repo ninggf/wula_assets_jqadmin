@@ -1318,11 +1318,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			this.source = table.data('table');
 			this.id = table.attr('id');
 			this.currentTreeNode = null;
-			if (this.isTree) {
-				this.folderOpenIcon = table.data('folderIcon1') || 'fa fa-minus-circle';
-				this.folderCloseIcon = table.data('folderIcon2') || 'fa fa-plus-circle';
-				this.leafIcon = table.data('leafIcon') || '';
-			}
+			this.folderOpenIcon = table.data('folderIcon1') || 'fa fa-minus-circle';
+			this.folderCloseIcon = table.data('folderIcon2') || 'fa fa-plus-circle';
+			this.leafIcon = table.data('leafIcon') || '';
 			if (this.noHover) {
 				table.addClass('table');
 			} else {
@@ -1372,6 +1370,19 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 								me.reload();
 							}
 						}
+					}
+				});
+			} else {
+				this.table.on('click', 'tbody tr > td:first-child span.tt-folder', function () {
+					var h = $(this),
+					    node = h.parent().parent(),
+					    str = node.next();
+					if (h.hasClass('node-open')) {
+						h.removeClass(me.folderOpenIcon).removeClass('node-open').addClass(me.folderCloseIcon);
+						str.addClass('hidden').hide();
+					} else {
+						h.removeClass(me.folderCloseIcon).addClass('node-open').addClass(me.folderOpenIcon);
+						str.removeClass('hidden').show();
 					}
 				});
 			}
@@ -1667,6 +1678,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 					wui.destroy(_tb);
 					_tb.remove();
 					me.table.find('thead').after(html);
+					me.subTr();
 				}
 
 				if ($.isFunction(cb)) {
@@ -1711,6 +1723,15 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 				var attr = '[data-field-' + field + '="' + value + '"]';
 				this.table.find('tbody tr' + attr).show();
 				this.table.find('tbody tr').not(attr).hide();
+			}
+		};
+		nuiTable.prototype.subTr = function () {
+			var ptrs = this.table.find('tbody tr[rel]'),
+			    icon = this.folderCloseIcon;
+			if (ptrs.length > 0) {
+				ptrs.each(function () {
+					$(this).find('td:first').prepend($('<span class="tt-folder ' + icon + '"></span>'));
+				});
 			}
 		};
 		$.fn.wulatable = function (option) {

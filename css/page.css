@@ -1605,6 +1605,10 @@ fieldset[disabled] .btn-gplus.active {
 .wizard ul li.active {
   color: #4cc0c1;
 }
+.ztree li ul.line {
+  height: auto;
+  border: none;
+}
 .switch {
   cursor: pointer;
   position: relative;

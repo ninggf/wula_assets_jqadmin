@@ -343,14 +343,19 @@
   border-color: #ff5f5f !important
 }
 
-.wizard .badge-info {
-  background-color: @brand-info;
+.wizard {
+  .badge-info {
+    background-color: @brand-info;
+  }
+  .badge-success {
+    background-color: @brand-success;
+  }
+  ul li.active {
+    color: @brand-info;
+  }
 }
 
-.wizard .badge-success {
-  background-color: @brand-success;
-}
-
-.wizard ul li.active {
-  color: @brand-info;
+.ztree li ul.line {
+  height: auto;
+  border: none;
 }
