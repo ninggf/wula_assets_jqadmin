@@ -1309,6 +1309,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		var nuiTable = function nuiTable(table) {
 			var me = this;
 			this.table = table;
+			this.fixTable = null;
+			this.fixBody = null;
+			this.parent = table.parent();
 			this.data = {};
 			this.isTree = table.data('tree') !== undefined;
 			this.hideHead = table.data('hh') !== undefined;
@@ -1330,6 +1333,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			table.data('formTarget', this);
 			table.data('pagerTarget', this);
 			table.data('loaderObj', this);
+			//		if (this.parent.is('.table-responsive') && this.parent.parent().is('.table-wrapper')) {
+			//			this.initFixHead(this.parent.parent());
+			//		}
 			this.initSorter();
 			if (this.id) {
 				var sform = $('form[data-table-form="#' + this.id + '"]');
@@ -1397,7 +1403,6 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 				var me = this,
 				    limit = 10,
 				    pager = $('div[data-table-pager="#' + me.id + '"]');
-
 				if (!this.data.cp) {
 					if (pager.length === 1 && pager.data('limit')) {
 						limit = parseInt(pager.data('limit'), 10);
@@ -1434,6 +1439,24 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 					this.reload();
 					this.inited = true;
 				}
+			}
+		};
+		nuiTable.prototype.initFixHead = function (wrapper) {
+			var ths = this.table.find('th[data-fix]');
+			if (ths.length > 0) {
+				this.hideHead = false;
+				this.fixTable = $('<table class="table table-fixed"></table>');
+				this.fixTable.html('<thead><tr></tr></thead><tbody></tbody>');
+				this.fixBody = this.fixTable.find('tbody');
+				var th = this.fixTable.find('tr'),
+				    w = 0;
+				ths.each(function (i, e) {
+					w += $(e).outerWidth();
+					th.append($(e));
+				});
+				this.fixTable.width(w);
+				wrapper.css('padding-right', w + 'px');
+				this.parent.append(this.fixTable);
 			}
 		};
 		nuiTable.prototype.initSorter = function () {

@@ -1609,6 +1609,17 @@ fieldset[disabled] .btn-gplus.active {
   height: auto;
   border: none;
 }
+div.table-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+table.table-fixed {
+  top: 0;
+  right: 0;
+  position: absolute;
+}
 .switch {
   cursor: pointer;
   position: relative;
