@@ -437,6 +437,10 @@
 	};
 	window.ajaxActions = {
 		reload(target) {
+			if (target === 'document') {
+				location.reload();
+				return;
+			}
 			target = $(target);
 			if (target.length) {
 				let loader = target.data('loaderObj');

@@ -701,6 +701,10 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		};
 		window.ajaxActions = {
 			reload: function reload(target) {
+				if (target === 'document') {
+					location.reload();
+					return;
+				}
 				target = $(target);
 				if (target.length) {
 					var loader = target.data('loaderObj');
