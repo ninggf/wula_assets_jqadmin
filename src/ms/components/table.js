@@ -7,11 +7,9 @@
 	// data-tfoot: auto-generate tfoot
 	// data-auto: auto-load data
 	// th[data-sort] : sort field
-	const nuiTable                 = function (table) {
+	const nuiTable              = function (table) {
 		let me               = this;
 		this.table           = table;
-		this.fixTable        = null;
-		this.fixBody         = null;
 		this.parent          = table.parent();
 		this.data            = {};
 		this.isTree          = table.data('tree') !== undefined;
@@ -34,9 +32,7 @@
 		table.data('formTarget', this);
 		table.data('pagerTarget', this);
 		table.data('loaderObj', this);
-//		if (this.parent.is('.table-responsive') && this.parent.parent().is('.table-wrapper')) {
-//			this.initFixHead(this.parent.parent());
-//		}
+
 		this.initSorter();
 		if (this.id) {
 			let sform = $('form[data-table-form="#' + this.id + '"]');
@@ -95,7 +91,7 @@
 		}
 		this.table.trigger('wulaui.table.init');
 	};
-	nuiTable.prototype.initData    = function () {
+	nuiTable.prototype.initData = function () {
 		if (this.autoLoad) {
 			let me = this, limit = 10, pager = $('div[data-table-pager="#' + me.id + '"]');
 			if (!this.data.cp) {
@@ -134,26 +130,13 @@
 				this.reload();
 				this.inited = true;
 			}
+		} else {
+			this.subTr();
+			this.inited = true;
 		}
 	};
-	nuiTable.prototype.initFixHead = function (wrapper) {
-		let ths = this.table.find('th[data-fix]');
-		if (ths.length > 0) {
-			this.hideHead = false;
-			this.fixTable = $('<table class="table table-fixed"></table>');
-			this.fixTable.html('<thead><tr></tr></thead><tbody></tbody>');
-			this.fixBody = this.fixTable.find('tbody');
-			let th       = this.fixTable.find('tr'), w = 0;
-			ths.each(function (i, e) {
-				w += $(e).outerWidth();
-				th.append($(e));
-			});
-			this.fixTable.width(w);
-			wrapper.css('padding-right', w + 'px');
-			this.parent.append(this.fixTable);
-		}
-	};
-	nuiTable.prototype.initSorter  = function () {
+
+	nuiTable.prototype.initSorter = function () {
 		let defaultSort = this.table.attr('data-sort'), me = this;
 		this.table.find('th[data-sort]').each(function (i, n) {
 			let th = $(n), sort = th.attr('data-sort');

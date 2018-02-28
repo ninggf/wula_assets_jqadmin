@@ -5,3 +5,12 @@ README.md export-ignore
 demo/   export-ignore
 src/   export-ignore
 less/ export-ignore
+
+js/* merge=ours
+css/blue/ merge=ours
+css/black/ merge=ours
+css/jqadmin.css merge=ours
+css/page.css merge=ours
+css/ztree.css merge=ours
+css/select2.css merge=ours
+css/login.css merge=ours
