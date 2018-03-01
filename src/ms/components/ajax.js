@@ -133,7 +133,7 @@
 			// 生成发起ajax请求的选项.
 			let be      = $.Event('ajax.build');
 			be.opts     = $.extend({element: $this, data: []}, $this.data() || {});
-			be.opts.url = be.opts.url || $this.attr('href') || $this.attr('action') || '';
+			be.opts.url = be.opts.url || $this.attr('href') || $this.attr('action') || $this.data('url') || '';
 			let ajax    = be.opts.ajax || 'get.json';
 			delete be.opts.ajax;
 			let types        = ajax.split('.');
@@ -178,6 +178,18 @@
 					value: ids
 				});
 			}
+			if ($this.is('input,select,textarea')) {
+				be.opts.data.push({
+					name : 'value',
+					value: $this.val()
+				});
+			}
+			if ($this.is('[data-toggle]')) {
+				be.opts.data.push({
+					name : 'value',
+					value: $this.hasClass('active') ? 0 : 1
+				});
+			}
 			$this.trigger(be);
 			if (!be.isDefaultPrevented()) {
 				if (be.opts.action === 'update' && $(be.opts.target).data('loaderObj')) {
@@ -211,7 +223,7 @@
 		return false;
 	};
 	const getMsg        = function (rq) {
-		let t = rq.responseText;
+		let t = rq.responseText || rq.statusText;
 		if (rq.getResponseHeader('ajax')) {
 			try {
 				let data = $.parseJSON(t);
@@ -219,7 +231,7 @@
 			} catch (e) {
 				t = '数据转换异常';
 			}
-		} else if (t.indexOf('</body>') > 0) {
+		} else if (t && t.indexOf('</body>') > 0) {
 			t = t.substr(0, t.indexOf('</body>'));
 			t = t.substr(t.indexOf('>', t.indexOf('<body')) + 1);
 		} else if (rq.statusText === 'error') {
@@ -234,8 +246,8 @@
 		layer.full(layer.open({
 			type   : 0,
 			title  : title,
-			icon   : 2,
-			content: message
+			content: message,
+			btn    : null
 		}));
 	};
 	//显示正常提示
@@ -413,9 +425,12 @@
 		}
 		return ['me', tag]
 	};
-	$('body').on('click', '[data-ajax]:not(form)', doAjaxRequest)
+	$('body').on('click', 'a[data-ajax]', doAjaxRequest)
+		.on('click', 'button[data-ajax]', doAjaxRequest)
 		.on('submit', 'form[data-ajax]', doAjaxRequest)
 		.on('change', 'select[data-ajax]', doAjaxRequest)
+		.on('change', 'input[data-ajax]', doAjaxRequest)
+		.on('change', 'textarea[data-ajax]', doAjaxRequest)
 		.on('ajax.send', '[data-loading]', function (e) {
 			e.stopPropagation();
 			let me = e.element;
@@ -428,6 +443,8 @@
 		if (me.data('loading') !== undefined) {
 			layer.close(me.data('loading'))
 		}
+	}).on('ajax.success', '[data-toggle]', function () {
+		$(this).toggleClass('active');
 	});
 	//挂载ajax方法
 	wulaui.ajax        = {
