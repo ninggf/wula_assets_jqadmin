@@ -138,7 +138,7 @@ body {
 
 .layui-header .jqadmin-logo-box {
   float: left;
-  min-width: 150px;
+  min-width: 160px;
 }
 
 .layui-header .jqadmin-logo-box h1 {
@@ -241,23 +241,24 @@ body {
 /**
 *左边菜单
 */
+.layui-side {
+  .jqadmin-home {
+    height: 50px;
+    line-height: 50px;
+    text-indent: 10px;
+  }
 
-.layui-side .jqadmin-home {
-  height: 50px;
-  line-height: 50px;
-  text-indent: 10px;
-}
+  .jqadmin-home a {
+    color: #ccc;
+  }
 
-.layui-side .jqadmin-home a {
-  color: #ccc;
-}
+  .sub-menu {
+    display: none;
+  }
 
-.layui-side .sub-menu {
-  display: none;
-}
-
-.layui-side .show {
-  display: block;
+  .show {
+    display: block;
+  }
 }
 
 .sub-menu .layui-nav-item dl dd a {
@@ -267,15 +268,24 @@ body {
 /**
 *内容主体
 */
+.layui-layout-admin {
+  .layui-side, .layui-body {
+    top: 54px;
+  }
+  .layui-side-scroll {
+    width: 180px;
+  }
+  .layui-side, .layui-nav-tree {
+    width: 160px;
 
-.layui-layout-admin .layui-side,
-.layui-layout-admin .layui-body {
-  top: 54px;
-}
-
-.layui-layout-admin .jqadmin-body {
-  overflow-y: hidden;
-  bottom: 31px;
+  }
+  .jqadmin-body {
+    overflow-y: hidden;
+    bottom: 31px;
+  }
+  .layui-body, .jqadmin-foot {
+    left: 160px;
+  }
 }
 
 .layui-tab-content {

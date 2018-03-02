@@ -97,7 +97,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		}
 	};
 	WulaUI.prototype.dialog  = function (opts, e) {
-		let _area = ["auto", "auto"], ajax = false;
+		let _area = ["auto", "auto"], ajax = false,idx=0;
 		if (e) {
 			let be     = $.Event('before.dialog');
 			be.options = opts;
@@ -143,20 +143,26 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 				opts.type    = 1;
 				opts.content = data;
 				if (!opts.area) {
-					let l = layer.open(opts);
-					layer.full(l);
+					idx = layer.open(opts);
+					layer.full(idx);
 				} else {
 					opts.area = _area;
-					layer.open(opts);
+					idx = layer.open(opts);
+				}
+				if(e){
+					e.data('dialogId',idx);
 				}
 			});
 		} else {
 			if (!opts.area) {
-				let l = layer.open(opts);
-				layer.full(l);
+				idx = layer.open(opts);
+				layer.full(idx);
 			} else {
 				opts.area = _area;
-				layer.open(opts);
+				idx = layer.open(opts);
+			}
+			if(e){
+				e.data('dialogId',idx);
 			}
 		}
 	};
