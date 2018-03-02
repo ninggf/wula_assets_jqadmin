@@ -377,7 +377,12 @@
 								} else if (args[1] === 'top' && top.layer) {
 									top.layer.close(top.layer.index);
 								} else {
-									layer.close(layer.index);
+									let did = opts.element.data('dialogId');
+									if(did){
+										layer.close(did);
+									}else{
+										layer.close(layer.index);
+									}
 								}
 							}
 							break;

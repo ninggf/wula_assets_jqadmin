@@ -102,7 +102,8 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	};
 	WulaUI.prototype.dialog = function (opts, e) {
 		var _area = ["auto", "auto"],
-		    ajax = false;
+		    ajax = false,
+		    idx = 0;
 		if (e) {
 			var be = $.Event('before.dialog');
 			be.options = opts;
@@ -146,20 +147,26 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 				opts.type = 1;
 				opts.content = data;
 				if (!opts.area) {
-					var l = layer.open(opts);
-					layer.full(l);
+					idx = layer.open(opts);
+					layer.full(idx);
 				} else {
 					opts.area = _area;
-					layer.open(opts);
+					idx = layer.open(opts);
+				}
+				if (e) {
+					e.data('dialogId', idx);
 				}
 			});
 		} else {
 			if (!opts.area) {
-				var l = layer.open(opts);
-				layer.full(l);
+				idx = layer.open(opts);
+				layer.full(idx);
 			} else {
 				opts.area = _area;
-				layer.open(opts);
+				idx = layer.open(opts);
+			}
+			if (e) {
+				e.data('dialogId', idx);
 			}
 		}
 	};
@@ -644,7 +651,12 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 									} else if (args[1] === 'top' && top.layer) {
 										top.layer.close(top.layer.index);
 									} else {
-										layer.close(layer.index);
+										var did = opts.element.data('dialogId');
+										if (did) {
+											layer.close(did);
+										} else {
+											layer.close(layer.index);
+										}
 									}
 								}
 								break;

@@ -110,7 +110,7 @@ body {
 */
 .layui-header .jqadmin-logo-box {
   float: left;
-  min-width: 150px;
+  min-width: 160px;
 }
 .layui-header .jqadmin-logo-box h1 {
   font-size: 1.5rem;
@@ -223,9 +223,20 @@ body {
 .layui-layout-admin .layui-body {
   top: 54px;
 }
+.layui-layout-admin .layui-side-scroll {
+  width: 180px;
+}
+.layui-layout-admin .layui-side,
+.layui-layout-admin .layui-nav-tree {
+  width: 160px;
+}
 .layui-layout-admin .jqadmin-body {
   overflow-y: hidden;
   bottom: 31px;
+}
+.layui-layout-admin .layui-body,
+.layui-layout-admin .jqadmin-foot {
+  left: 160px;
 }
 .layui-tab-content {
   height: 100%;
