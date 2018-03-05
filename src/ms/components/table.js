@@ -130,7 +130,7 @@
 				this.reload();
 				this.inited = true;
 			}
-		} else {
+		} else if (!this.isTree) {
 			this.subTr();
 			this.inited = true;
 		}
@@ -415,6 +415,7 @@
 		}
 	};
 	nuiTable.prototype.subTr  = function () {
+		if (this.isTree) return;
 		let ptrs = this.table.find('tbody tr[rel]'), icon = this.folderCloseIcon;
 		if (ptrs.length > 0) {
 			ptrs.each(function () {

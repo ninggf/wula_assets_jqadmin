@@ -110,10 +110,10 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			e.trigger(be);
 		}
 		if (parseInt(opts.type) === 2) {
-			if (opts.data) opts.content = opts.content + "?" + opts.data;
+			if (opts.data) opts.content = opts.content + (opts.content.indexOf('?') >= 0 ? "&" : "?") + opts.data;
 		} else if (opts.type === 'ajax') {
 			ajax = true;
-			if (opts.data) opts.content = opts.content + "?" + opts.data;
+			if (opts.data) opts.content = opts.content + (opts.content.indexOf('?') >= 0 ? "&" : "?") + opts.data;
 		} else {
 			opts.content = $(opts.content);
 		}
@@ -371,6 +371,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		});
 		var confirmx = function confirmx(ajax, content, opts) {
 			var ops = $.extend({}, { icon: 3, title: '请确认', loading: false }, opts || {});
+			if (!ajax.dataType) {
+				ajax.dataType = 'json';
+			}
 			layer.confirm(content || '亲，你确定要这么干吗？', ops, function (index) {
 				layer.close(index);
 				if (ops.loading) {
@@ -384,6 +387,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			});
 		};
 		var dialog = function dialog(opts, e) {
+			opts.type = 'ajax';
 			wulaui.dialog(opts, e);
 		};
 		// ajax 请求
@@ -1465,7 +1469,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 					this.reload();
 					this.inited = true;
 				}
-			} else {
+			} else if (!this.isTree) {
 				this.subTr();
 				this.inited = true;
 			}
@@ -1761,6 +1765,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			}
 		};
 		nuiTable.prototype.subTr = function () {
+			if (this.isTree) return;
 			var ptrs = this.table.find('tbody tr[rel]'),
 			    icon = this.folderCloseIcon;
 			if (ptrs.length > 0) {

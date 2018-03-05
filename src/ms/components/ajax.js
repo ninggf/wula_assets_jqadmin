@@ -102,6 +102,9 @@
 	});
 	const confirmx      = function (ajax, content, opts) {
 		let ops = $.extend({}, {icon: 3, title: '请确认', loading: false}, opts || {});
+		if (!ajax.dataType) {
+			ajax.dataType = 'json';
+		}
 		layer.confirm(content || '亲，你确定要这么干吗？', ops, function (index) {
 			layer.close(index);
 			if (ops.loading) {
@@ -115,6 +118,7 @@
 		});
 	};
 	const dialog        = function (opts, e) {
+		opts.type = 'ajax';
 		wulaui.dialog(opts, e);
 	};
 	// ajax 请求
@@ -378,9 +382,9 @@
 									top.layer.close(top.layer.index);
 								} else {
 									let did = opts.element.data('dialogId');
-									if(did){
+									if (did) {
 										layer.close(did);
-									}else{
+									} else {
 										layer.close(layer.index);
 									}
 								}
