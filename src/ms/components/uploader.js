@@ -245,7 +245,7 @@
 					}
 				} catch (e) {
 					$('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
-					$.notifyD(e.message);
+					wui.toast.error(e.message);
 				}
 			} else {
 				$('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
@@ -268,12 +268,12 @@
 				try {
 					let result = eval('(' + file.response + ')');
 					let rst    = result.error;
-					$.notifyD(rst.message);
+					wui.toast.error(rst.message);
 				} catch (e) {
 					console.log(e);
 				}
 			} else if (file.message) {
-				$.notifyD(file.message);
+				wui.toast.error(file.message());
 			}
 			$this.element.trigger('uploader.error');
 		});

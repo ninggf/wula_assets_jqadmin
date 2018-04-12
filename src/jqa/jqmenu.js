@@ -45,7 +45,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	 * 将tabmenu类附到jqmenu上，方法tab的接口调用与重写
 	 */
 	jqmenu.prototype.tabmenu = tabmenu;
-
+	window.jqTabmenu  = tabmenu;
 	/**
 	 *@todo 自适应窗口
 	 */

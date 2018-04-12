@@ -53,8 +53,12 @@
 					deal500(xhr, '数据类型转换出错');
 					break;
 				case 401:
-					showNotice(xhr);
-					$(document).trigger('wula.need.login');
+					if (window.layui && layui.wulaAuthPage) {
+						top.location = layui.wulaAuthPage;
+					} else {
+						showNotice(xhr);
+						$(document).trigger('wula.need.login');
+					}
 					break;
 				case 403:
 					showNotice(xhr);
@@ -102,6 +106,9 @@
 	});
 	const confirmx      = function (ajax, content, opts) {
 		let ops = $.extend({}, {icon: 3, title: '请确认', loading: false}, opts || {});
+		if (!ajax.dataType) {
+			ajax.dataType = 'json';
+		}
 		layer.confirm(content || '亲，你确定要这么干吗？', ops, function (index) {
 			layer.close(index);
 			if (ops.loading) {
@@ -115,6 +122,7 @@
 		});
 	};
 	const dialog        = function (opts, e) {
+		opts.type = 'ajax';
 		wulaui.dialog(opts, e);
 	};
 	// ajax 请求
@@ -122,6 +130,9 @@
 		e.preventDefault();
 		e.stopPropagation();
 		let $this = $(this);
+		if ($this.is('a') && $this.closest('ul').is('.dropdown-menu')) {
+			$this.closest('ul').closest('.open').removeClass('open');
+		}
 		if ($this.data('ajaxSending')) {
 			return false;
 		}
@@ -378,9 +389,9 @@
 									top.layer.close(top.layer.index);
 								} else {
 									let did = opts.element.data('dialogId');
-									if(did){
+									if (did) {
 										layer.close(did);
-									}else{
+									} else {
 										layer.close(layer.index);
 									}
 								}
@@ -455,7 +466,32 @@
 	wulaui.ajax        = {
 		confirm: confirmx,
 		dialog : dialog,
-		ajax   : $.ajax
+		ajax   : $.ajax,
+		async  : true,
+		sync   : function () {
+			this.async = false;
+			return this;
+		},
+		get    : function (url, data, dataType) {
+			let opts   = {
+				dataType: dataType ? dataType : 'json',
+				method  : 'GET',
+				data    : data || {},
+				async   : !!this.async
+			};
+			this.async = true;
+			return $.ajax(url, opts);
+		},
+		post   : function (url, data, dataType) {
+			let opts   = {
+				dataType: dataType ? dataType : 'json',
+				method  : 'POST',
+				data    : data || {},
+				async   : !!this.async
+			};
+			this.async = true;
+			return $.ajax(url, opts);
+		}
 	};
 	window.ajaxActions = {
 		reload(target) {
