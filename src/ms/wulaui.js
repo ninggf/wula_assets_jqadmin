@@ -209,6 +209,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		if (href) {
 			wulaui.open(data);
 		}
+		if (that.is('a') && that.closest('ul').is('.dropdown-menu')) {
+			that.closest('ul').closest('.open').removeClass('open');
+		}
 		return false;
 	}).on('click', '[data-dialog]', function () {
 		try {

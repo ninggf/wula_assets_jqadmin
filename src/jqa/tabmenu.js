@@ -21,12 +21,10 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		}
 		return this;
 	};
-
 	/**
-	 *@todo 初始化对象
-	 *@return 返回对象参数初始化结果
+	 * 返回对象参数初始化结果
 	 */
-	tabMenu.prototype.init = function (options) {
+	tabMenu.prototype.init = function () {
 		var _this      = this,
 			config     = _this.config,
 			$container = $('' + config.item + ''),
@@ -38,8 +36,6 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		objTab.titleBox   = $container.children('ul.layui-tab-title');
 		objTab.contentBox = $container.children('div.layui-tab-content');
 		objTab.tabFilter  = filter;
-		_this.hideRightMenu();
-		_this.drag();
 
 		return _this;
 	}
@@ -67,19 +63,20 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 	}
 	tabMenu.prototype.afterTabClose = function (data, _this) {
 	}
-
 	/**
-	 *@todo 添加tab菜单选项卡
-	 *@param object data [ title 菜单选项卡标题
+	 * 添加tab菜单选项卡
+	 *@param  data [ title 菜单选项卡标题
 	 ,href 菜单URL地址
 	 ,icon 菜单的ICON图标
+	 ,cls  class
 	 ]
+	 @param fresh
 	 */
 	tabMenu.prototype.tabAdd = function (data, fresh) {
-
 		var tab_index = this.exited(data),
 			_this     = this,
 			cls       = data.cls || 'iconfont';
+		data.cls      = cls;
 		if (tab_index === -1) {
 			_this.beforeTabAdd(data, _this);
 			var layID   = data.layId ? data.layId : new Date().getTime();
@@ -101,7 +98,8 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			element.tabAdd(objTab.tabFilter, {
 				title  : title,
 				content: content,
-				id     : layID
+				id     : layID,
+				cls    : cls
 			});
 
 			//添加打开的菜单到列表,刷新打开列表时不操作数据
@@ -128,18 +126,6 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			this.tabMove(tab_index, 0);
 			//切换到当前打开的选项卡
 			element.tabChange(objTab.tabFilter, layID);
-
-			//监听鼠标右键事件
-			objTab.titleBox.find('li:not([bind])').on('contextmenu', function (event) {
-				$(this).attr("bind", 1);
-				var layId = $(this).attr('lay-id');
-				var e     = event || window.event;
-
-				$('.right-click-menu').attr('lay-id', layId).css({"top": e.pageY, "left": e.pageX}).slideDown(100);
-				$('.right-click-menu').find("a:not([bind])").on('click', {_this: _this}, _this.rightMenuEvent);
-				return false;
-			});
-
 		} else {
 			element.tabChange(objTab.tabFilter, tab_index);
 			_this.changeTab(data, _this, tab_index);
@@ -152,7 +138,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		}
 	}
 
-	tabMenu.prototype.effect = function (layID, ischange) {
+	tabMenu.prototype.effect  = function (layID, ischange) {
 		//页面淡出效果
 		var l = layer.load(2);
 		if (ischange) {
@@ -171,58 +157,6 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			});
 		}
 	};
-
-	tabMenu.prototype.rightMenuEvent = function (event) {
-		var _this = event.data._this;
-		var event = $(this).data('event');
-		$(this).attr("bind", 1);
-		var index = $(this).parents('.right-click-menu').attr('lay-id');
-		$(this).parents('.right-click-menu').hide();
-		$('.menu-list').slideUp();
-		$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
-		switch (event) {
-			case "close":
-				if (index != 0) {
-					element.tabDelete(objTab.tabFilter, index);
-				}
-				var data = {
-					layId: index
-				}
-				_this.storage(data, "close");
-				break;
-			case "other":
-				objTab.titleBox.find('li').each(function (i, o) {
-					var layId = $(o).attr('lay-id');
-					if (layId != index && layId != 0) {
-						element.tabDelete(objTab.tabFilter, layId);
-					}
-				})
-				var data = {
-					layId: index
-				}
-				_this.storage(data, "other");
-				break;
-
-			case "all":
-				objTab.titleBox.find('li').each(function (i, o) {
-					var layId = $(o).attr('lay-id');
-					if (layId != 0) {
-						element.tabDelete(objTab.tabFilter, layId);
-					}
-					var data = {
-						layId: layId
-					}
-					_this.storage(data, "all");
-				})
-				break;
-			default:
-				_this.fresh(index);
-		}
-		_this.tabMove(1, 1);
-		$(this).parents('.right-click-menu').hide();
-		element.init();
-	}
-
 	tabMenu.prototype.storage = function (data, action) {
 		if (data.title == undefined && action != "all") {
 			return false;
@@ -265,7 +199,6 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 					if (menu.layId == data.layId) {
 						menulist.splice(index, 1);
 					}
-
 				}
 				storage.menu = menulist.join("|");
 				storage.removeItem("curMenu");
@@ -291,30 +224,42 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			}
 		}
 	}
-
-	tabMenu.prototype.fresh = function (index) {
-		element.tabChange(objTab.tabFilter, index);
+	tabMenu.prototype.fresh   = function (index, active) {
+		if (!index) {
+			return;
+		}
+		if (active) {
+			element.tabChange(objTab.tabFilter, index);
+		}
 		var othis   = objTab.titleBox.find('>li[lay-id="' + index + '"]'),
-			index   = othis.parent().children('li').index(othis),
+			index1  = othis.parent().children('li').index(othis),
 			parents = othis.parents('.layui-tab').eq(0),
 			item    = parents.children('.layui-tab-content').children('.layui-tab-item'),
-			src     = item.eq(index).find('iframe').attr("src");
-		item.eq(index).find('iframe').attr("src", src);
-	}
-
-	tabMenu.prototype.hideRightMenu = function () {
-		$(document).on('contextmenu', function (event) {
-			$(this).find('.right-click-menu').hide();
-		});
-		$(document).on('click', function (event) {
-			$(this).find('.right-click-menu').hide();
-		})
-	}
-
+			src     = item.eq(index1).find('iframe').attr("src");
+		item.eq(index1).find('iframe').attr("src", src);
+	};
+	tabMenu.prototype.close   = function (location) {
+		var url = location.href.substring(location.origin.length), id = this.exited({href: url});
+		if (id) {
+			var data = {layId: id};
+			element.tabDelete(objTab.tabFilter, id);
+			this.tabMove(1, 1);
+			this.afterTabClose(data, this);
+			//删除数组中的对应元素
+			element.init();
+			data.title = '';
+			this.storage(data, "close");
+		}
+	};
+	tabMenu.prototype.reload  = function (url) {
+		var id = this.exited({href: url});
+		if (id) {
+			this.fresh(id, false);
+		}
+	};
 	/**
-	 *@todo 判断菜单选项卡是否已超出了总宽度，若超出则显示左右移动按钮，否则隐藏按钮
-	 *@param int index 大于等于0时表示菜单选项卡已经存在，才有移动的需求
-	 *@param int scene 为1时表示删除tab菜单选项卡，为0时表示切换或是添加菜单选项卡
+	 *@param index 大于等于0时表示菜单选项卡已经存在，才有移动的需求
+	 *@param scene 为1时表示删除tab菜单选项卡，为0时表示切换或是添加菜单选项卡
 	 */
 	tabMenu.prototype.tabMove = function (index, scene) {
 		//取得屏幕总宽度
@@ -367,51 +312,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			$('.tab-move-btn').hide();
 			objTab.titleBox.css({"marginLeft": 45});
 		}
-	}
-
-	tabMenu.prototype.drag = function () {
-		var _this = this;
-
-		objTab.titleBox.on("mousedown", function (e) {
-
-			//取得屏幕总宽度
-			var navWidth = parseInt(objTab.titleBox.parent('div').width());
-
-			//取得菜单选项卡总宽度
-			var $tabNav       = objTab.titleBox.find('li'),
-				tab_all_width = 0;
-			$tabNav.each(function (i, n) {
-				tab_all_width += $(n).outerWidth(true);
-			});
-			if (!$tabNav[0]) {
-				return
-			}
-			;
-
-			if (tab_all_width > navWidth + 1) {
-				var maxml = tab_all_width - navWidth + 54
-				var _x    = e.pageX - parseInt(objTab.titleBox.css("marginLeft")); //取得鼠标到标签左边left的距离
-
-				objTab.titleBox.on("mousemove", function (e) {
-					x = e.pageX - _x;
-					if (x > 45) {
-						x = 45;
-					} else if (x < -maxml) {
-						x = -maxml;
-					}
-					objTab.titleBox.css({"marginLeft": x});
-				});
-
-				objTab.titleBox.parents('body').on("mouseup", function (e) {
-					objTab.titleBox.off("mousemove");
-				})
-
-				return false;
-			}
-
-		});
-	}
-
+	};
 	/**
 	 *根据值查找所在位置index值，查不到就返回-1
 	 */
