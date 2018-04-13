@@ -1,5 +1,6 @@
 ($ => {
 	const prepareValidateRule      = function (rules) {
+		rules = rules || {};
 		if ('object' !== typeof rules) {
 			try {
 				rules = $.parseJSON(rules);
