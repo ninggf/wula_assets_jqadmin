@@ -1,4 +1,3 @@
-(function ($) {
 	//default consts of exedit
 	var _consts      = {
 			event: {
@@ -1184,4 +1183,3 @@
 		}
 		return (!root.curEditNode) && (_uCanDo ? _uCanDo.apply(view, arguments) : true);
 	}
-})(jQuery);

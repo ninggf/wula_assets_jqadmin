@@ -3,5 +3,5 @@ layui.define(['jquery', 'ztree'], exports => {
 
 	//=require tree/jquery.ztree.exhide.js
 
-	exports('ztree.hide', {})
+	exports('ztree.hide', $.fn.zTree)
 });

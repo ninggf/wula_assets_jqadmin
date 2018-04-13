@@ -1,4 +1,3 @@
-(function ($) {
 	//default init node of exLib
 	var _initNode   = function (setting, level, n, parentNode, isFirstNode, isLastNode, openFlag) {
 			if (typeof n.isHidden == "string") n.isHidden = tools.eqs(n.isHidden, "true");
@@ -353,4 +352,3 @@
 			_repairParentChkClassWithSelf.apply(view, arguments);
 		}
 	}
-})(jQuery);

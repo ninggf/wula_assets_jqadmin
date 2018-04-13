@@ -1,9 +1,8 @@
 layui.define(['jquery'], function (exports) {
-	let jQuery = layui.$, $ = jQuery;
-	layui.addcss('ztree.css', 'ztree');
+	let jQuery = layui.$, $ = layui.$;
 
 	//=require tree/jquery.ztree.core.js
-	//=require tree/jquery.ztree.excheck.js
 
 	exports('ztree', $.fn.zTree);
+	layui.addcss('ztree.css', 'ztree');
 });

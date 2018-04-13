@@ -26,7 +26,6 @@
 				autoParam: ["id"]
 			};
 		}
-
 		element.on('ztree.setting.load', function () {
 			let e  = $.Event('ztree.init');
 			e.tree = me;
@@ -75,9 +74,13 @@
 		e.stopPropagation();
 		let that = $(this).find('[data-ztree]');
 		if (that.length > 0) {
-			layui.use('ztree', function () {
+			if ($.fn.zTree) {
 				that.wulatree();
-			});
+			} else {
+				layui.use('ztree', function () {
+					that.wulatree();
+				});
+			}
 		}
 	})
 })($);

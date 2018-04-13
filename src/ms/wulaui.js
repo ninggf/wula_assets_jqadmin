@@ -268,6 +268,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	//=require components/datepicker.js
 	//=require components/tree.js
 	//end
+
 	wulaui.init();
 	exports('wulaui', wulaui)
 });

@@ -160,8 +160,12 @@
 		e.stopPropagation();
 		let that = $(this).find('[data-combox]');
 		if (that.length > 0)
-			layui.use('select2', () => {
+			if ($.fn.select2) {
 				that.wulauiCombox2();
-			});
+			} else {
+				layui.use('select2', () => {
+					that.wulauiCombox2();
+				});
+			}
 	});
 })($);

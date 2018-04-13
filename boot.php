@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '1.3.5');
+define('JQ_VERSION', '1.3.6');
 
 /**
  * 加载界面样式资源.
@@ -57,21 +57,22 @@ function smarty_function_initjq($config = false) {
 		$ms['tabmenu'] = 'js/tabmenu';
 		$ms['jqtags']  = 'js/jqtags';
 		// lib
-		$ms['bootstrap']  = 'lib/bootstrap';
-		$ms['highlight']  = 'lib/highlight';
-		$ms['fuelux']     = 'lib/fuelux/fuelux';
-		$ms['plupload']   = 'lib/plupload';
-		$ms['select2']    = 'lib/select2';
-		$ms['datepicker'] = 'lib/datepicker';
-		$ms['validate']   = 'lib/validate';
-		$ms['sortable']   = 'lib/sortable';
-		$ms['toastr']     = 'js/toastr';
-		$ms['ztree']      = 'js/ztree';
-		$ms['ztree.edit'] = 'js/ztree_edit';
-		$ms['ztree.hide'] = 'js/ztree_hide';
-		$ms['wulaui']     = 'js/wulaui';
-		$modules          = json_encode($ms, JSON_UNESCAPED_SLASHES);
-		$groups           = wulaphp\app\App::$prefix;
+		$ms['bootstrap']   = 'lib/bootstrap';
+		$ms['highlight']   = 'lib/highlight';
+		$ms['fuelux']      = 'lib/fuelux/fuelux';
+		$ms['plupload']    = 'lib/plupload';
+		$ms['select2']     = 'lib/select2';
+		$ms['datepicker']  = 'lib/datepicker';
+		$ms['validate']    = 'lib/validate';
+		$ms['sortable']    = 'lib/sortable';
+		$ms['toastr']      = 'js/toastr';
+		$ms['ztree']       = 'js/ztree';
+		$ms['ztree.edit']  = 'js/ztree_edit';
+		$ms['ztree.hide']  = 'js/ztree_hide';
+		$ms['ztree.check'] = 'js/ztree_check';
+		$ms['wulaui']      = 'js/wulaui';
+		$modules           = json_encode($ms, JSON_UNESCAPED_SLASHES);
+		$groups            = wulaphp\app\App::$prefix;
 		unset($groups['check'], $config['config']);
 		$config['key']             = 'config';
 		$config['value']['base']   = WWWROOT_DIR;

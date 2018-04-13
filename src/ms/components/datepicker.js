@@ -52,9 +52,13 @@
 		e.stopPropagation();
 		let that = $(this).find('[data-datepicker]');
 		if (that.length > 0) {
-			layui.use('datepicker', function () {
+			if ($.fn.datepicker) {
 				that.wulauiDatepicker();
-			})
+			} else {
+				layui.use('datepicker', function () {
+					that.wulauiDatepicker();
+				})
+			}
 		}
 	})
 })($);

@@ -317,9 +317,13 @@
 		e.stopPropagation();
 		let that = $(this).find('[data-uploader]');
 		if (that.length > 0) {
-			layui.use('plupload', function () {
+			if (window.plupload) {
 				that.wulauploader();
-			});
+			} else {
+				layui.use('plupload', function () {
+					that.wulauploader();
+				});
+			}
 		}
 	})
 })($, wulaui);
