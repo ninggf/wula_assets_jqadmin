@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '1.3.6');
+define('JQ_VERSION', '1.3.7');
 
 /**
  * 加载界面样式资源.
@@ -46,7 +46,7 @@ EOF;
  */
 function smarty_function_initjq($config = false) {
 	$ver  = JQ_VERSION;
-	$base = \wulaphp\app\App::assets('');
+	$base = rtrim(\wulaphp\app\App::assets(''), '/');
 	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 
 	if ($config && isset($config['config'])) {

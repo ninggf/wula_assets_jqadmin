@@ -1,5 +1,5 @@
 layui.define(['jquery', 'ztree'], exports => {
-	let jQuery = layui.$;
+	let $ = layui.$;
 
 	//=require tree/jquery.ztree.exhide.js
 
