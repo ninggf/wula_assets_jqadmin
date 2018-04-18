@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], exports => {
+layui.define(['jquery', 'bootstrap'], exports => {
 	let $ = layui.$;
 
 	/*

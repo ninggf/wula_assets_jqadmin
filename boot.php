@@ -70,6 +70,7 @@ function smarty_function_initjq($config = false) {
 		$ms['ztree.edit']  = 'js/ztree_edit';
 		$ms['ztree.hide']  = 'js/ztree_hide';
 		$ms['ztree.check'] = 'js/ztree_check';
+		$ms['clipboard']   = 'js/clipboard';
 		$ms['wysiwyg']     = 'js/wysiwyg';
 		$ms['wulaui']      = 'js/wulaui';
 		$modules           = json_encode($ms, JSON_UNESCAPED_SLASHES);
