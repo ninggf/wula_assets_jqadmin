@@ -18,7 +18,7 @@ define('JQ_VERSION', '1.3.7');
  */
 function smarty_function_loaduicss($styles = false) {
 	$ver  = JQ_VERSION;
-	$base = \wulaphp\app\App::assets('');
+	$base = WWWROOT_DIR . ASSETS_DIR . '/';
 	$css  = <<<EOF
 	<link rel="stylesheet" type="text/css" href="{$base}wula/jqadmin/css/font.min.css?v={$ver}" media="all"/>
     <link rel="stylesheet" type="text/css" href="{$base}wula/jqadmin/css/layui.css?v={$ver}" media="all"/>
@@ -27,7 +27,7 @@ EOF;
 
 	if ($styles) {
 		foreach ($styles as $id => $style) {
-			if ($style) $css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}/wula/jqadmin/css/{$style}?v={$ver}\" media=\"all\"/>\n";
+			if ($style) $css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}wula/jqadmin/css/{$style}?v={$ver}\" media=\"all\"/>\n";
 		}
 	}
 
@@ -46,7 +46,7 @@ EOF;
  */
 function smarty_function_initjq($config = false) {
 	$ver  = JQ_VERSION;
-	$base = rtrim(\wulaphp\app\App::assets(''), '/');
+	$base = WWWROOT_DIR . ASSETS_DIR;
 	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 
 	if ($config && isset($config['config'])) {
@@ -70,6 +70,7 @@ function smarty_function_initjq($config = false) {
 		$ms['ztree.edit']  = 'js/ztree_edit';
 		$ms['ztree.hide']  = 'js/ztree_hide';
 		$ms['ztree.check'] = 'js/ztree_check';
+		$ms['wysiwyg']     = 'js/wysiwyg';
 		$ms['wulaui']      = 'js/wulaui';
 		$modules           = json_encode($ms, JSON_UNESCAPED_SLASHES);
 		$groups            = wulaphp\app\App::$prefix;

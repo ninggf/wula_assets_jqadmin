@@ -23,6 +23,104 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			}
 			return params;
 		};
+	WulaUI.prototype.map     = function () {
+		this.elements = [];
+
+		this.size = function () {
+			return this.elements.length;
+		};
+
+		this.isEmpty = function () {
+			return (this.elements.length < 1);
+		};
+
+		this.clear = function () {
+			delete this.elements;
+			this.elements = [];
+		};
+
+		this.put = function (_key, _value) {
+			this.remove(_key);
+			this.elements.push({
+				key  : _key,
+				value: _value
+			});
+		};
+
+		this.remove = function (_key) {
+			try {
+				for (let i = 0; i < this.elements.length; i++) {
+					if (this.elements[i].key === _key) {
+						this.elements.splice(i, 1);
+						return true;
+					}
+				}
+			} catch (e) {
+				return false;
+			}
+			return false;
+		};
+
+		this.get  = function (_key) {
+			try {
+				for (let i = 0; i < this.elements.length; i++) {
+					if (this.elements[i].key === _key) {
+						return this.elements[i].value;
+					}
+				}
+			} catch (e) {
+				return null;
+			}
+		};
+		this.join = function (sep) {
+			sep      = sep ? sep : ',';
+			let keys = [], values = [];
+			try {
+				for (let i = 0; i < this.elements.length; i++) {
+					keys[i]   = this.elements[i].key;
+					values[i] = this.elements[i].value;
+				}
+			} catch (e) {
+				return {keys: '', values: ''};
+			}
+			return {keys: keys.join(sep), values: values.join(sep)};
+		};
+
+		this.element = function (_index) {
+			if (_index < 0 || _index >= this.elements.length) {
+				return null;
+			}
+			return this.elements[_index];
+		};
+
+		this.contains = function (_key) {
+			try {
+				for (let i = 0; i < this.elements.length; i++) {
+					if (this.elements[i].key === _key) {
+						return true;
+					}
+				}
+			} catch (e) {
+				return false;
+			}
+			return false;
+		};
+
+		this.values = function () {
+			let arr = [];
+			for (let i = 0; i < this.elements.length; i++) {
+				arr.push(this.elements[i].value);
+			}
+			return arr;
+		};
+		this.keys   = function () {
+			let arr = [];
+			for (let i = 0; i < this.elements.length; i++) {
+				arr.push(this.elements[i].key);
+			}
+			return arr;
+		};
+	};
 	WulaUI.prototype.toast   = top.global && top.global.toast ? top.global.toast : layui.toastr;
 	WulaUI.prototype.layer   = top.global && top.global.layer ? top.global.layer : layui.layer;
 	WulaUI.prototype.app     = function (url) {
@@ -267,6 +365,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	//=require components/select2.js
 	//=require components/datepicker.js
 	//=require components/tree.js
+	//=require components/wysiwyg.js
 	//end
 
 	wulaui.init();
