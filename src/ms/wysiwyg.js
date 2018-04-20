@@ -1,5 +1,34 @@
-layui.define(['jquery', 'bootstrap'], exports => {
-	let $ = layui.$;
+layui.define(['jquery', 'laytpl', 'bootstrap'], exports => {
+	let $       = layui.$,
+		jQuery  = $,
+		tpl     = layui.laytpl,
+		atagTpl = '<div class="pull-in">' +
+			'<div class="form-group clearfix">' +
+			'<div class="col-xs-4"><label>target</label><br/><input type="text" class="form-control" value="{{d.target}}" name="target"></div>' +
+			'<div class="col-xs-8"><label>标题</label><br/><input type="text" class="form-control" value="{{=d.title}}" name="title"></div>' +
+			'</div>' +
+			'<div class="form-group clearfix">' +
+			'<div class="col-xs-12"><label>URL</label>' +
+			'<div class="input-group">' +
+			'<input class="form-control" placeholder="URL" type="text" value="{{d.href}}" name="href">' +
+			'<span class="input-group-btn"><button class="btn btn-success btn-icon" type="button"><i class="fa fa-check-square"></i></button></span>' +
+			'</div></div></div>',
+		imgTpl  = '<div class="pull-in">' +
+			'<div class="form-group clearfix">' +
+			'<div class="col-xs-3"><label>宽</label><br/><input type="text" class="form-control" value="{{d.width}}" name="width"></div>' +
+			'<div class="col-xs-3"><label>高</label><br/><input type="text" class="form-control" value="{{d.height}}" name="height"></div>' +
+			'<div class="col-xs-6"><label>替换文本</label><br/><input type="text" class="form-control" value="{{=d.alt}}" name="alt"></div>' +
+			'</div><div class="form-group clearfix"><div class="col-xs-12"><label>排版</label><br/><div>' +
+			'<label class="checkbox-inline"><input type="radio" name="float" value="none">无</label>' +
+			'<label class="checkbox-inline"><input type="radio" name="float" value="left">居左</label>' +
+			'<label class="checkbox-inline"><input type="radio" name="float" value="right">居右</label>' +
+			'</div></div></div>' +
+			'<div class="form-group clearfix">' +
+			'<div class="col-xs-12"><label>图片地址</label>' +
+			'<div class="input-group">' +
+			'<input class="form-control" placeholder="SRC" type="text" value="{{d.src}}" name="src">' +
+			'<span class="input-group-btn"><button class="btn btn-success btn-icon" type="button"><i class="fa fa-check-square"></i></button></span>' +
+			'</div></div></div>';
 
 	/*
 	 * hotkeys key handler
@@ -14,7 +43,7 @@ layui.define(['jquery', 'bootstrap'], exports => {
 			return;
 		}
 
-		var origHandler             = handleObj.handler,
+		let origHandler             = handleObj.handler,
 			keys                    = handleObj.data.keys.toLowerCase().split(" "),
 			textAcceptingInputTypes = ["text", "password", "number", "email", "url", "range", "date", "month", "week", "time", "datetime", "datetime-local", "search", "color", "tel"];
 
@@ -25,7 +54,7 @@ layui.define(['jquery', 'bootstrap'], exports => {
 				return;
 			}
 
-			var special              = jQuery.hotkeys.specialKeys[event.keyCode],
+			let special              = jQuery.hotkeys.specialKeys[event.keyCode],
 				// character codes are available only in keypress
 				character            = event.type === "keypress" && String.fromCharCode(event.which).toLowerCase(),
 				modif = "", possible = {};
@@ -62,12 +91,34 @@ layui.define(['jquery', 'bootstrap'], exports => {
 				}
 			}
 
-			for (var i = 0, l = keys.length; i < l; i++) {
+			for (let i = 0, l = keys.length; i < l; i++) {
 				if (possible[keys[i]]) {
 					return origHandler.apply(this, arguments);
 				}
 			}
 		};
+	}
+
+	function editAtag(a) {
+		let opts = {
+			href  : a.attr("href") || '',
+			target: a.attr('target') || '',
+			title : a.attr('title') || ''
+		};
+
+		return tpl(atagTpl).render(opts);
+	}
+
+	function editImg(a) {
+		let opts = {
+			src   : a.attr("src") || '',
+			alt   : a.attr("alt") || '',
+			width : a.css('width') || '',
+			height: a.css('height') || '',
+			float : a.css('float') || 'none'
+		};
+
+		return tpl(imgTpl).render(opts);
 	}
 
 	/*
@@ -81,14 +132,18 @@ layui.define(['jquery', 'bootstrap'], exports => {
 		// This calls the $ function, with the element as a parameter and
 		// returns the jQuery object wrapper for element. It also assigns the
 		// jQuery object wrapper to the property $editor on `this`.
+		let me             = this;
 		this.selectedRange = null;
-		this.editor        = $(element);
-		var editor         = $(element);
-		var defaults       = {
+		this.editor        = $(element).on('click', function () {
+			$(this).find('a,img').removeAttr('data-original-title').popover('destroy');
+		});
+		let editor         = $(element);
+		let defaults       = {
 			hotKeys           : {
 				"Ctrl+b meta+b"             : "bold",
 				"Ctrl+i meta+i"             : "italic",
 				"Ctrl+u meta+u"             : "underline",
+				"Ctrl+f meta+f"             : "removeFormat",
 				"Ctrl+z"                    : "undo",
 				"Ctrl+y meta+y meta+shift+z": "redo",
 				"Ctrl+l meta+l"             : "justifyleft",
@@ -102,32 +157,83 @@ layui.define(['jquery', 'bootstrap'], exports => {
 			commandRole       : "edit",
 			activeToolbarClass: "btn-info",
 			selectionMarker   : "edit-focus-marker",
-			selectionColor    : "darkgrey",
-			dragAndDropImages : true,
+			selectionColor    : "darkgray",
+			dragAndDropImages : false,
 			keypressTimeout   : 200,
 			fileUploadError   : function (reason, detail) {
-				console.log("File upload error", reason, detail);
+				//console.log("File upload error", reason, detail);
 			}
 		};
 
-		var options            = $.extend(true, {}, defaults, userOptions);
-		var toolbarBtnSelector = "a[data-" + options.commandRole + "],button[data-" + options.commandRole + "],input[type=button][data-" + options.commandRole + "]";
+		let options             = $.extend(true, {}, defaults, userOptions);
+		this.options            = options;
+		let toolbarBtnSelector  = "a[data-" + options.commandRole + "],button[data-" + options.commandRole + "],input[type=button][data-" + options.commandRole + "]";
+		this.toolbarBtnSelector = toolbarBtnSelector;
 		this.bindHotkeys(editor, options, toolbarBtnSelector);
-
-		if (options.dragAndDropImages) {
-			this.initFileDrops(editor, options, toolbarBtnSelector);
-		}
 
 		this.bindToolbar(editor, $(options.toolbarSelector), options, toolbarBtnSelector);
 
-		editor.attr("contenteditable", true)
-			.on("mouseup keyup mouseout", function () {
-				this.saveSelection();
-				this.updateToolbar(editor, toolbarBtnSelector, options);
-			}.bind(this));
+		editor.attr("contenteditable", true).on("mouseup keyup mouseout", function () {
+			this.saveSelection();
+			this.updateToolbar(editor, toolbarBtnSelector, options);
+		}.bind(this));
+
+		editor.on('click', 'img', function (e) {
+			e.stopPropagation();
+			let a = $(this).popover({
+				container: 'body',
+				content  : editImg($(this)),
+				html     : true,
+				placement: 'bottom',
+				viewport : '#' + me.editor.attr('id'),
+				trigger  : 'manual',
+				template : '<div class="popover imgtag-dlg" role="tooltip" style="width: 400px;max-width:400px"><div class="arrow"></div><div class="popover-content"></div></div>'
+			}).on('shown.bs.popover', function () {
+				let float = a.css('float');
+				$('.imgtag-dlg').find('[name=float][value=' + float + ']').prop('checked', true);
+				$('.imgtag-dlg button').on('click', function () {
+					let pa     = $(this).closest('.imgtag-dlg'),
+						src    = pa.find('[name=src]').val(),
+						alt    = pa.find('[name=alt]').val(),
+						width  = pa.find('[name=width]').val(),
+						height = pa.find('[name=height]').val(),
+						float  = pa.find('[name=float]:checked').val();
+					a.attr('src', src).attr('alt', alt).css('width', width).css('height', height);
+					if (float === 'none') {
+						a.css('float', 'none');
+					} else {
+						a.css('float', float);
+					}
+					a.popover('destroy');
+				});
+			}).popover('show');
+			return false;
+
+		}).on('click', 'a', function (e) {
+			e.stopPropagation();
+			let a = $(this).popover({
+				container: 'body',
+				content  : editAtag($(this)),
+				html     : true,
+				placement: 'bottom',
+				viewport : '#' + me.editor.attr('id'),
+				trigger  : 'manual',
+				template : '<div class="popover atag-dlg" role="tooltip" style="width: 400px;max-width:400px"><div class="arrow"></div><div class="popover-content"></div></div>'
+			}).on('shown.bs.popover', function () {
+				$('.atag-dlg button').on('click', function () {
+					let pa   = $(this).closest('.atag-dlg'),
+						tg   = pa.find('[name=target]').val(),
+						tl   = pa.find('[name=title]').val(),
+						href = pa.find('[name=href]').val();
+					a.attr('target', tg).attr('title', tl).attr('href', href);
+					a.popover('destroy');
+				});
+			}).popover('show');
+			return false;
+		});
 
 		$(window).bind("touchend", function (e) {
-			var isInside     = (editor.is(e.target) || editor.has(e.target).length > 0),
+			let isInside     = (editor.is(e.target) || editor.has(e.target).length > 0),
 				currentRange = this.getCurrentRange(),
 				clear        = currentRange && (currentRange.startContainer === currentRange.endContainer && currentRange.startOffset === currentRange.endOffset);
 
@@ -138,55 +244,12 @@ layui.define(['jquery', 'bootstrap'], exports => {
 		});
 	}
 
-	Wysiwyg.prototype.readFileIntoDataUrl = function (fileInfo) {
-		var loader  = $.Deferred(),
-			fReader = new FileReader();
-
-		fReader.onload = function (e) {
-			loader.resolve(e.target.result);
-		};
-
-		fReader.onerror    = loader.reject;
-		fReader.onprogress = loader.notify;
-		fReader.readAsDataURL(fileInfo);
-		return loader.promise();
-	};
-
-	Wysiwyg.prototype.cleanHtml = function (o) {
-		var self = this;
-		if ($(self).data("wysiwyg-html-mode") === true) {
-			$(self).html($(self).text());
-			$(self).attr("contenteditable", true);
-			$(self).data("wysiwyg-html-mode", false);
-		}
-
-		// Strip the images with src="data:image/.." out;
-		if (o === true && $(self).parent().is("form")) {
-			var gGal = $(self).html;
-			if ($(gGal).has("img").length) {
-				var gImages  = $("img", $(gGal));
-				var gResults = [];
-				var gEditor  = $(self).parent();
-				$.each(gImages, function (i, v) {
-					if ($(v).attr("src").match(/^data:image\/.*$/)) {
-						gResults.push(gImages[i]);
-						$(gEditor).prepend("<input value='" + $(v).attr("src") + "' type='hidden' name='postedimage/" + i + "' />");
-						$(v).attr("src", "postedimage/" + i);
-					}
-				});
-			}
-		}
-
-		var html = $(self).html();
-		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, "");
-	};
-
 	Wysiwyg.prototype.updateToolbar = function (editor, toolbarBtnSelector, options) {
 		if (options.activeToolbarClass) {
 			$(options.toolbarSelector).find(toolbarBtnSelector).each(function () {
-				var self       = $(this);
-				var commandArr = self.data(options.commandRole).split(" ");
-				var command    = commandArr[0];
+				let self       = $(this);
+				let commandArr = self.data(options.commandRole).split(" ");
+				let command    = commandArr[0];
 
 				// If the command has an argument and its value matches this button. == used for string/number comparison
 				if (commandArr.length > 1 && document.queryCommandEnabled(command) && document.queryCommandValue(command) === commandArr[1]) {
@@ -207,11 +270,11 @@ layui.define(['jquery', 'bootstrap'], exports => {
 	};
 
 	Wysiwyg.prototype.execCommand = function (commandWithArgs, valueArg, editor, options, toolbarBtnSelector) {
-		var commandArr = commandWithArgs.split(" "),
+		let commandArr = commandWithArgs.split(" "),
 			command    = commandArr.shift(),
 			args       = commandArr.join(" ") + (valueArg || "");
 
-		var parts = commandWithArgs.split("-");
+		let parts = commandWithArgs.split("-");
 
 		if (parts.length === 1) {
 			document.execCommand(command, false, args);
@@ -219,12 +282,12 @@ layui.define(['jquery', 'bootstrap'], exports => {
 			document.execCommand("formatBlock", false, parts[1]);
 		}
 
-		(editor).trigger("change");
-		this.updateToolbar(editor, toolbarBtnSelector, options);
+		(editor || this.editor).trigger("change");
+		this.updateToolbar(editor || this.editor, toolbarBtnSelector || this.toolbarBtnSelector, options || this.options);
 	};
 
 	Wysiwyg.prototype.bindHotkeys = function (editor, options, toolbarBtnSelector) {
-		var self = this;
+		let self = this;
 		$.each(options.hotKeys, function (hotkey, command) {
 			if (!command) return;
 
@@ -248,7 +311,7 @@ layui.define(['jquery', 'bootstrap'], exports => {
 	};
 
 	Wysiwyg.prototype.getCurrentRange = function () {
-		var sel, range;
+		let sel, range;
 		if (window.getSelection) {
 			sel = window.getSelection();
 			if (sel.getRangeAt && sel.rangeCount) {
@@ -266,7 +329,7 @@ layui.define(['jquery', 'bootstrap'], exports => {
 	};
 
 	Wysiwyg.prototype.restoreSelection = function () {
-		var selection;
+		let selection;
 		if (window.getSelection || document.createRange) {
 			selection = window.getSelection();
 			if (this.selectedRange) {
@@ -284,43 +347,6 @@ layui.define(['jquery', 'bootstrap'], exports => {
 		}
 	};
 
-	// Adding Toggle HTML based on the work by @jd0000, but cleaned up a little to work in this context.
-	Wysiwyg.prototype.toggleHtmlEdit = function (editor) {
-		if (editor.data("wysiwyg-html-mode") !== true) {
-			var oContent  = editor.html();
-			var editorPre = $("<pre />");
-			$(editorPre).append(document.createTextNode(oContent));
-			$(editorPre).attr("contenteditable", true);
-			$(editor).html(" ");
-			$(editor).append($(editorPre));
-			$(editor).attr("contenteditable", false);
-			$(editor).data("wysiwyg-html-mode", true);
-			$(editorPre).focus();
-		} else {
-			$(editor).html($(editor).text());
-			$(editor).attr("contenteditable", true);
-			$(editor).data("wysiwyg-html-mode", false);
-			$(editor).focus();
-		}
-	};
-
-	Wysiwyg.prototype.insertFiles = function (files, options, editor, toolbarBtnSelector) {
-		var self = this;
-		editor.focus();
-		$.each(files, function (idx, fileInfo) {
-			if (/^image\//.test(fileInfo.type) || /.+\.(bmp|gif|jpg|jpeg|png)$/.test(fileInfo.name.toLowerCase())) {
-				$.when(self.readFileIntoDataUrl(fileInfo)).done(function (dataUrl) {
-					self.execCommand("insertimage", dataUrl, editor, options, toolbarBtnSelector);
-					editor.trigger("image-inserted");
-				}).fail(function (e) {
-					options.fileUploadError("file-reader", e);
-				});
-			} else {
-				options.fileUploadError("unsupported-file-type", fileInfo.type);
-			}
-		});
-	};
-
 	Wysiwyg.prototype.markSelection = function (color, options) {
 		this.restoreSelection();
 		if (document.queryCommandSupported("hiliteColor")) {
@@ -332,30 +358,24 @@ layui.define(['jquery', 'bootstrap'], exports => {
 	//Move selection to a particular element
 	function selectElementContents(element) {
 		if (window.getSelection && document.createRange) {
-			var selection = window.getSelection();
-			var range     = document.createRange();
+			let selection = window.getSelection();
+			let range     = document.createRange();
 			range.selectNodeContents(element);
 			selection.removeAllRanges();
 			selection.addRange(range);
 		} else if (document.selection && document.body.createTextRange) {
-			var textRange = document.body.createTextRange();
+			let textRange = document.body.createTextRange();
 			textRange.moveToElementText(element);
 			textRange.select();
 		}
 	}
 
 	Wysiwyg.prototype.bindToolbar = function (editor, toolbar, options, toolbarBtnSelector) {
-		var self = this;
+		let self = this;
 		toolbar.find(toolbarBtnSelector).click(function () {
 			self.restoreSelection();
 			editor.focus();
-
-			if (editor.data(options.commandRole) === "html") {
-				self.toggleHtmlEdit(editor);
-			} else {
-				self.execCommand($(this).data(options.commandRole), null, editor, options, toolbarBtnSelector);
-			}
-
+			self.execCommand($(this).data(options.commandRole), null, editor, options, toolbarBtnSelector);
 			self.saveSelection();
 		});
 
@@ -368,11 +388,11 @@ layui.define(['jquery', 'bootstrap'], exports => {
 		});
 
 		toolbar.find("input[type=text][data-" + options.commandRole + "]").on("webkitspeechchange change", function () {
-			var newValue = this.value;  // Ugly but prevents fake double-calls due to selection restoration
+			let newValue = this.value;  // Ugly but prevents fake double-calls due to selection restoration
 			this.value   = "";
 			self.restoreSelection();
 
-			var text = window.getSelection();
+			let text = window.getSelection();
 			if (text.toString().trim() === '' && newValue) {
 				//create selection if there is no selection
 				self.editor.append('<span>' + newValue + '</span>');
@@ -385,31 +405,11 @@ layui.define(['jquery', 'bootstrap'], exports => {
 			}
 			self.saveSelection();
 		}).on("blur", function () {
-			var input = $(this);
+			//let input = $(this);
 			self.markSelection(false, options);
 		});
-		toolbar.find("input[type=file][data-" + options.commandRole + "]").change(function () {
-			self.restoreSelection();
-			if (this.type === "file" && this.files && this.files.length > 0) {
-				self.insertFiles(this.files, options, editor, toolbarBtnSelector);
-			}
-			self.saveSelection();
-			this.value = "";
-		});
-	};
 
-	Wysiwyg.prototype.initFileDrops = function (editor, options, toolbarBtnSelector) {
-		var self = this;
-		editor.on("dragenter dragover", false).on("drop", function (e) {
-			var dataTransfer = e.originalEvent.dataTransfer;
-			e.stopPropagation();
-			e.preventDefault();
-			if (dataTransfer && dataTransfer.files && dataTransfer.files.length > 0) {
-				self.insertFiles(dataTransfer.files, options, editor, toolbarBtnSelector);
-			}
-		});
 	};
-
 	/*
 	 *  Represenets an editor
 	 *  @constructor
@@ -417,8 +417,7 @@ layui.define(['jquery', 'bootstrap'], exports => {
 	 */
 
 	$.fn.wysiwyg = function (userOptions) {
-		var wysiwyg = new Wysiwyg(this, userOptions);
-		return wysiwyg;
+		return new Wysiwyg(this, userOptions);
 	};
 
 	$.hotkeys = {

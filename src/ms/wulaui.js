@@ -1,7 +1,7 @@
 layui.define(['jquery', 'layer', 'toastr'], function (exports) {
-	let $                    = layui.$,
-		layer                = layui.layer,
-		WulaUI               = function () {
+	let $                         = layui.$,
+		layer                     = layui.layer,
+		WulaUI                    = function () {
 			let cfg     = layui.data('wulaui');
 			this.config = $.extend({}, {
 				base  : '/',
@@ -10,7 +10,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 				groups: {char: [], prefix: []},
 				ids   : {}
 			}, cfg.config);
-		}, getParams         = function (obj, attr) {
+		}, getParams              = function (obj, attr) {
 			let params = obj.data(attr) || obj.attr(attr);
 			if (params) {
 				if (typeof(params) === "string") {
@@ -23,7 +23,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			}
 			return params;
 		};
-	WulaUI.prototype.map     = function () {
+	WulaUI.prototype.map          = function () {
 		this.elements = [];
 
 		this.size = function () {
@@ -121,9 +121,9 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			return arr;
 		};
 	};
-	WulaUI.prototype.toast   = top.global && top.global.toast ? top.global.toast : layui.toastr;
-	WulaUI.prototype.layer   = top.global && top.global.layer ? top.global.layer : layui.layer;
-	WulaUI.prototype.app     = function (url) {
+	WulaUI.prototype.toast        = top.global && top.global.toast ? top.global.toast : layui.toastr;
+	WulaUI.prototype.layer        = top.global && top.global.layer ? top.global.layer : layui.layer;
+	WulaUI.prototype.app          = function (url) {
 		if (typeof(url) === "string") {
 			let config = this.config,
 				chunks = url.split('/');
@@ -154,7 +154,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		}
 		return url;
 	};
-	WulaUI.prototype.media   = function (url) {
+	WulaUI.prototype.media        = function (url) {
 		if (/^(\/|https?:\/\/).+/.test(url)) {
 			return url;
 		}
@@ -164,19 +164,19 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		}
 		return this.config.base + url;
 	};
-	WulaUI.prototype.assets  = function (url) {
+	WulaUI.prototype.assets       = function (url) {
 		if (/^(\/|https?:\/\/).+/.test(url)) {
 			return url;
 		}
 		return this.config.assets + url;
 	};
-	WulaUI.prototype.open    = function (obj) {
+	WulaUI.prototype.open         = function (obj) {
 		if (top.global && top.global.menu) {
 			let menu = top.global.menu;
 			menu.menuOpen(obj);
 		}
 	};
-	WulaUI.prototype.init    = function (e) {
+	WulaUI.prototype.init         = function (e) {
 		e = e || $('body .wulaui');
 		if (e.hasClass('wulaui')) {
 			e.trigger('wulaui.widgets.init');
@@ -184,7 +184,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			e.find('.wulaui').trigger('wulaui.widgets.init');
 		}
 	};
-	WulaUI.prototype.destroy = function (e) {
+	WulaUI.prototype.destroy      = function (e) {
 		if (e.length === 0) return;
 		if (e.hasClass('wulaui')) {
 			e.triggerHandler('wulaui.widgets.destroy');
@@ -194,7 +194,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			});
 		}
 	};
-	WulaUI.prototype.dialog  = function (opts, e) {
+	WulaUI.prototype.dialog       = function (opts, e) {
 		let _area = ["auto", "auto"], ajax = false, idx = 0;
 		if (e) {
 			let be     = $.Event('before.dialog');
@@ -264,8 +264,17 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 			}
 		}
 	};
-	WulaUI.prototype.params  = getParams;
-	WulaUI.prototype.format  = function (source, params) {
+	WulaUI.prototype.iframeDialog = function (url, title, size, e) {
+		let opts = {
+			type   : 2,
+			content: url,
+			title  : title || '窗口',
+			area   : size
+		};
+		this.dialog(opts, e);
+	};
+	WulaUI.prototype.params       = getParams;
+	WulaUI.prototype.format       = function (source, params) {
 		if (arguments.length === 1) {
 			return function () {
 				let args = $.makeArray(arguments);

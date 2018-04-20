@@ -111,6 +111,42 @@ button:focus {
   }
 }
 
+div.wysiwyg {
+  .btn-toolbar {
+    margin-bottom: 2px;
+    li a {
+      cursor: default;
+    }
+  }
+  [data-wysiwyg], textarea {
+    font-size: 16px;
+    max-height: 100px;
+    height: 100px;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    border-collapse: separate;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    outline: none;
+  }
+  [data-wysiwyg]{
+    a {
+      color: blue;
+      text-decoration: underline;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .markdown-body {
     padding: 15px;
