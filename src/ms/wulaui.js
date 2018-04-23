@@ -302,7 +302,12 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 	let wulaui = new WulaUI();
 	//注册事件
 	$('body').on('click', '[data-tab]', function () {
-		let that  = $(this),
+		let that = $(this), event = $.Event('ajax.before');
+		that.trigger(event);
+		if (event.isDefaultPrevented()) {
+			return false;
+		}
+		let
 			href  = that.attr('href') || that.data('url'),
 			title = that.attr('title') || that.data('title') || that.text() || '新窗口',
 			icon  = that.data('tab') || '&#xe621;',

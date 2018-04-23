@@ -140,7 +140,13 @@
 		let event     = $.Event('ajax.before');
 		event.element = $this;
 		$this.trigger(event);
-		if (!event.isDefaultPrevented()) {
+		if (event.isDefaultPrevented()) {
+			return false;
+		}
+		let ve     = $.Event('ajax.validate');
+		ve.element = $this;
+		$this.trigger(ve);
+		if (!ve.isDefaultPrevented()) {
 			// 生成发起ajax请求的选项.
 			let be      = $.Event('ajax.build');
 			be.opts     = $.extend({element: $this, data: []}, $this.data() || {});

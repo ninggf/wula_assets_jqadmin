@@ -38,17 +38,17 @@
 		this.value      = elem.data('value');
 		this.varName    = elem.data('name');
 		this.auto       = elem.data('auto') !== undefined;
-		this.extensions = elem.data('exts');
+		this.extensions = elem.data('exts') || 'jpg,gif,png,jpeg';
 		this.width      = elem.data('width') || 90;
 		this.height     = elem.data('height') || this.width;
 		this.readonly   = elem.data('readonly') !== undefined;
 		this.whstyle    = 'width:' + this.width + 'px;height:' + this.height + 'px;';
 		let opts        = {};
 		if (this.extensions) {
-			opts.filters = {
+			opts.filters = [{
 				title     : '*.*',
 				extensions: this.extensions
-			};
+			}];
 		}
 		let cnt    = elem.data('multi');
 		this.multi = parseInt(cnt ? cnt : '1', 10) || 1;
@@ -273,7 +273,7 @@
 					console.log(e);
 				}
 			} else if (file.message) {
-				wui.toast.error(file.message());
+				wui.toast.error(file.message);
 			}
 			$this.element.trigger('uploader.error');
 		});
@@ -284,11 +284,16 @@
 	nuiUploader.prototype.start = function () {
 		if (this.newFile > 0) {
 			this.uploader.start();
+		} else {
+			this.element.trigger('uploader.done');
 		}
 	};
 
 	nuiUploader.prototype.stop  = function () {
 		this.uploader.stop();
+	};
+	nuiUploader.prototype.get   = function () {
+		return this.uploader;
 	};
 	nuiUploader.prototype.clear = function () {
 		this.wrapper.find('li').not(this.uploadBtn).find('i').click();

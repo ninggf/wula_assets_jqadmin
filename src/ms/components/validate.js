@@ -60,7 +60,7 @@
 
 		this.validator = form.validate(this.rules);
 		let me         = this;
-		form.on('ajax.before', function () {
+		form.on('ajax.validate', function () {
 			return me.validate();
 		});
 		const destroy = function () {
@@ -78,7 +78,7 @@
 		if (this.validator.form()) {
 			if (errors) {
 				this.validator.showErrors(errors);
-				return;
+				return false;
 			}
 			if (this.validator.pendingRequest) {
 				this.validator.formSubmitted = true;

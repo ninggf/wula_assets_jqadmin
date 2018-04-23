@@ -123,7 +123,7 @@ div.wysiwyg {
     max-height: 100px;
     height: 100px;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     background-color: white;
     border-collapse: separate;
     border: 1px solid rgb(204, 204, 204);
@@ -139,12 +139,17 @@ div.wysiwyg {
     overflow-x: hidden;
     outline: none;
   }
-  [data-wysiwyg]{
+  [data-wysiwyg] {
     a {
       color: blue;
       text-decoration: underline;
     }
   }
+}
+
+div.max1000 {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 @media (max-width: 767px) {
