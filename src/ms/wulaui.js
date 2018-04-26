@@ -170,6 +170,12 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
 		}
 		return this.config.assets + url;
 	};
+	WulaUI.prototype.base         = function (url) {
+		if (/^(\/|https?:\/\/).+/.test(url)) {
+			return url;
+		}
+		return this.config.base + url;
+	};
 	WulaUI.prototype.open         = function (obj) {
 		if (top.global && top.global.menu) {
 			let menu = top.global.menu;

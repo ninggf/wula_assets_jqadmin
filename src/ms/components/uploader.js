@@ -43,6 +43,7 @@
 		this.height     = elem.data('height') || this.width;
 		this.readonly   = elem.data('readonly') !== undefined;
 		this.whstyle    = 'width:' + this.width + 'px;height:' + this.height + 'px;';
+		this.isLocal    = elem.data('localStore') !== undefined;
 		let opts        = {};
 		if (this.extensions) {
 			opts.filters = [{
@@ -148,7 +149,7 @@
 			if ($.isArray(this.value)) {
 				$.each(this.value, (i, e) => {
 					let html = '<li id="up-file' + i + '">';
-					html += '<img id="img_file' + i + '" src="' + wui.media(e) + '" style="' + $this.whstyle + '"/>';
+					html += '<img id="img_file' + i + '" src="' + ($this.isLocal ? wui.base(e) : wui.media(e)) + '" style="' + $this.whstyle + '"/>';
 					if (!$this.readonly) {
 						html += '<i>×</i>';
 					}
