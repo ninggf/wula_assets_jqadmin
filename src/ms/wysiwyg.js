@@ -184,7 +184,7 @@ layui.define(['jquery', 'laytpl', 'bootstrap'], exports => {
 				container: 'body',
 				content  : editImg($(this)),
 				html     : true,
-				placement: 'bottom',
+				placement: 'auto bottom',
 				viewport : '#' + me.editor.attr('id'),
 				trigger  : 'manual',
 				template : '<div class="popover imgtag-dlg" role="tooltip" style="width: 400px;max-width:400px"><div class="arrow"></div><div class="popover-content"></div></div>'
@@ -215,7 +215,7 @@ layui.define(['jquery', 'laytpl', 'bootstrap'], exports => {
 				container: 'body',
 				content  : editAtag($(this)),
 				html     : true,
-				placement: 'bottom',
+				placement: 'auto bottom',
 				viewport : '#' + me.editor.attr('id'),
 				trigger  : 'manual',
 				template : '<div class="popover atag-dlg" role="tooltip" style="width: 400px;max-width:400px"><div class="arrow"></div><div class="popover-content"></div></div>'
