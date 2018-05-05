@@ -102,7 +102,7 @@
 	// 全局设置
 	$.ajaxSetup({
 		cache  : false,
-		timeout: 900000
+		timeout: 300000
 	});
 	const confirmx      = function (ajax, content, opts) {
 		let ops = $.extend({}, {icon: 3, title: '请确认', loading: false}, opts || {});
@@ -157,7 +157,8 @@
 			be.opts.dataType = types.length === 2 ? types[1] : 'json';
 			let method       = $this.attr('method') || (types[0] ? types[0] : null) || 'GET';
 			be.opts.method   = method.toUpperCase();
-
+			let to           = $this.data('timeout');
+			be.opts.timeout  = to === undefined ? 120000 : parseInt(to, 10);//60 seconds
 			if (be.opts.method === 'UPDATE') {
 				be.opts.method   = 'GET';
 				be.opts.dataType = 'html';
