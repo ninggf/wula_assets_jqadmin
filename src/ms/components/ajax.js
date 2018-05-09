@@ -22,13 +22,10 @@
 		if (opts.mode === 'abort') {
 			return;
 		}
-		if (!opts.element) {
-			opts.element = $('body');
-		} else {
-			opts.isElement = true;
-		}
-		if (opts.isElement) {
+		if (opts.element) {
 			opts.element.data('ajaxSending', true);
+		} else {
+			return;
 		}
 		let e     = new $.Event('ajax.send');
 		e.element = opts.element;
@@ -37,7 +34,7 @@
 	});
 
 	$(document).ajaxError((event, xhr, opts, error) => {
-		if (opts.mode === 'abort') {
+		if (opts.mode === 'abort' || !opts.element) {
 			return;
 		}
 		let e = $.Event('ajax.error');
@@ -84,20 +81,24 @@
 		if (opts.mode === 'abort') {
 			return;
 		}
-		opts.element.trigger('ajax.success', [data, opts, xhr]);
+		if (opts.element) {
+			opts.element.trigger('ajax.success', [data, opts, xhr]);
+		}
 	});
 
 	$(document).ajaxComplete((event, xhr, opts) => {
 		if (opts.mode === 'abort') {
 			return;
 		}
-		opts.element.data('ajaxSending', false);
-		if (opts.element.hasClass('data-loading-text')) {
-			opts.element.button('reset');
+		if (opts.element) {
+			opts.element.data('ajaxSending', false);
+			if (opts.element.hasClass('data-loading-text')) {
+				opts.element.button('reset');
+			}
+			let e     = new $.Event('ajax.done');
+			e.element = opts.element;
+			opts.element.trigger(e, [opts, xhr]);
 		}
-		let e     = new $.Event('ajax.done');
-		e.element = opts.element;
-		opts.element.trigger(e, [opts, xhr]);
 	});
 	// 全局设置
 	$.ajaxSetup({
