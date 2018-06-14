@@ -1,7 +1,7 @@
-@font-family-sans-serif: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, -apple-system, BlinkMacSystemFont, Helvetica Neue, STHeiti, Microsoft Yahei, Tahoma, Simsun, sans-serif;
 @font-family-serif: Georgia, "Times New Roman", Times, serif;
 @font-family-base: @font-family-sans-serif;
-@font-size-base: 14px;
+@font-size-base: 12px;
 
 a:link,
 a:hover,
@@ -36,7 +36,7 @@ body {
 }
 
 .layui-nav * {
-  font-size: 14px;
+  font-size: 13px;
   i {
     font-size: 16px;
   }
@@ -53,7 +53,7 @@ body {
 
 .layui-nav .layui-nav-item a {
   display: block;
-  padding: 0 20px;
+  padding: 0 15px;
 }
 
 .layui-nav-bar,
@@ -93,7 +93,8 @@ body {
 }
 
 .layui-nav-tree .layui-nav-item a {
-  height: 45px;
+  height: 35px;
+  line-height: 35px;
   padding-left: 13px;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -118,17 +119,17 @@ body {
 }
 
 .layui-nav-tree .layui-nav-child a {
-  height: 40px;
-  line-height: 40px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .layui-nav-tree .layui-nav-more {
-  top: 20px;
+  top: 18px;
   right: 10px;
 }
 
 .layui-nav-itemed .layui-nav-more {
-  top: 14px;
+  top: 18px;
 }
 
 /**
@@ -254,6 +255,7 @@ body {
 
   .sub-menu {
     display: none;
+    margin-top: 4px;
   }
 
   .show {
@@ -281,7 +283,7 @@ body {
   }
   .jqadmin-body {
     overflow-y: hidden;
-    bottom: 31px;
+    bottom: 0;
   }
   .layui-body, .jqadmin-foot {
     left: 160px;
@@ -402,8 +404,9 @@ body {
 */
 
 .layui-layout-admin .jqadmin-foot {
-  height: 30px;
-  line-height: 30px;
+  display: none;
+  height: 0;
+  line-height: 0;
   text-align: center;
   color: #666;
   font-weight: 300;

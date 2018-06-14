@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '1.3.13');
+define('JQ_VERSION', '1.4.0');
 
 /**
  * 加载界面样式资源.
@@ -45,8 +45,12 @@ EOF;
  * @return string
  */
 function smarty_function_initjq($config = false) {
-	$ver  = JQ_VERSION;
-	$verc = $ver . '.' . BUILD_NUMBER;
+	$ver = JQ_VERSION;
+	if (defined('BUILD_NUMBER')) {
+		$verc = $ver . '.' . BUILD_NUMBER;
+	} else {
+		$verc = $ver . '.0';
+	}
 	$base = WWWROOT_DIR . ASSETS_DIR;
 	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 

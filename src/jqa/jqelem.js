@@ -85,9 +85,9 @@ layui.define('jquery', function (exports) {
 		//基础事件体
 		, call    = {
 			//Tab点击
-			tabClick: function (e, index, liElem) {
+			tabClick: function (e, idx, liElem) {
 				var othis   = liElem || $(this),
-					index   = index || othis.parent().children('li').index(othis),
+					index   = idx || othis.parent().children('li').index(othis),
 					parents = othis.parents('.layui-tab').eq(0),
 					item    = parents.children('.layui-tab-content').children('.layui-tab-item'),
 					elemA   = othis.find('a'),
@@ -200,7 +200,6 @@ layui.define('jquery', function (exports) {
 					parents.find('.' + THIS).removeClass(THIS);
 					othis.addClass(THIS);
 				}
-
 				layui.event.call(this, MOD_NAME, 'nav(' + filter + ')', othis);
 			}
 			//点击子菜单选中
@@ -256,7 +255,6 @@ layui.define('jquery', function (exports) {
 	Element.prototype.init = function (type) {
 		var that  = this,
 			items = {
-
 				//Tab选项卡
 				// tab: function() {
 				//     call.tabAuto.call({});
@@ -349,7 +347,6 @@ layui.define('jquery', function (exports) {
 								var one = oitem.children('a');
 								one.append('<span class="' + NAV_MORE + '"></span>');
 							}
-
 							oitem.off('click', call.clickThis).on('click', call.clickThis); //点击选中
 							oitem.children('a').off('click', call.showChild).on('click', call.showChild); //展开二级菜单
 							child.children('dd').off('click', call.clickChild).on('click', call.clickChild); //点击子菜单选中
@@ -374,10 +371,9 @@ layui.define('jquery', function (exports) {
 						othis.css('visibility', 'visible');
 					});
 				}
-
 				//进度条
 				,
-				progress: function () {
+				progress  : function () {
 					var ELEM = 'layui-progress';
 
 					$('.' + ELEM).each(function () {
@@ -394,10 +390,9 @@ layui.define('jquery', function (exports) {
 						}
 					});
 				}
-
 				//折叠面板
 				,
-				collapse: function () {
+				collapse  : function () {
 					var ELEM = 'layui-collapse';
 
 					$('.' + ELEM).each(function () {

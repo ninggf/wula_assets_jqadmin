@@ -53,16 +53,6 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		});
 		return tab_index;
 	};
-
-	/**
-	 * 菜单操作的接口
-	 */
-	tabMenu.prototype.beforeTabAdd = function (data, _this) {
-	}
-	tabMenu.prototype.changeTab     = function (data, _this, tab_index) {
-	}
-	tabMenu.prototype.afterTabClose = function (data, _this) {
-	}
 	/**
 	 * 添加tab菜单选项卡
 	 *@param  data [ title 菜单选项卡标题
@@ -71,14 +61,15 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 	 ,cls  class
 	 ]
 	 @param fresh
+	 @param active
 	 */
-	tabMenu.prototype.tabAdd = function (data, fresh) {
+	tabMenu.prototype.tabAdd = function (data, fresh, active) {
 		var tab_index = this.exited(data),
 			_this     = this,
-			cls       = data.cls || 'iconfont';
+			cls       = data.cls || 'iconfont',
+			isActive  = active !== false;
 		data.cls      = cls;
 		if (tab_index === -1) {
-			_this.beforeTabAdd(data, _this);
 			var layID   = data.layId ? data.layId : new Date().getTime();
 			var content = '<iframe src="' + data.href + '" data-id="' + layID + '" class="jqadmin-iframe"></iframe>';
 			var title   = '';
@@ -106,38 +97,42 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			if (!data.nodo) {
 				data.layId = layID;
 				_this.storage(data, "add");
+				//页面淡出效果
 			}
-
-			//页面淡出效果
-			_this.effect(layID);
-
+			if (isActive) {
+				_this.effect(layID);
+			}
 			if (this.config.closed) {
 				//监听关闭事件
 				objTab.titleBox.find('li').children('i.layui-tab-close[data-id=' + layID + ']').on('click', function () {
 					element.tabDelete(objTab.tabFilter, $(this).parent('li').attr('lay-id'), data.parent);
 					_this.tabMove(1, 1);
-					_this.afterTabClose(data, _this);
 					//删除数组中的对应元素
 					element.init();
 					_this.storage(data, "close");
 				});
 			}
-
-			this.tabMove(tab_index, 0);
-			//切换到当前打开的选项卡
-			element.tabChange(objTab.tabFilter, layID);
+			if (isActive) {
+				this.tabMove(tab_index, 0);
+				//切换到当前打开的选项卡
+				element.tabChange(objTab.tabFilter, layID);
+			}
 		} else {
 			element.tabChange(objTab.tabFilter, tab_index);
-			_this.changeTab(data, _this, tab_index);
-			_this.effect(tab_index, true);
 			_this.storage(data, "change");
 			this.tabMove(tab_index, 0);
 			if (fresh) {
 				_this.fresh(tab_index);
 			}
 		}
-	}
-
+	};
+	tabMenu.prototype.active  = function (data) {
+		var tab_index = this.exited(data);
+		if (tab_index >= 0) {
+			element.tabChange(objTab.tabFilter, tab_index);
+			this.tabMove(tab_index, 0);
+		}
+	};
 	tabMenu.prototype.effect  = function (layID, ischange) {
 		//页面淡出效果
 		var l = layer.load(2);
@@ -157,25 +152,27 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			});
 		}
 	};
+	//存储
 	tabMenu.prototype.storage = function (data, action) {
 		if (data.title == undefined && action != "all") {
 			return false;
 		}
-		var storage = window.sessionStorage;
+		var storage = window.sessionStorage || {
+			removeItem: function () {
+			}
+		};
 		var _data   = JSON.stringify(data);
 		if (action == "add") {
 			if (storage.menu) {
 				var menulist = storage.menu;
-				menulist     = menulist.split("|");
+				menulist     = menulist.split("<-!->");
 				menulist.remove(_data);
 				menulist.push(_data);
-				var menu     = menulist.join("|");
+				var menu     = menulist.join("<-!->");
 				storage.menu = menu;
 			} else {
 				storage.menu = _data;
 			}
-			storage.curMenu = _data;
-
 		} else if (action == "all") {
 			storage.removeItem("curMenu");
 			storage.removeItem("menu");
@@ -185,8 +182,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			if (!menulist) {
 				return;
 			}
-			menulist = menulist.split("|");
-
+			menulist = menulist.split("<-!->");
 			if (action == "close") {
 				for (index in menulist) {
 					if (index == "remove") {
@@ -200,9 +196,8 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 						menulist.splice(index, 1);
 					}
 				}
-				storage.menu = menulist.join("|");
+				storage.menu = menulist.join("<-!->");
 				storage.removeItem("curMenu");
-
 			} else {
 				for (index in menulist) {
 					if (index == "remove") {
@@ -212,19 +207,18 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 						var menu = JSON.parse(menulist[index]);
 					}
 					if (menu.layId == data.layId) {
-						var _data = menulist[index];
+						_data = menulist[index];
+						break;
 					}
 				}
-				if (action == "change") { //切换
-					storage.curMenu = _data;
-				} else if (action == "other") {
-					storage.curMenu = _data;
-					storage.menu    = _data;
+				if (action == "other") {
+					storage.menu = _data;
 				}
 			}
 		}
-	}
-	tabMenu.prototype.fresh   = function (index, active) {
+	};
+
+	tabMenu.prototype.fresh  = function (index, active) {
 		if (!index) {
 			return;
 		}
@@ -238,20 +232,19 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			src     = item.eq(index1).find('iframe').attr("src");
 		item.eq(index1).find('iframe').attr("src", src);
 	};
-	tabMenu.prototype.close   = function (location) {
+	tabMenu.prototype.close  = function (location) {
 		var url = location.href.substring(location.origin.length), id = this.exited({href: url});
 		if (id) {
 			var data = {layId: id};
 			element.tabDelete(objTab.tabFilter, id);
 			this.tabMove(1, 1);
-			this.afterTabClose(data, this);
 			//删除数组中的对应元素
 			element.init();
 			data.title = '';
 			this.storage(data, "close");
 		}
 	};
-	tabMenu.prototype.reload  = function (url) {
+	tabMenu.prototype.reload = function (url) {
 		var id = this.exited({href: url});
 		if (id) {
 			this.fresh(id, false);
