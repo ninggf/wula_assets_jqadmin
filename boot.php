@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '1.3.12');
+define('JQ_VERSION', '1.3.13');
 
 /**
  * 加载界面样式资源.
@@ -46,6 +46,7 @@ EOF;
  */
 function smarty_function_initjq($config = false) {
 	$ver  = JQ_VERSION;
+	$verc = $ver . '.' . BUILD_NUMBER;
 	$base = WWWROOT_DIR . ASSETS_DIR;
 	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
 
@@ -83,10 +84,10 @@ function smarty_function_initjq($config = false) {
 		$config['value']['ids']    = wulaphp\app\App::id2dir(null);
 		$config['value']['groups'] = $groups ? $groups : ['char' => []];
 		$cfg                       = json_encode($config, JSON_UNESCAPED_SLASHES);
-		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend({$modules}).data('wulaui',{$cfg});layui.data('wulaui',{key:'modules',value:{$modules}});layui.wulaAuthPage='{$loginpage}'</script>";
+		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$verc}'}).extend({$modules}).data('wulaui',{$cfg});layui.data('wulaui',{key:'modules',value:{$modules}});layui.wulaAuthPage='{$loginpage}'</script>";
 	} else {
 		$loginpage = isset($config['loginpage']) && $config['loginpage'] ? \wulaphp\app\App::url($config['loginpage']) : '';
-		$jq[]      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$ver}'}).extend(layui.data('wulaui','modules'));layui.wulaAuthPage='{$loginpage}'</script>";
+		$jq[]      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$verc}'}).extend(layui.data('wulaui','modules'));layui.wulaAuthPage='{$loginpage}'</script>";
 	}
 	$ms = [];
 	if ($config && isset($config['modules']) && $config['modules']) {
