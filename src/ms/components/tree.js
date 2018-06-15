@@ -34,12 +34,12 @@
 			me.nodes    = e.tree.nodes;
 			if (!e.isDefaultPrevented()) {
 				me.treeObj = $.fn.zTree.init(element, me.settings, me.nodes);
-				element.trigger('ztree.inited', [me.treeObj]);
+				element.trigger('ztree.ready', [me.treeObj]);
 			}
 			element.off('ztree.setting.load');
 		}).closest('.wulaui').on('wulaui.widgets.destroy', me.destroy);
 
-		if (!this.lazy) {
+		if (!this.lazy || element.data('treeEventBind')) {
 			element.trigger('ztree.setting.load');
 		}
 	};
@@ -51,12 +51,15 @@
 			$(this).off('wulaui.widgets.destroy', this.destroy);
 		}
 	};
-
-	$.fn.wulatree = function (option) {
+	$.fn.wulatree              = function (option) {
 		return $(this).each(function () {
 			let me = $(this);
 			if (option === 'load') {
-				me.trigger('ztree.setting.load');
+				if (me.data('treeObj')) {
+					me.trigger('ztree.setting.load');
+				} else {
+					me.data('treeEventBind', true);
+				}
 			} else if (option === 'destroy') {
 				let treeObj = me.data('treeObj');
 				if (treeObj) {
@@ -74,13 +77,9 @@
 		e.stopPropagation();
 		let that = $(this).find('[data-ztree]');
 		if (that.length > 0) {
-			if ($.fn.zTree) {
+			layui.use('ztree', function () {
 				that.wulatree();
-			} else {
-				layui.use('ztree', function () {
-					that.wulatree();
-				});
-			}
+			});
 		}
 	})
 })($);

@@ -33,9 +33,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		_this.menuBind();
 		_this.openOldMenu();
 		element.init();
-		//加载默认tab
-		//tabmenu.effect(0);
-
 		if ($('iframe[data-id=0]').length > 0) {
 			$('iframe[data-id=0]').attr('src', $('[lay-id=0]').find('em').data('href'));
 		}
@@ -62,10 +59,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	jqmenu.prototype.menuBind = function () {
 		var _this = this, mm = $('#menu');
 		//初始化时显示第一个菜单
-
-		//$('.sub-menu').eq(0).slideDown();
-		//mm.find('li').removeClass("layui-this").eq(0).addClass("layui-this");
-
 		mm.find('a').on('mouseenter', function () {
 			layer.tips($(this).data("title"), $(this), {
 				tips: 3
@@ -220,6 +213,10 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}
 		if (menuId) {
 			$('#' + menuId).click();
+		} else if (sStorage.menuId) {
+			$('#' + sStorage.menuId).click();
+		} else {
+			$('#menu li:first').click();
 		}
 	};
 	jqmenu.prototype.menulist = function () {
