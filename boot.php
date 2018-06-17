@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '1.4.1');
+define('JQ_VERSION', '2.0.0');
 
 /**
  * 加载界面样式资源.
@@ -18,16 +18,16 @@ define('JQ_VERSION', '1.4.1');
  */
 function smarty_function_loaduicss($styles = false) {
 	$ver  = JQ_VERSION;
-	$base = WWWROOT_DIR . ASSETS_DIR . '/';
+	$base = WWWROOT_DIR . ASSETS_DIR;
 	$css  = <<<EOF
-	<link rel="stylesheet" type="text/css" href="{$base}wula/jqadmin/css/font.min.css?v={$ver}" media="all"/>
-    <link rel="stylesheet" type="text/css" href="{$base}wula/jqadmin/css/layui.css?v={$ver}" media="all"/>
+	<link rel="stylesheet" type="text/css" href="{$base}/jqadmin/css/font.min.css?v={$ver}" media="all"/>
+    <link rel="stylesheet" type="text/css" href="{$base}/jqadmin/css/layui.css?v={$ver}" media="all"/>
     	
 EOF;
 
 	if ($styles) {
 		foreach ($styles as $id => $style) {
-			if ($style) $css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}wula/jqadmin/css/{$style}?v={$ver}\" media=\"all\"/>\n";
+			if ($style) $css .= "<link rel=\"stylesheet\" id=\"{$id}\" type=\"text/css\" href=\"{$base}/jqadmin/css/{$style}?v={$ver}\" media=\"all\"/>\n";
 		}
 	}
 
@@ -52,7 +52,7 @@ function smarty_function_initjq($config = false) {
 		$verc = $ver . '.0';
 	}
 	$base = WWWROOT_DIR . ASSETS_DIR;
-	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/wula/jqadmin/layui.js?v={$ver}\"></script>";
+	$jq[] = "<script type=\"text/javascript\" src=\"{$base}/jqadmin/layui.js?v={$ver}\"></script>";
 
 	if ($config && isset($config['config'])) {
 		$loginpage     = isset($config['loginpage']) && $config['loginpage'] ? \wulaphp\app\App::url($config['loginpage']) : '';
@@ -88,10 +88,10 @@ function smarty_function_initjq($config = false) {
 		$config['value']['ids']    = wulaphp\app\App::id2dir(null);
 		$config['value']['groups'] = $groups ? $groups : ['char' => []];
 		$cfg                       = json_encode($config, JSON_UNESCAPED_SLASHES);
-		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$verc}'}).extend({$modules}).data('wulaui',{$cfg});layui.data('wulaui',{key:'modules',value:{$modules}});layui.wulaAuthPage='{$loginpage}'</script>";
+		$jq[]                      = "<script type=\"text/javascript\">layui.config({base:'{$base}/jqadmin/',version:'{$verc}'}).extend({$modules}).data('wulaui',{$cfg});layui.data('wulaui',{key:'modules',value:{$modules}});layui.wulaAuthPage='{$loginpage}'</script>";
 	} else {
 		$loginpage = isset($config['loginpage']) && $config['loginpage'] ? \wulaphp\app\App::url($config['loginpage']) : '';
-		$jq[]      = "<script type=\"text/javascript\">layui.config({base:'{$base}/wula/jqadmin/',version:'{$verc}'}).extend(layui.data('wulaui','modules'));layui.wulaAuthPage='{$loginpage}'</script>";
+		$jq[]      = "<script type=\"text/javascript\">layui.config({base:'{$base}/jqadmin/',version:'{$verc}'}).extend(layui.data('wulaui','modules'));layui.wulaAuthPage='{$loginpage}'</script>";
 	}
 	$ms = [];
 	if ($config && isset($config['modules']) && $config['modules']) {
