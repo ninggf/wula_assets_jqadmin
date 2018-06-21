@@ -271,7 +271,7 @@
 					let rst    = result.error;
 					wui.toast.error(rst.message);
 				} catch (e) {
-					console.log(e);
+					wui.toast.error('文件上传出错');
 				}
 			} else if (file.message) {
 				wui.toast.error(file.message);
