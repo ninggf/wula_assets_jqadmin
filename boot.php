@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '2.0.0');
+define('JQ_VERSION', '2.1.0');
 
 /**
  * 加载界面样式资源.
@@ -67,6 +67,7 @@ function smarty_function_initjq($config = false) {
 		$ms['fuelux']      = 'lib/fuelux/fuelux';
 		$ms['plupload']    = 'lib/plupload';
 		$ms['select2']     = 'lib/select2';
+		$ms['chartjs']     = 'lib/chartjs';
 		$ms['datepicker']  = 'lib/datepicker';
 		$ms['validate']    = 'lib/validate';
 		$ms['sortable']    = 'lib/sortable';
