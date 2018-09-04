@@ -1,3 +1,39 @@
+.layui-tab-card {
+  border-bottom: 1px solid #1AA094;
+  box-shadow: none;
+}
+
+.menu-list {
+  border-color: #1AA094;
+  border-right: 1px solid #1AA094;
+  border-right: none;
+}
+
+.jqadmin-tab-box .layui-tab-title .layui-this {
+  background-color: #1AA094;
+}
+
+.jqadmin-tab-box .layui-tab-title .layui-this * {
+  color: #fff;
+}
+
+.layui-header .layui-nav .layui-this a:after {
+  position: absolute;
+  left: 0;
+  height: 3px;
+  background-color: #5FB878;
+  transition: all .2s;
+  -webkit-transition: all .2s;
+  content: '';
+  top: auto;
+  bottom: 0;
+  width: 100%;
+}
+
+.tab-move-btn {
+  box-sizing: border-box;
+}
+
 /**
 * 头部 
 */
@@ -49,13 +85,6 @@
   border-top-color: transparent;
 }
 
-.layui-nav .layui-nav-mored, .layui-nav-itemed .layui-nav-more {
-  border-style: dashed;
-  border-color: transparent;
-  border-bottom-style: solid;
-  border-bottom-color: #FFF;
-}
-
 .layui-nav .layui-nav-child a {
   color: #333;
 }
@@ -83,10 +112,6 @@
 
 .layui-nav-tree .layui-nav-item a:hover {
   background-color: #1E9FFF;
-}
-
-.layui-nav-tree .layui-nav-item a.nav-collapse {
-  border-bottom: 1px solid #ccc;
 }
 
 .layui-nav-tree .layui-this,
@@ -118,12 +143,6 @@
   color: #fff;
 }
 
-.layui-nav-itemed .layui-nav-child {
-  display: block;
-  padding: 0;
-  background-color: rgba(255, 255, 255, 1) !important;
-}
-
 /**
 *自定义样式
 *
@@ -143,7 +162,7 @@
 
 // 
 @media screen and (max-width: 750px) {
-    .layui-layout-admin .jqadmin-main-menu{
-      background: gray;
-    }
+  .layui-layout-admin .jqadmin-main-menu {
+    background: gray;
+  }
 }
