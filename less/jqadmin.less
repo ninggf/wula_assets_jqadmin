@@ -1,7 +1,9 @@
-@font-family-sans-serif: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, -apple-system, BlinkMacSystemFont, Helvetica Neue, STHeiti, Microsoft Yahei, Tahoma, Simsun, sans-serif;
+@font-family-sans-serif: -apple-system, Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
 @font-family-serif: Georgia, "Times New Roman", Times, serif;
 @font-family-base: @font-family-sans-serif;
-@font-size-base: 12px;
+@font-size-base: 14px;
+@layout-admin-wrap: 220px;
+@layout-admin: 200px;
 
 a:link,
 a:hover,
@@ -36,7 +38,6 @@ body {
 }
 
 .layui-nav * {
-  font-size: 13px;
   i {
     font-size: 16px;
   }
@@ -90,15 +91,15 @@ body {
   display: block;
   width: 100%;
   line-height: 50px;
-}
-
-.layui-nav-tree .layui-nav-item a {
-  height: 35px;
-  line-height: 35px;
-  padding-left: 13px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+  a {
+    height: 35px;
+    line-height: 35px;
+    padding-left: 13px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #efefef;
+  }
 }
 
 .layui-nav-tree .layui-nav-bar {
@@ -136,34 +137,31 @@ body {
 *自定义样式
 *
 */
-
 .layui-header .jqadmin-logo-box {
   float: left;
-  min-width: 160px;
-}
-
-.layui-header .jqadmin-logo-box h1 {
-  font-size: 1.5rem;
-  color: #999;
-  text-align: center;
-  line-height: 45px;
-  float: left;
-  width: 100%;
-  padding: 0 10px;
-  b {
-    font-weight: normal;
-  }
-  sub, sup {
-    font-size: 14px;
-  }
-  sub {
-    margin-left: -5px;
+  min-width: @layout-admin;
+  h1 {
+    font-size: 1.5rem;
+    color: #999;
+    text-align: center;
+    line-height: 45px;
+    float: left;
+    width: 100%;
+    b {
+      font-weight: normal;
+    }
+    sub, sup {
+      font-size: 14px;
+    }
+    sub {
+      margin-left: -5px;
+    }
   }
 }
 
 .menu-type {
   padding: 0 14px;
-  line-height: 41px;
+  line-height: 42px;
   cursor: pointer;
   font-size: 1.5rem;
   color: #666;
@@ -275,10 +273,10 @@ body {
     top: 54px;
   }
   .layui-side-scroll {
-    width: 180px;
+    width: @layout-admin-wrap;
   }
   .layui-side, .layui-nav-tree {
-    width: 160px;
+    width: @layout-admin;
 
   }
   .jqadmin-body {
@@ -286,7 +284,7 @@ body {
     bottom: 0;
   }
   .layui-body, .jqadmin-foot {
-    left: 160px;
+    left: @layout-admin;
   }
 }
 
@@ -467,7 +465,7 @@ body {
 
 .layui-nav .layui-nav-item a {
   span {
-    margin-left: 2px;
+    margin-left: 5px;
   }
 }
 
@@ -616,9 +614,6 @@ body {
     left: 50%;
     transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
-    h1 {
-      padding: 0;
-    }
   }
 
   .layui-layout-admin .jqadmin-main-menu {

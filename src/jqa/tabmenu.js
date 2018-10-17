@@ -267,7 +267,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 			tab_all_width += $(n).outerWidth(true);
 		});
 
-		if (tab_all_width > navWidth + 1) {
+		if (tab_all_width > navWidth - 50) {
 			$('.tab-move-btn').show();
 			var ml = navWidth - tab_all_width;
 			if (ml < 45) {
