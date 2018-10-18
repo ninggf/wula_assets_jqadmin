@@ -2,7 +2,7 @@
 @font-family-serif: Georgia, "Times New Roman", Times, serif;
 @font-family-base: @font-family-sans-serif;
 @font-size-base: 14px;
-@layout-admin-wrap: 220px;
+@layout-admin-wrap: 200px;
 @layout-admin: 200px;
 
 a:link,
@@ -118,7 +118,26 @@ body {
   border: none;
   box-shadow: none;
 }
-
+.left-off .layui-nav-tree .layui-nav-child {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  
+}
+.minWidth.left-off .layui-nav-tree .layui-nav-child {
+  position: relative;
+  top: 56px;
+  left: 0;
+  
+}
+.left-off .layui-nav-itemed>.layui-nav-child{
+  background: rgba(0,0,0,.7)!important;
+  // background: #fff!important;
+  // color: #333;
+}
+.left-off .layui-nav-item>a>span,.left-off .layui-nav-item>a>em{
+  display: none!important;
+}
 .layui-nav-tree .layui-nav-child a {
   height: 30px;
   line-height: 30px;
@@ -527,7 +546,7 @@ body {
 }
 
 .left-off #submenu .layui-nav .layui-nav-item a span {
-  display: none;
+  // display: none;
 }
 
 .left-off .jqadmin-foot {
@@ -549,8 +568,12 @@ body {
     position: absolute;
     border-width: 6px;
     margin: 0;
+    top: 15px;
     right: 5px;
   }
+}
+.left-off .layui-nav-tree .layui-nav-itemed a em{
+  top: 8px;
 }
 
 .left-off .sub-menu .layui-nav-item dl dd a {
@@ -588,10 +611,15 @@ body {
   font-size: 20px;
   display: none;
 }
-
+.left-off {
+  .layui-side-scroll,.jqamdin-left-bar,.layui-layout-admin .layui-side{
+    overflow: visible;
+  }
+}
 @media screen and (max-width: 750px) {
   .left-off .layui-layout-admin .layui-side, .left-off .layui-side-scroll, .left-off .layui-nav-tree {
     width: 0;
+    overflow-x: hidden;
   }
 
   .left-off .layui-body {
@@ -618,9 +646,10 @@ body {
 
   .layui-layout-admin .jqadmin-main-menu {
     background: #23262E;
-    max-width: 120px;
+    max-width: 160px;
     position: absolute;
     left: 0;
+    padding: 0 20px;
     top: 54px;
     display: none;
     li {

@@ -74,6 +74,17 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 			if (obj.find('dl').length <= 0) {
 				_this.menuSetOption(obj);
+			}else{
+				if(obj.hasClass('layui-nav-itemed')){
+					obj.find("a").off('mouseenter').removeClass('nav-collapse');
+				}else{
+					obj.find("a").on('mouseenter', function () {
+						layer.tips($(this).data("title"), $(this));
+					});
+					obj.find("a").on('mouseleave', function () {
+						layer.closeAll('tips');
+					});
+				}
 			}
 		}).find('dd').bind("click", function () {
 			_this.menuSetOption($(this));
@@ -268,16 +279,23 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 
 		switch (parseInt(showType)) {
 			case 1:
+			
 				var subm = $('#submenu').find("ul li");
+				var subm1 = $('#submenu').find("ul li[class!=layui-nav-itemed]");
 				subm.children("a").each(function () {
 					$(this).addClass('nav-collapse');
 				});
+				
 				$('body').addClass('left-off').removeClass('left-miss');
 				subm.find("a").on('mouseenter', function () {
-					layer.tips($(this).data("title"), $(this));
+					if(!$(this).parent('li').hasClass('layui-nav-itemed')){
+						layer.tips($(this).data("title"), $(this));
+					}
 				}).on('mouseleave', function () {
 					layer.closeAll('tips')
 				});
+
+				
 
 				if (!_this.options.showIcon) {
 					$('#submenu').find('i').removeClass("hide-icon");
