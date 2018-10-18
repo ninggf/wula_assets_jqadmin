@@ -125,6 +125,30 @@
 								</dd>
 							</dl>
 						</li>
+						<li class="layui-nav-item layui-nav-itemed">
+							<a href="javascript:;" data-title="内容管理"> <i class="iconfont">&#xe637;</i> 
+								<span>内容管理</span>
+								<em class="layui-nav-more"></em> </a>
+							<dl class="layui-nav-child">
+								<dd>
+									<a href="javascript:;" data-url="article.html" data-title="文章列表"> <i
+										class="iconfont" data-icon="&#xe62a;">&#xe62a;</i> <span>文章列表</span> </a>
+								</dd>
+								<dd>
+									<a href="javascript:;" data-url="article-cat.html" data-title="文章分类"> <i
+										class="iconfont" data-icon="&#xe635;">&#xe635;</i> <span>文章分类</span> </a>
+								</dd>
+								<dd>
+									<a href="javascript:;" data-url="tag.html" data-title="标签管理"> <i class="iconfont"
+																									 data-icon="&#xe632;">&#xe632;</i>
+										<span>标签管理</span> </a>
+								</dd>
+								<dd>
+									<a href="javascript:;" data-url="./css/font/demo_unicode.html" data-title="图标管理"> <i
+										class="iconfont" data-icon="&#xe612;">&#xe612;</i> <span>图标管理</span> </a>
+								</dd>
+							</dl>
+						</li>
 						<span class="layui-nav-bar" style="opacity:1;"></span></ul>
 				</div>
 				<div class="sub-menu">
@@ -251,6 +275,8 @@
 	</div>
 </div>
 <ul class="menu-list" id="menu-list"></ul>
+<!-- cover -->
+<div class="coverBox"></div>
 
 <script id="menu-list-tpl" type="text/html">
 	{{# layui.each(d.list, function(index, item){ }}

@@ -18,6 +18,9 @@ body {
   font-size: @font-size-base;
   color: #333;
 }
+html,body{
+  height: 100%;
+}
 
 /**
 * 头部 
@@ -135,7 +138,7 @@ body {
   border-radius: 0;
   width: 160px;
 }
-.left-off .layui-nav-item>a>span,.left-off .layui-nav-item>a>em{
+.left-off .jqamdin-left-bar .layui-nav-item>a>span,.left-off .jqamdin-left-bar .layui-nav-item>a>em{
   display: none!important;
 }
 .layui-nav-tree .layui-nav-child a {
@@ -219,7 +222,16 @@ body {
   padding: 0;
   background: none;
 }
-
+.coverBox{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  z-index: 1000;
+  display: none;
+}
 .layui-header .layui-nav .layui-nav-item {
   margin: 0;
 }
