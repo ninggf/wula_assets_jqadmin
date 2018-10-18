@@ -70,6 +70,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		//绑定左侧树菜单的单击事件
 		$('.sub-menu .layui-nav-item,.tab-menu,.menu-list li').bind("click", function () {
 			var obj = $(this);
+			layer.closeAll('tips');
 			$('.menu-list').slideUp();
 			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 			if (obj.find('dl').length <= 0) {
@@ -279,7 +280,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 
 		switch (parseInt(showType)) {
 			case 1:
-			
+				$('.layui-nav-tree .layui-nav-item').removeClass('layui-nav-itemed');
 				var subm = $('#submenu').find("ul li");
 				var subm1 = $('#submenu').find("ul li[class!=layui-nav-itemed]");
 				subm.children("a").each(function () {
