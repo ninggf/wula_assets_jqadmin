@@ -35,7 +35,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		element.init();
 		if ($('iframe[data-id=0]').length > 0) {
 			$('iframe[data-id=0]').attr('src', $('[lay-id=0]').find('em').data('href'));
-		}
+		};
+		$('.layui-tab-content').append('<div class="coverBox"></div>');
 	}
 
 	/**
@@ -66,7 +67,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}).on('mouseleave', function () {
 			layer.closeAll('tips')
 		});
-		$('.coverBox').bind('click',function(e){
+		$('.layui-tab-content').on('click','.coverBox',function(){
+			console.log(1);
 			$(this).hide();
 			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 			$('.menu-list').slideUp('fast');
@@ -129,8 +131,11 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		//绑定更多按钮事件
 		$('.tab-move-btn').bind("click", function () {
 			var show = $('.menu-list').css('display');
+			$('.jqadmin-auxiliary-btn').removeClass('xz');
+			$('.minWidth .jqadmin-main-menu').slideUp();
 			if (show == "none") {
 				$(this).addClass('open');
+				$('.coverBox').show();
 				$('.coverBox').show();
 				_this.menulist();
 				$('.menu-list li').bind("click", function () {
@@ -235,12 +240,13 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			if (url) {
 				var li = $('#submenu').find('a[data-url="' + url + '"]');
 				if (li.length > 0) {
+					$('.left-off .layui-nav-itemed').removeClass('layui-nav-itemed')
 					var subm = li.closest('ul.layui-nav');
 					subm.find('.layui-this').removeClass('layui-this');
 					var mp = li.parent();
 					mp.addClass('layui-this');
 					if (mp.is('dd')) {
-						mp.closest('li').addClass('layui-nav-itemed');
+						// mp.closest('li').addClass('layui-nav-itemed');
 					}
 					menuId = subm.data('formenu');
 				}
@@ -392,6 +398,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	});
 	$('.jqadmin-auxiliary-btn').click(function () {
 		$(this).toggleClass('xz');
+		$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
+		$('.menu-list').slideUp('fast');
 		$('.coverBox').show();
 		if (!cloneTemp) {
 			var cloneItems = $('.minWidth .layui-header .header-right .right-menu li').clone(true);
