@@ -70,6 +70,12 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		$('.coverBox').bind('click',function(e){
 			$(this).hide();
 			$('.left-off .layui-nav-itemed').removeClass('layui-nav-itemed');
+			$('#submenu').find("ul li").find("a").on('mouseenter', function () {
+				layer.tips($(this).data("title"), $(this));
+			});
+			$('#submenu').find("ul li").find("a").on('mouseleave', function () {
+				layer.closeAll('tips');
+			});
 		})
 		//绑定左侧树菜单的单击事件
 		$('.sub-menu .layui-nav-item,.tab-menu,.menu-list li').bind("click", function () {
@@ -102,6 +108,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 
 		//绑定主菜单单击事件，点击时显示相应的菜单
 		element.on('nav(main-menu)', function (elem) {
+			$('.left-off .jqamdin-left-bar .layui-nav-itemed').removeClass('layui-nav-itemed');
 			var index = elem.index();
 			if ((elem[0].className).indexOf('tab-menu') != -1) {
 				return;
