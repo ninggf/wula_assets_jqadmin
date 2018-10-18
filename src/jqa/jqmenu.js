@@ -66,9 +66,12 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}).on('mouseleave', function () {
 			layer.closeAll('tips')
 		});
-		
 		$('.coverBox').bind('click',function(e){
 			$(this).hide();
+			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
+			$('.menu-list').slideUp('fast');
+			$('.jqadmin-auxiliary-btn').removeClass('xz');
+			$('.minWidth .jqadmin-main-menu').slideUp();
 			$('.left-off .layui-nav-itemed').removeClass('layui-nav-itemed');
 			$('#submenu').find("ul li").find("a").on('mouseenter', function () {
 				layer.tips($(this).data("title"), $(this));
@@ -94,6 +97,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 						$('.coverBox').show();
 					}
 				}else{
+					$('.coverBox').hide();
 					obj.find("a").on('mouseenter', function () {
 						layer.tips($(this).data("title"), $(this));
 					});
@@ -103,6 +107,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				}
 			}
 		}).find('dd').bind("click", function () {
+			
 			_this.menuSetOption($(this));
 		});
 
@@ -126,6 +131,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			var show = $('.menu-list').css('display');
 			if (show == "none") {
 				$(this).addClass('open');
+				$('.coverBox').show();
 				_this.menulist();
 				$('.menu-list li').bind("click", function () {
 					_this.menuSetOption($(this));
@@ -135,6 +141,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				$(this).find('i').html("&#xe603;");
 			} else {
 				$(this).removeClass('open');
+				$('.coverBox').hide();
 				$('.menu-list').slideUp('fast');
 				$(this).find('i').html("&#xe604;");
 			}
@@ -385,6 +392,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	});
 	$('.jqadmin-auxiliary-btn').click(function () {
 		$(this).toggleClass('xz');
+		$('.coverBox').show();
 		if (!cloneTemp) {
 			var cloneItems = $('.minWidth .layui-header .header-right .right-menu li').clone(true);
 			$('.minWidth .layui-header .header-right .right-menu').hide();
