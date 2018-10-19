@@ -58,7 +58,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 	 *@todo 初始化菜单
 	 */
 	jqmenu.prototype.menuBind = function () {
-		var _this = this, mm = $('#menu');
+		var _this = this, mm = $('#menu'),leftSub = $('#submenu').find("ul li");
 		//初始化时显示第一个菜单
 		mm.find('a').on('mouseenter', function () {
 			layer.tips($(this).data("title"), $(this), {
@@ -67,6 +67,22 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		}).on('mouseleave', function () {
 			layer.closeAll('tips')
 		});
+		if($('body').hasClass('left-off')){
+			leftSub.on('mouseenter', function () {
+				if($(this).find('dl').length > 0){
+					$(this).addClass('layui-nav-itemed');
+					layer.closeAll('tips');
+				}else{
+					layer.tips($(this).children('a').data("title"), $(this));
+				}
+			}).on('mouseleave', function () {
+				
+				layer.closeAll('tips');
+				$(this).removeClass('layui-nav-itemed');
+			});
+		}else{
+			leftSub.off('mouseenter').off('mouseleave');
+		}
 		$('.layui-tab-content').on('click','.coverBox',function(){
 			$(this).hide();
 			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
@@ -94,9 +110,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			}else{
 				if(obj.hasClass('layui-nav-itemed')){
 					obj.find("a").off('mouseenter').removeClass('nav-collapse');
-					if($('body').hasClass('left-off')){
-						$('.coverBox').show();
-					}
+					// if($('body').hasClass('left-off')){
+					// 	$('.coverBox').show();
+					// }
 				}else{
 					$('.coverBox').hide();
 					obj.find("a").on('mouseenter', function () {
@@ -310,18 +326,22 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			case 1:
 				$('.layui-nav-tree .layui-nav-item').removeClass('layui-nav-itemed');
 				var subm = $('#submenu').find("ul li");
-				var subm1 = $('#submenu').find("ul li[class!=layui-nav-itemed]");
 				subm.children("a").each(function () {
 					$(this).addClass('nav-collapse');
 				});
 				
 				$('body').addClass('left-off').removeClass('left-miss');
-				subm.find("a").on('mouseenter', function () {
-					if(!$(this).parent('li').hasClass('layui-nav-itemed')){
-						layer.tips($(this).data("title"), $(this));
+				subm.on('mouseenter', function () {
+					if($(this).find('dl').length > 0){
+						$(this).addClass('layui-nav-itemed');
+						layer.closeAll('tips');
+					}else{
+						layer.tips($(this).children('a').data("title"), $(this));
 					}
 				}).on('mouseleave', function () {
-					layer.closeAll('tips')
+					
+					layer.closeAll('tips');
+					$(this).removeClass('layui-nav-itemed');
 				});
 
 				
@@ -332,6 +352,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				showIcon.html('&#xe66b;');
 				break;
 			default:
+				$('#submenu').find("ul li").off('mouseenter').off('mouseleave');
 				$('#submenu').find("ul li").find("a").off('mouseenter').removeClass('nav-collapse');
 				$('body').removeClass('left-off');
 				if (screenWidth < 750) {
@@ -345,7 +366,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 
 	function getSize() {
 		var showIcon    = $(".menu-type").find("i").removeClass('iconfont').addClass('layui-icon');
-			oHtml       = document.documentElement;
+			oHtml       = document.documentElement,
+			leftSub = $('#submenu').find("ul li")
 		var screenWidth = oHtml.clientWidth;
 		if (screenWidth < 750) {
 			$('.jqadmin-main-menu').hide();
@@ -382,6 +404,22 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			showIcon.html('&#xe668;');
 			$('.jqadmin-main-menu .cloneDom').remove();
 			cloneTemp = false;
+		}
+		if($('body').hasClass('left-off')){
+			leftSub.on('mouseenter', function () {
+				if($(this).find('dl').length > 0){
+					$(this).addClass('layui-nav-itemed');
+					layer.closeAll('tips');
+				}else{
+					layer.tips($(this).children('a').data("title"), $(this));
+				}
+			}).on('mouseleave', function () {
+				
+				layer.closeAll('tips');
+				$(this).removeClass('layui-nav-itemed');
+			});
+		}else{
+			leftSub.off('mouseenter').off('mouseleave');
 		}
 	}
 
