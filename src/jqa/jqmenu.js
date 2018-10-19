@@ -68,7 +68,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			layer.closeAll('tips')
 		});
 		$('.layui-tab-content').on('click','.coverBox',function(){
-			console.log(1);
 			$(this).hide();
 			$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 			$('.menu-list').slideUp('fast');
