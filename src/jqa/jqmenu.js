@@ -386,11 +386,16 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 				$(this).addClass('nav-collapse');
 			})
 			$('#submenu').find("ul li").find("a").on('mouseenter', function () {
-				layer.tips($(this).data("title"), $(this));
+				if($(this).siblings('dl').length<0){
+					layer.tips($(this).data("title"), $(this));
+				}else{
+					layer.closeAll('tips');
+				}
 			});
 			$('#submenu').find("ul li").find("a").on('mouseleave', function () {
 				layer.closeAll('tips');
 			});
+			
 
 			showIcon.html('&#xe66b;');
 			$('.jqadmin-main-menu .cloneDom').remove();
