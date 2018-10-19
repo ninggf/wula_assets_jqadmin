@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 define('JQ_VERSION', '2.4.3');
-
+define('JQ_RC', '0001');
 /**
  * 加载界面样式资源.
  *
@@ -47,9 +47,9 @@ EOF;
 function smarty_function_initjq($config = false) {
     $ver = JQ_VERSION;
     if (defined('BUILD_NUMBER')) {
-        $verc = $ver . '.' . BUILD_NUMBER;
+        $verc = $ver . '.' . BUILD_NUMBER . '-' . JQ_RC;
     } else {
-        $verc = $ver . '.0';
+        $verc = $ver . '.0-' . JQ_RC;
     }
     $base = WWWROOT_DIR . ASSETS_DIR;
     $jq[] = "<script type=\"text/javascript\" src=\"{$base}/jqadmin/layui.js?v={$ver}\"></script>";
