@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '2.4.3');
-define('JQ_RC', '0001');
+define('JQ_VERSION', '2.3.0');
+define('JQ_RC', '2450');
 /**
  * 加载界面样式资源.
  *
