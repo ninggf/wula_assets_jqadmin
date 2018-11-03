@@ -30,6 +30,49 @@ html, body {
   top: 56px;
 }
 
+.jqadmin-logo-box {
+  .img-logo {
+    display: none;
+    img {
+      width: 28px;
+      height: 28px;
+      margin: 13px 11px;
+    }
+  }
+}
+
+.minWidth {
+  .jqadmin-logo-box {
+    background-color: transparent !important;
+    .logo {
+      display: block !important;
+    }
+    .img-logo {
+      display: none !important;
+      img {
+        width: 32px;
+        height: 32px;
+        margin: 11px 9px;
+      }
+    }
+  }
+}
+
+.left-off {
+  .layui-header {
+    .jqadmin-logo-box {
+      width: 50px;
+      min-width: 50px;
+      .logo {
+        display: none;
+      }
+      .img-logo {
+        display: inline-block;
+      }
+    }
+  }
+}
+
 /** 导航菜单 **/
 
 .layui-nav {
@@ -401,12 +444,13 @@ html, body {
   position: absolute;
   right: 0;
   top: 100px;
-  width: 150px;
+  width: 120px;
   padding: 10px 15px;
   z-index: 998;
+  border: 1px solid #fff;
   border-top: none;
   border-right: none;
-  border-radius: 0 0 3px 3px;
+  border-radius: 0 0 0 3px;
   display: none;
   li {
     height: 28px;
@@ -626,9 +670,10 @@ html, body {
     overflow: visible;
   }
 }
+
 .minWidth {
-  .layui-body{
-    left: 0!important;
+  .layui-body {
+    left: 0 !important;
   }
 }
 
