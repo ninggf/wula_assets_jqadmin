@@ -90,6 +90,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			$('#submenu').find("ul li").find("a").on('mouseenter', function () {
 				layer.tips($(this).data("title"), $(this));
 			});
+			$('.minWidth').addClass('left-miss left-off');
 			$('#submenu').find("ul li").find("a").on('mouseleave', function () {
 				layer.closeAll('tips');
 			});
@@ -145,9 +146,11 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			var show = $('.menu-list').css('display');
 			$('.jqadmin-auxiliary-btn').removeClass('xz');
 			$('.minWidth .jqadmin-main-menu').slideUp();
+			if($('body').hasClass('minWidth')){
+				$('body').addClass('left-miss left-off');
+			}
 			if (show == "none") {
 				$(this).addClass('open');
-				$('.coverBox').show();
 				$('.coverBox').show();
 				_this.menulist();
 				$('.menu-list li').bind("click", function () {
@@ -311,6 +314,10 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			showType    = storage.getItem("showType");
 
 			if ($('body').hasClass('left-off')) {
+				if($('body').hasClass('minWidth')){
+					$('.coverBox').show();
+					$('.menu-list').css('display','none')
+				}
 				showType = 0;
 			} else {
 				showType = 1;
@@ -439,7 +446,21 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		$(this).toggleClass('xz');
 		$('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
 		$('.menu-list').slideUp('fast');
-		$('.coverBox').show();
+		//$('.coverBox').show();
+		if($(this).hasClass('xz')){
+			$('.coverBox').show();
+		}else{
+			if($('body').hasClass('left-miss')||$('body').hasClass('left-off')){
+				$('.coverBox').hide();
+			}
+			
+		}
+		if(!$('body').hasClass('left-miss')&&!$('body').hasClass('left-off')){
+
+		}else{
+			//$('.coverBox').toggle();
+		}
+		
 		if (!cloneTemp) {
 			var cloneItems = $('.minWidth .layui-header .header-right .right-menu li').clone(true);
 			$('.minWidth .layui-header .header-right .right-menu').hide();
