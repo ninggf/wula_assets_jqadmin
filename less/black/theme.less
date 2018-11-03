@@ -1,43 +1,136 @@
+body {
+  color: #333;
+}
+
 .layui-tab-card {
   border-bottom: 1px solid #1AA094;
-  box-shadow: none;
+}
+
+.layui-nav-tree {
+  .layui-nav-item {
+    a {
+      color: #efefef;
+      &:hover {
+        background-color: #009688;
+      }
+    }
+  }
+}
+
+.layui-layout-admin {
+  .layui-header {
+    border-bottom: #68718f solid 4px;
+    .layui-nav {
+      .layui-nav-item {
+        .msg-num {
+          background: red;
+          color: #FFF;
+        }
+      }
+    }
+  }
+}
+
+.layui-header {
+  .jqadmin-logo-box {
+    h1 {
+      color: #999;
+    }
+  }
+  .layui-nav {
+    .layui-this {
+      a {
+        &:after {
+          background-color: #5FB878;
+        }
+      }
+    }
+  }
+}
+
+.layui-nav-child {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+  border: 1px solid #d2d2d2;
+  background-color: #fff;
 }
 
 .menu-list {
   border-color: #1AA094;
-  border-right: 1px solid #1AA094;
   border-right: none;
+  background: #FFF;
 }
 
-.jqadmin-tab-box .layui-tab-title .layui-this {
-  background-color: #1AA094;
+.menu-btn {
+  border-left: 1px solid #1E9FFF;
+  color: #1E9FFF;
+  background: #CCC;
 }
 
-.jqadmin-tab-box .layui-tab-title .layui-this * {
+.menu-type {
+  color: #666;
+  border-right: 1px solid #CCC;
+  background-color: #FFF;
+}
+
+.jqadmin-tab-box {
+  li {
+    border-right: #e2e2e2 solid 1px;
+  }
+  .layui-tab-title {
+    .layui-this {
+      background-color: #1AA094;
+      color: #666;
+      * {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.jqamdin-left-bar {
+  background-color: #23262E;
+  .layui-nav {
+    background-color: #23262E;
+    border-radius: 0;
+  }
+}
+
+.jqadmin-tab-box {
+  .tab-move-btn {
+    background: #FFF;
+    border-left: 1px solid #CCC;
+    .open {
+      border-left: #1AA094 solid 1px;
+    }
+    .move-left-btn,
+    .move-right-btn {
+      border-left: 1px solid #ccc;
+    }
+  }
+}
+
+.jqadmin-auxiliary-btn {
   color: #fff;
 }
 
-.layui-layout-admin .layui-header {
-  border-bottom: #68718f solid 4px;
+.layui-layout-admin {
+  .jqadmin-foot {
+    color: #666;
+    border-top: 1px solid #CCC;
+  }
 }
 
-.layui-header .layui-nav .layui-this a:after {
-  position: absolute;
-  left: 0;
-  height: 3px;
-  background-color: #5FB878;
-  transition: all .2s;
-  -webkit-transition: all .2s;
-  content: '';
-  top: auto;
-  bottom: 0;
-  width: 100%;
-}
-
-.tab-move-btn {
-  box-sizing: border-box;
-}
-
-.layui-nav-tree .layui-nav-item a:hover {
-  background-color: #009688;
+.right-click-menu {
+  background: #FFF;
+  border: 1px solid #F2F2F2;
+  li {
+    a {
+      color: #CCC;
+      border-bottom: 1px solid #F2F2F2;
+      &:hover {
+        background: #EEE;
+        color: #666;
+      }
+    }
+  }
 }

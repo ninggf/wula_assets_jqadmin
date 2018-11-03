@@ -24,9 +24,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 			}
 		};
 
-	/**
-	 *@todo 初始化数据
-	 */
 	jqmenu.prototype.init = function () {
 		var _this = this;
 		_this.resize();
@@ -35,9 +32,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
 		element.init();
 		if ($('iframe[data-id=0]').length > 0) {
 			$('iframe[data-id=0]').attr('src', $('[lay-id=0]').find('em').data('href'));
-		};
-		$('.layui-tab-content').append('<div class="coverBox"></div>');
-	}
+		}
+		$('.layui-tab-content').prepend('<div class="coverBox"></div>');
+	};
 
 	/**
 	 * 将tabmenu类附到jqmenu上，方法tab的接口调用与重写

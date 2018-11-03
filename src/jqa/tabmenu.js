@@ -38,7 +38,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		objTab.tabFilter  = filter;
 
 		return _this;
-	}
+	};
 
 	tabMenu.prototype.exited = function (data) {
 		var tab_index = -1, href = data.href;
@@ -71,7 +71,7 @@ layui.define(['jquery', 'jqelem'], function (exports) {
 		data.cls      = cls;
 		if (tab_index === -1) {
 			var layID   = data.layId ? data.layId : new Date().getTime();
-			var content = '<iframe src="' + data.href + '" data-id="' + layID + '" class="jqadmin-iframe"></iframe>';
+			var content = '<iframe src="' + data.href + '" data-id="' + layID + '" class="jqadmin-iframe" frameborder="0"></iframe>';
 			var title   = '';
 
 			// 如果icon有定义则添加到标题中
