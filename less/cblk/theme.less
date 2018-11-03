@@ -1,12 +1,15 @@
-@topbar-color: #fff;
-@topbarbtm-color: #eee;
-@logobk-color: #1E9FFF;
+@topbar-color: #393D49;
+@topbarbtm-color: #68718f;
+@logobk-color: #20222A;
 @logotxt-color: rgba(255, 255, 255, .8);
 @siderbar-color: #20222A;
-@activebk-color: #1E9FFF;
-@tab-after-color: #ccc;
-@tab-activebk-color: #1E9FFF;
+@siderbar-text-color: rgba(255, 255, 255, .7);
+@activebk-color: #009688;
+@tab-after-color: #5FB878;
+@tab-activebk-color: #009688;
 @bodyColor: #333;
+@topbar-text-color: rgba(255, 255, 255, .7);
+@topbar-active-text-color: #fff;
 
 body {
   color: @bodyColor;
@@ -20,23 +23,14 @@ body {
   background-color: @tab-after-color
 }
 
-.layui-nav {
-  .layui-nav-more {
-    border-color: @bodyColor transparent transparent;
-  }
-  .layui-nav-mored {
-    border-color: transparent transparent @bodyColor;
-  }
-}
-
 .sub-menu {
   .layui-nav {
     .layui-nav-more {
-      border-color: #fff transparent transparent;
+      border-color: @siderbar-text-color transparent transparent;
     }
     .layui-nav-itemed {
       .layui-nav-more {
-        border-color: transparent transparent #fff;
+        border-color: transparent transparent @siderbar-text-color;
       }
     }
   }
@@ -72,6 +66,15 @@ body {
           color: #FFF;
         }
       }
+      .layui-nav-more {
+        border-color: @topbar-text-color transparent transparent;
+      }
+      .layui-nav-mored {
+        border-color: transparent transparent @topbar-text-color;
+      }
+      .layui-nav-child a {
+        color: @bodyColor;
+      }
     }
   }
 }
@@ -97,12 +100,13 @@ body {
   .layui-nav {
     .layui-nav-item {
       a {
-        color: #333;
+        color: @topbar-text-color;
       }
     }
     .layui-this {
       &:after,
       a {
+        color: @topbar-active-text-color;
         &:after {
           background-color: @activebk-color;
         }
