@@ -8,4 +8,5 @@
 .DS_Store
 *.bak
 node_modules/
+css/select2/
 package-lock.json

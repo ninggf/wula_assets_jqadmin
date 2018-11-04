@@ -49,7 +49,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             tabmenu.init();
             tabmenu.tabMove(0, 1);
         }).resize();
-    }
+    };
 
     /**
      *@todo 初始化菜单
@@ -58,9 +58,11 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         var _this = this, mm = $('#menu'), leftSub = $('#submenu').find("ul li");
         //初始化时显示第一个菜单
         mm.find('a').on('mouseenter', function () {
-            layer.tips($(this).data("title"), $(this), {
-                tips: 3
-            });
+            if ($('body').hasClass('left-off') && !$('body').hasClass('minWidth')) {
+                layer.tips($(this).data("title"), $(this), {
+                    tips: 3
+                });
+            }
         }).on('mouseleave', function () {
             layer.closeAll('tips')
         });
@@ -73,7 +75,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                     layer.tips($(this).children('a').data("title"), $(this));
                 }
             }).on('mouseleave', function () {
-
                 layer.closeAll('tips');
                 $(this).removeClass('layui-nav-itemed');
             });
@@ -109,9 +110,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             } else {
                 if (obj.hasClass('layui-nav-itemed')) {
                     obj.find("a").off('mouseenter').removeClass('nav-collapse');
-                    // if($('body').hasClass('left-off')){
-                    // 	$('.coverBox').show();
-                    // }
                 } else {
                     $('.coverBox').hide();
                     obj.find("a").on('mouseenter', function () {
@@ -123,24 +121,31 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 }
             }
         }).find('dd').bind("click", function () {
-
             _this.menuSetOption($(this));
         });
-
+        // 功能导航的单击事件
+        $('body').on('click', '.all-menus a', function () {
+            _this.menuSetOption($(this));
+            layer.closeAll();
+            return false;
+        });
         //绑定主菜单单击事件，点击时显示相应的菜单
         element.on('nav(main-menu)', function (elem) {
             $('.left-off .jqamdin-left-bar .layui-nav-itemed').removeClass('layui-nav-itemed');
-            var index = elem.index();
-            if ((elem[0].className).indexOf('tab-menu') != -1) {
-                return;
+            var index = elem.index(), subMenu = $('#submenu .sub-menu');
+            if (!elem[0].id) {//無左部菜單
+                if (elem.hasClass('fav-menu')) {//打開快捷菜單
+                    _this.menuSetOption(elem);
+                }
+            } else {
+                var cmenu       = subMenu.eq(index), sStorage = window.sessionStorage || {};
+                sStorage.menuId = cmenu.find('ul').data('formenu');
+                if (cmenu.is(':visible')) {
+                    return false;
+                }
+                subMenu.hide();
+                cmenu.show();
             }
-            var cmenu       = $('#submenu .sub-menu').eq(index), sStorage = window.sessionStorage || {};
-            sStorage.menuId = cmenu.find('ul').data('formenu');
-            if (cmenu.is(':visible')) {
-                return;
-            }
-            $('#submenu .sub-menu').hide();
-            cmenu.show();
         });
         //绑定更多按钮事件
         $('.tab-move-btn').bind("click", function () {
@@ -167,18 +172,10 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 $(this).find('i').html("&#xe604;");
             }
         });
-
-        //禁止双击选中
-        $('span.move-left-btn,span.move-right-btn').bind("selectstart", function () {
-            return false;
-        });
     };
 
-    /**
-     *@todo 设置菜单项
-     */
     jqmenu.prototype.menuSetOption = function (obj) {
-        var $a    = obj.children('a'),
+        var $a    = obj.is('a') ? obj : obj.children('a'),
             href  = $a.data('url'),
             icon  = $a.children('i:first').data('icon') || '&#xe621;',
             title = $a.data('title'),
@@ -191,9 +188,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         this.menuOpen(data);
     };
 
-    /**
-     *@todo 打开菜单项
-     */
     jqmenu.prototype.menuOpen = function (data, active) {
         tabmenu.tabAdd(data, this.options.fresh, active);
     };
@@ -261,9 +255,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                     subm.find('.layui-this').removeClass('layui-this');
                     var mp = li.parent();
                     mp.addClass('layui-this');
-                    if (mp.is('dd')) {
-                        // mp.closest('li').addClass('layui-nav-itemed');
-                    }
                     menuId = subm.data('formenu');
                 }
             }
@@ -309,11 +300,9 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         var screenWidth = oHtml.clientWidth, showType = 0;
         if (type == 'close') {
             showType = 1;
-        }
-        if (type != 'open' && type != 'close' && window.localStorage) {
-            var storage = window.localStorage;
-            showType    = storage.getItem("showType");
-
+        } else if (type == 'open') {
+            showType = 0;
+        } else {
             if ($('body').hasClass('left-off')) {
                 if ($('body').hasClass('minWidth')) {
                     $('.coverBox').show();
@@ -326,7 +315,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         }
         var _this    = this,
             showIcon = $(".menu-type").find("i");
-
         switch (parseInt(showType)) {
             case 1://打开
                 $('.layui-nav-tree .layui-nav-item').removeClass('layui-nav-itemed');
@@ -344,7 +332,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                         layer.tips($(this).children('a').data("title"), $(this));
                     }
                 }).on('mouseleave', function () {
-
                     layer.closeAll('tips');
                     $(this).removeClass('layui-nav-itemed');
                 });
@@ -370,6 +357,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
     function getSize() {
         var showIcon    = $(".menu-type").find("i").removeClass('iconfont').addClass('layui-icon'),
             oHtml       = document.documentElement,
+            preSet      = $('body').hasClass('pre-set'),
             leftSub     = $('#submenu').find("ul li");
         var screenWidth = oHtml.clientWidth;
         if (screenWidth <= 750) {
@@ -378,7 +366,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             $('.jqadmin-main-menu .layui-nav .layui-nav-item a span').show();
             $('#submenu').find("ul li").find("a").off('mouseenter');
             $('.layui-header .header-right .right-menu').hide();
-            console.log('getSize<750');
             showIcon.html('&#xe66b;');
         } else if (screenWidth < 970) {
             $('.layui-nav-itemed').removeClass('layui-nav-itemed');
@@ -408,9 +395,15 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             $('.jqadmin-main-menu').show();
             $('.jqadmin-main-menu .layui-nav .layui-nav-item a span').show();
             $('.layui-header .header-right .right-menu').show();
-            $('body').removeClass('left-off minWidth left-miss');
+            if (preSet) {
+                $('body').removeClass('minWidth left-miss');
+                showIcon.html('&#xe66b;');
+            } else {
+                $('body').removeClass('left-off minWidth left-miss');
+                showIcon.html('&#xe668;');
+            }
             $('#submenu').find("ul li").find("a").off('mouseenter').removeClass('nav-collapse');
-            showIcon.html('&#xe668;');
+
             $('.jqadmin-main-menu .cloneDom').remove();
             cloneTemp = false;
         }
@@ -423,7 +416,6 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                     layer.tips($(this).children('a').data("title"), $(this));
                 }
             }).on('mouseleave', function () {
-
                 layer.closeAll('tips');
                 $(this).removeClass('layui-nav-itemed');
             });
@@ -445,21 +437,13 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         $(this).toggleClass('xz');
         $('.tab-move-btn').removeClass('open').find('i').html("&#xe604;");
         $('.menu-list').slideUp('fast');
-        //$('.coverBox').show();
         if ($(this).hasClass('xz')) {
             $('.coverBox').show();
         } else {
             if ($('body').hasClass('left-miss') || $('body').hasClass('left-off')) {
                 $('.coverBox').hide();
             }
-
         }
-        if (!$('body').hasClass('left-miss') && !$('body').hasClass('left-off')) {
-
-        } else {
-            //$('.coverBox').toggle();
-        }
-
         if (!cloneTemp) {
             var cloneItems = $('.minWidth .layui-header .header-right .right-menu li').clone(true);
             $('.minWidth .layui-header .header-right .right-menu').hide();

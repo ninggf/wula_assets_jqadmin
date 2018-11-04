@@ -1,15 +1,18 @@
+@topbar-color: #20222A;
+@topbarbtm-color: #1E9FFF;
 @logobk-color: #1E9FFF;
 @logotxt-color: rgba(255, 255, 255, .8);
-@topbar-color: #FFF;
-@topbarbtm-color: @logobk-color;
-@siderbar-color: #20222A;
-@siderbar-child-color: @siderbar-color;
-@activebk-color: @logobk-color;
-@tab-after-color: @logobk-color;
-@tab-activebk-color: @logobk-color;
+@siderbar-color: #FFF;
+@siderbar-child-color: #F7F7F7;
+@siderbar-text-color: #333;
+@activebk-color: #1E9FFF;
+@tab-after-color: #1E9FFF;
+@tab-activebk-color: @activebk-color;
+@bodyColor: #333;
+@topbar-text-color: rgba(255, 255, 255, .7);
+@topbar-active-text-color: #fff;
 @tab-b-b-color: #e2e2e2;
 @tab-split-color: #e2e2e2;
-@bodyColor: #333;
 
 body {
   color: @bodyColor;
@@ -23,23 +26,14 @@ body {
   background-color: @tab-after-color
 }
 
-.layui-nav {
-  .layui-nav-more {
-    border-color: @bodyColor transparent transparent;
-  }
-  .layui-nav-mored {
-    border-color: transparent transparent @bodyColor;
-  }
-}
-
 .sub-menu {
   .layui-nav {
     .layui-nav-more {
-      border-color: #fff transparent transparent;
+      border-color: @siderbar-text-color transparent transparent;
     }
     .layui-nav-itemed {
       .layui-nav-more {
-        border-color: transparent transparent #fff;
+        border-color: transparent transparent @siderbar-text-color;
       }
     }
   }
@@ -52,13 +46,26 @@ body {
   .layui-this > a,
   .layui-this > a:hover {
     background-color: @activebk-color;
-    color: #fff;
+    color: @siderbar-text-color !important;
+  }
+  .layui-nav-child {
+    background-color: @siderbar-child-color !important;
   }
   .layui-nav-item {
+    &:first-child {
+      a {
+        border-bottom: 1px solid @tab-split-color;
+      }
+    }
     a {
-      color: #fff;
+      color: @siderbar-text-color !important;
       &:hover {
         background-color: @activebk-color;
+      }
+    }
+    .layui-nav-child {
+      a {
+        border-bottom: none;
       }
     }
   }
@@ -75,6 +82,15 @@ body {
           color: #FFF;
         }
       }
+      .layui-nav-more {
+        border-color: @topbar-text-color transparent transparent;
+      }
+      .layui-nav-mored {
+        border-color: transparent transparent @topbar-text-color;
+      }
+      .layui-nav-child a {
+        color: @bodyColor;
+      }
     }
   }
 }
@@ -83,7 +99,7 @@ body {
   .layui-header {
     .jqadmin-logo-box {
       h1 {
-        color: @bodyColor;
+        color: @logotxt-color;
       }
     }
   }
@@ -98,7 +114,7 @@ body {
 .layui-header {
   .jqadmin-logo-box {
     background-color: @logobk-color;
-    height: 58px;
+    height: 54px;
     h1 {
       color: @logotxt-color;
     }
@@ -106,12 +122,13 @@ body {
   .layui-nav {
     .layui-nav-item {
       a {
-        color: #333;
+        color: @topbar-text-color;
       }
     }
     .layui-this {
       &:after,
       a {
+        color: @topbar-active-text-color;
         &:after {
           background-color: @activebk-color;
         }
@@ -133,7 +150,7 @@ body {
 }
 
 .menu-btn {
-  border-left: 1px solid #1E9FFF;
+  border-left: 1px solid @tab-b-b-color;
   color: #1E9FFF;
   background: #CCC;
 }
@@ -176,6 +193,7 @@ body {
 }
 
 .jqamdin-left-bar {
+  border-right: 1px solid #e2e2e2;
   background-color: @siderbar-color;
   .layui-nav {
     background-color: @siderbar-color;
@@ -184,7 +202,7 @@ body {
 }
 
 .jqadmin-auxiliary-btn {
-  color:  @bodyColor;
+  color: @topbar-text-color;
 }
 
 .layui-layout-admin {

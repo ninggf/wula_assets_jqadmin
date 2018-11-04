@@ -3,13 +3,16 @@
 @logobk-color: #20222A;
 @logotxt-color: rgba(255, 255, 255, .8);
 @siderbar-color: #20222A;
+@siderbar-child-color: @siderbar-color;
 @siderbar-text-color: rgba(255, 255, 255, .7);
 @activebk-color: #009688;
 @tab-after-color: #5FB878;
-@tab-activebk-color: #009688;
+@tab-activebk-color: @activebk-color;
 @bodyColor: #333;
 @topbar-text-color: rgba(255, 255, 255, .7);
 @topbar-active-text-color: #fff;
+@tab-b-b-color: #e2e2e2;
+@tab-split-color: #e2e2e2;
 
 body {
   color: @bodyColor;
@@ -89,6 +92,12 @@ body {
   }
 }
 
+.left-off {
+  .layui-nav-itemed > .layui-nav-child {
+    background-color: @siderbar-child-color !important;
+  }
+}
+
 .layui-header {
   .jqadmin-logo-box {
     background-color: @logobk-color;
@@ -128,14 +137,14 @@ body {
 }
 
 .menu-btn {
-  border-left: 1px solid #1E9FFF;
+  border-left: 1px solid @tab-b-b-color;
   color: #1E9FFF;
   background: #CCC;
 }
 
 .menu-type {
   color: #666;
-  border-right: 1px solid #CCC;
+  border-right: 1px solid @tab-split-color;
   background-color: #FFF;
 }
 
@@ -145,7 +154,7 @@ body {
 
 .jqadmin-tab-box {
   li {
-    border-right: #e2e2e2 solid 1px;
+    border-right: 1px solid @tab-split-color;
   }
   .layui-tab-title {
     background-color: #fff;
@@ -179,7 +188,7 @@ body {
 }
 
 .jqadmin-auxiliary-btn {
-  color: #fff;
+  color:  @topbar-text-color;
 }
 
 .layui-layout-admin {
@@ -201,5 +210,17 @@ body {
         color: #666;
       }
     }
+  }
+}
+
+.theme-list {
+  li.layui-this:after, li:hover:after {
+    border-color: @tab-activebk-color;
+  }
+}
+
+@media (max-width: 750px) {
+  .layui-layout-admin .jqadmin-main-menu {
+    background: @topbar-color;
   }
 }

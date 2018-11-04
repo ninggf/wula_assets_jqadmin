@@ -148,8 +148,8 @@ html, body {
   width: 100%;
   line-height: 50px;
   a {
-    height: 35px;
-    line-height: 35px;
+    height: 41px;
+    line-height: 41px;
     padding-left: 13px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -204,12 +204,12 @@ html, body {
 }
 
 .layui-nav-tree .layui-nav-more {
-  top: 18px;
+  top: 23px;
   right: 10px;
 }
 
 .layui-nav-itemed .layui-nav-more {
-  top: 18px;
+  top: 21px;
 }
 
 /**
@@ -589,17 +589,12 @@ html, body {
 
 .left-off .layui-layout-admin .layui-side, .left-off .layui-side-scroll, .left-off .layui-nav-tree {
   width: 50px;
-
 }
 
 .left-off .layui-body {
   left: 50px;
   padding-left: 0;
 
-}
-
-.left-off #submenu .layui-nav .layui-nav-item a span {
-  // display: none;
 }
 
 .left-off .jqadmin-foot {
@@ -678,64 +673,6 @@ html, body {
   }
 }
 
-@media screen and (max-width: 750px) {
-  .left-off .layui-layout-admin .layui-side, .left-off .layui-side-scroll, .left-off .layui-nav-tree {
-    width: 0;
-    overflow-x: hidden;
-  }
-
-  .left-off .layui-body {
-    left: 0;
-    padding-left: 0;
-
-  }
-
-  .left-off .jqadmin-foot {
-    left: 0;
-  }
-
-  // 顶部导航自适应
-  .jqadmin-auxiliary-btn {
-    display: block;
-  }
-
-  .layui-header .jqadmin-logo-box {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-  }
-
-  .layui-layout-admin .jqadmin-main-menu {
-    background: #23262E;
-    max-width: 160px;
-    position: absolute;
-    left: 0;
-    padding: 0 20px;
-    top: 54px;
-    display: none;
-    li {
-      width: 100%;
-    }
-  }
-
-  .layui-layout-admin .jqadmin-main-menu .cloneDom span {
-    display: inline-block !important;
-  }
-
-  .xz {
-    transform: rotate(90deg);
-  }
-
-  .hd {
-    display: none;
-  }
-
-  .show {
-    display: block;
-  }
-}
-
 .theme-list {
   width: 330px;
   li {
@@ -796,6 +733,135 @@ html, body {
     left: -5px;
     border-color: #5FB878;
     opacity: 1;
+  }
+}
+
+.all-menu {
+  border-right: 1px solid #f7f7f7;
+  li {
+    float: left;
+    width: 150px;
+    margin: 0 5px 5px 5px;
+    position: relative;
+    a {
+      span {
+        margin-left: 5px;
+      }
+    }
+    i.act {
+      display: none;
+      position: absolute;
+      right: 2px;
+      top: 1px;
+      cursor: pointer;
+      color: red;
+    }
+    &.no-child {
+      &:hover {
+        i.act {
+          display: block;
+        }
+      }
+    }
+    &.has-child {
+      margin: 0 5px 15px 5px;
+      a {
+        font-weight: bolder;
+      }
+      dl {
+        margin-top: 5px;
+        margin-left: 21px;
+        dd {
+          position: relative;
+          &:hover {
+            i.act {
+              display: block;
+            }
+          }
+        }
+        a {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+.short-menu {
+  li {
+    padding-left: 15px;
+    width: 150px;
+    position: relative;
+    i.act {
+      display: none;
+      position: absolute;
+      right: 2px;
+      top: 1px;
+      cursor: pointer;
+    }
+    &:hover {
+      i.act {
+        display: block;
+      }
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  .left-off .layui-layout-admin .layui-side, .left-off .layui-side-scroll, .left-off .layui-nav-tree {
+    width: 0;
+    overflow-x: hidden;
+  }
+
+  .left-off .layui-body {
+    left: 0;
+    padding-left: 0;
+
+  }
+
+  .left-off .jqadmin-foot {
+    left: 0;
+  }
+
+  // 顶部导航自适应
+  .jqadmin-auxiliary-btn {
+    display: block;
+  }
+
+  .layui-header .jqadmin-logo-box {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+
+  .layui-layout-admin .jqadmin-main-menu {
+    background: #23262E;
+    max-width: 160px;
+    position: absolute;
+    left: 0;
+    padding: 0 20px;
+    top: 54px;
+    display: none;
+    li {
+      width: 100%;
+    }
+  }
+
+  .layui-layout-admin .jqadmin-main-menu .cloneDom span {
+    display: inline-block !important;
+  }
+
+  .xz {
+    transform: rotate(90deg);
+  }
+
+  .hd {
+    display: none;
+  }
+
+  .show {
+    display: block;
   }
 }
 
