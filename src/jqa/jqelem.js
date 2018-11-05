@@ -256,13 +256,43 @@ layui.define('jquery', function (exports) {
         var that  = this,
             items = {
                 nav       : function () {
-                    $(NAV_ELEM).each(function () {
+                    var timerMore = {},
+                        follow    = function (bar, nav, index) {
+                            var othis = $(this),
+                                child = othis.find('.' + NAV_CHILD);
+                            if (!nav.hasClass(NAV_TREE)) {
+                                child.addClass(NAV_ANIM);
+                                if (child.css('display') === 'block') {
+                                    clearTimeout(timerMore[index]);
+                                }
+                                timerMore[index] = setTimeout(function () {
+                                    child.addClass(SHOW)
+                                    othis.find('.' + NAV_MORE).addClass(NAV_MORE + 'd');
+                                }, 300);
+                            }
+                        };
+                    $(NAV_ELEM).each(function (index) {
                         var othis    = $(this),
+                            bar      = $('<span class="' + NAV_BAR + '"></span>'),
                             itemElem = othis.find('.' + NAV_ITEM);
+
+                        //Hover滑动效果
+                        if (!othis.find('.' + NAV_BAR)[0]) {
+                            itemElem.on('mouseenter', function () {
+                                follow.call(this, bar, othis, index);
+                            }).on('mouseleave', function () {
+                                if (!othis.hasClass(NAV_TREE)) {
+                                    clearTimeout(timerMore[index]);
+                                    timerMore[index] = setTimeout(function () {
+                                        othis.find('.' + NAV_CHILD).removeClass(SHOW);
+                                        othis.find('.' + NAV_MORE).removeClass(NAV_MORE + 'd');
+                                    }, 300);
+                                }
+                            });
+                        }
                         itemElem.each(function () {
                             var oitem = $(this),
                                 child = oitem.find('.' + NAV_CHILD);
-
                             //二级菜单
                             if (child[0] && !oitem.find('.' + NAV_MORE)[0]) {
                                 var one = oitem.children('a');

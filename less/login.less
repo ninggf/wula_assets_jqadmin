@@ -1,3 +1,4 @@
+/*
 html, body {
   background: #293e53;
 }
@@ -75,6 +76,7 @@ html, body {
 }
 
 /* .main{padding: 0 0 0 15px;} */
+/*
 .main > .container > .sign-in.form-inline {
   position: relative;
   max-width: 500px;
@@ -200,5 +202,88 @@ html, body {
   }
   .main > .container > .sign-in.form-inline{
     padding: 0 18px;
+  }
+}
+*/
+
+html {
+  background-color: #f2f2f2;
+  color: #666;
+}
+
+body, html {
+  height: 100%;
+}
+
+.login-wrap {
+  position: relative;
+  left: 0;
+  top: 0;
+  padding: 166px 0 110px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.login-body {
+  width: 375px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  .layui-form {
+    padding: 20px;
+    .login-wula {
+      text-align: right;
+      color: #999999;
+      font-size: 90%;
+    }
+  }
+  .layui-form-item {
+    position: relative;
+    .layui-input {
+      padding-left: 38px;
+    }
+  }
+  .login-icon {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 38px;
+    line-height: 36px;
+    text-align: center;
+    color: #d2d2d2;
+  }
+}
+
+.login-rem {
+  margin-bottom: 20px;
+  p {
+    display: inline-block;
+    margin-top: 10px;
+    color: orangered;
+    vertical-align: middle;
+    margin-left: -15px;
+  }
+}
+
+.login-header {
+  padding: 20px 20px 0;
+  text-align: center;
+  p {
+    font-weight: 300;
+    color: #999999;
+  }
+}
+
+.login-footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  line-height: 30px;
+  padding: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, .5);
+  span {
+    padding: 0 5px;
   }
 }
