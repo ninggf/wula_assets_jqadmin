@@ -1,6 +1,6 @@
 ($ => {
-	const pagerTpl            = '<section class="col-sm-12 col-md-7 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
-	const tipTpl              = '<section class="col-sm-12 col-md-5 col-lg-4 visible-sm-block visible-md-block  visible-lg-block"><div class="m-t text-muted">每页&nbsp;<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
+	const pagerTpl            = '<section class="col-xs-4 col-sm-4 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
+	const tipTpl              = '<section class="col-xs-8 col-sm-8 col-lg-4"><div class="m-t text-muted">每页<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
 	const nuiPager            = function (pager) {
 		let targetId = pager.data('tablePager');
 		if (targetId) {
@@ -52,13 +52,13 @@
 		}
 
 		let pagerElm = this.pagerElm = pageWrapper.find('ul');
-		pagerElm.append('<li class="disabled p-f"><a href="#" rel="1"><i class="fa fa-fast-backward"></i></a></li>');
+		pagerElm.append('<li class="disabled p-f hidden-sm hidden-xs"><a href="#" rel="1"><i class="fa fa-fast-backward"></i></a></li>');
 		pagerElm.append('<li class="disabled p-p"><a href="#" rel="1"><i class="fa fa-backward"></i></a></li>');
 		for (let i = 1; i <= this.pp; i++) {
-			pagerElm.append('<li class="p-' + i + '"><a href="#" rel="' + i + '">' + i + '</a></li>');
+			pagerElm.append('<li class="p-' + i + ' hidden-sm hidden-xs"><a href="#" rel="' + i + '">' + i + '</a></li>');
 		}
 		pagerElm.append('<li class="disabled p-n"><a href="#" rel="1"><i class="fa fa-forward"></i></a></li>');
-		pagerElm.append('<li class="disabled p-l"><a href="#" rel="1"><i class="fa fa-fast-forward"></i></a></li>');
+		pagerElm.append('<li class="disabled p-l hidden-sm hidden-xs"><a href="#" rel="1"><i class="fa fa-fast-forward"></i></a></li>');
 		pageWrapper.appendTo(pager);
 		pagerElm.on('click', 'a', function (event) {
 			event.preventDefault();
@@ -116,9 +116,9 @@
 		}
 		start = Math.max(0, start);
 		for (let i = 1; i <= Math.min(this.pp, tp); i++) {
-			pagerElm.find('.p-' + i).addClass('hidden-xs').css('display', 'inline').find('a').attr('rel', start + i).html(start + i);
+			pagerElm.find('.p-' + i).css('display', 'inline').find('a').attr('rel', start + i).html(start + i);
 		}
-		pagerElm.find('a[rel=' + this.current + ']').parents('li').removeClass('hidden-xs').addClass('disabled');
+		pagerElm.find('a[rel=' + this.current + ']').parents('li').removeClass('hidden-xs hidden-sm').addClass('disabled');
 	};
 
 	$.fn.wulaplgpager = function () {

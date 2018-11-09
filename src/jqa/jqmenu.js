@@ -359,8 +359,13 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 $body.removeClass('minWidth left-miss');
                 showIcon.html('&#xe66b;');
             } else {
-                $body.removeClass('left-off minWidth left-miss');
-                showIcon.html('&#xe668;');
+                if (screenWidth <= 1280) {
+                    $body.addClass('left-off').removeClass('minWidth left-miss');
+                    showIcon.html('&#xe66b;');
+                } else {
+                    $body.removeClass('left-off minWidth left-miss');
+                    showIcon.html('&#xe668;');
+                }
             }
             leftSub.find("a").removeClass('nav-collapse');
 

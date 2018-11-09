@@ -129,8 +129,8 @@ div.wysiwyg {
     border: 1px solid rgb(204, 204, 204);
     padding: 4px;
     box-sizing: content-box;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0 1px 1px 0 inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0 1px 1px 0 inset;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
@@ -154,6 +154,58 @@ div.max1000 {
 
 .combodate select {
   display: inline-block;
+}
+
+.layui-card {
+  .with-table {
+    padding: 0;
+  }
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+.layui-card-footer {
+  border-top: 1px solid #ddd;
+  padding-bottom: 10px;
+  select {
+    height: 26px;
+    line-height: 26px;
+    border-radius: 2px;
+    border: 1px solid #e2e2e2;
+    background-color: #fff;
+    display: inline-block;
+  }
+}
+
+.layui-form-label {
+  width: 110px;
+  margin-bottom: 0;
+}
+
+.has-form {
+  position: relative;
+  .layui-form-item {
+    margin-bottom: 5px
+  }
+  .more {
+    display: none;
+  }
+  .search-btns {
+    display: none;
+    border-radius: 5px;
+    width: 56px;
+    height: 28px;
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    margin-left: -28px;
+  }
+  &:hover {
+    .search-btns {
+      display: inline-block;
+    }
+  }
 }
 
 @media (max-width: 767px) {
