@@ -409,6 +409,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
     //=require components/form.js
     //=require components/validate.js
     //=require components/table.js
+    //=require components/repeater.js
     //=require components/table-plg-pager.js
     //=require components/table-plg-searchform.js
     //=require components/uploader.js

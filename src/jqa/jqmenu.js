@@ -106,8 +106,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         });
         // 功能导航的单击事件
         $body.on('click', '.all-menus a', function () {
-            _this.menuSetOption($(this));
             layer.closeAll();
+            _this.menuSetOption($(this));
             return false;
         });
         //绑定主菜单单击事件，点击时显示相应的菜单
@@ -120,7 +120,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 }
             } else {
                 var cmenu       = subMenu.eq(index), sStorage = window.sessionStorage || {};
-                sStorage.menuId = cmenu.find('ul').data('formenu');
+                sStorage.menuId = cmenu.find('[data-formmenu]').data('formenu');
                 if (cmenu.is(':visible')) {
                     return false;
                 }
@@ -156,17 +156,23 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
     };
 
     jqmenu.prototype.menuSetOption = function (obj) {
-        var $a    = obj.is('a') ? obj : obj.children('a'),
-            href  = $a.data('url'),
-            icon  = $a.children('i:first').data('icon') || '&#xe621;',
-            title = $a.data('title'),
-            data  = {
+        var $a     = obj.is('a') ? obj : obj.children('a'),
+            href   = $a.data('url'),
+            icon   = $a.children('i:first').data('icon') || '&#xe621;',
+            title  = $a.data('title'),
+            target = $a.data('target') || $a.attr('target'),
+            data   = {
                 href : href,
                 icon : icon,
                 cls  : $a.children('i:first').get(0).className,
                 title: title
             };
+        if (target) {
+            window.location.href = href;
+            return true;
+        }
         this.menuOpen(data);
+        return false;
     };
 
     jqmenu.prototype.menuOpen = function (data, active) {
