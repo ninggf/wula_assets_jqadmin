@@ -51,10 +51,6 @@
         }
     };
     nuiRepeater.prototype.doPage   = function (cp, limit, reload, ct) {
-        if (this.data.cp !== cp || this.data.limit !== limit) {
-            reload = true;
-            ct     = 1;
-        }
         this.data.cp = cp;
         if (limit) {
             this.data.limit = limit;
