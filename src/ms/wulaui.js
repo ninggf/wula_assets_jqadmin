@@ -240,14 +240,28 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
             }
         }
         if (ajax) {
-            opts.type        = 1;
-            opts.success     = function (o) {
+            opts.type    = 1;
+            opts.success = function (o) {
                 wulaui.init(o);
                 opts.$content = o;
             };
-            opts.beforeClose = function () {
-                wulaui.destroy(opts.$content);
-            };
+            if (opts.end) {
+                let uEnd = opts.end;
+                opts.end = function () {
+                    uEnd();
+                    wulaui.destroy(opts.$content);
+                    if (e) {
+                        e.triggerHandler('close.dialog')
+                    }
+                };
+            } else {
+                opts.end = function () {
+                    wulaui.destroy(opts.$content);
+                    if (e) {
+                        e.triggerHandler('close.dialog')
+                    }
+                };
+            }
             wulaui.ajax.ajax(opts.content, {
                 element : e || $('body'),
                 dataType: 'html',
@@ -267,6 +281,11 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
                 }
             });
         } else {
+            if (e) {
+                opts.end = function () {
+                    e.triggerHandler('close.dialog')
+                };
+            }
             if (!opts.area) {
                 idx = layer.open(opts);
                 layer.full(idx);
@@ -380,7 +399,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
         if (ow) {
             $this.width(ow);
         }
-    }).on('click','.has-form a.btn-more',function () {
+    }).on('click', '.has-form a.btn-more', function () {
         let mores = $(this).closest('form').find('.more');
         mores.toggle();
     });

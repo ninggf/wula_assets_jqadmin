@@ -128,7 +128,7 @@ layui.define(['jquery', 'laytpl', 'bootstrap'], exports => {
 	 *  @param {object} userOptions - The default options selected by the user.
 	 */
 	function Wysiwyg(element, userOptions) {
-
+        document.execCommand("defaultParagraphSeparator", false, "p");
 		// This calls the $ function, with the element as a parameter and
 		// returns the jQuery object wrapper for element. It also assigns the
 		// jQuery object wrapper to the property $editor on `this`.
@@ -444,6 +444,5 @@ layui.define(['jquery', 'laytpl', 'bootstrap'], exports => {
 	$.each(["keydown", "keyup", "keypress"], function () {
 		$.event.special[this] = {add: keyHandler};
 	});
-
 	exports('wysiwyg', Wysiwyg);
 });

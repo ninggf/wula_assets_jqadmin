@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '2.3.1');
+define('JQ_VERSION', '2.3.3');
 define('JQ_RC', '2450');
 /**
  * 加载界面样式资源.
@@ -75,6 +75,7 @@ function smarty_function_initjq($config = false) {
         //extends
         $ms['tableSelect'] = 'extends/tableSelect';
         $ms['treeSelect']  = 'extends/treeSelect';
+        $ms['cascader']    = 'extends/cascader';
 
         //wulaui and thrid
         $ms['toastr']      = 'js/toastr';
@@ -85,8 +86,9 @@ function smarty_function_initjq($config = false) {
         $ms['clipboard']   = 'js/clipboard';
         $ms['wysiwyg']     = 'js/wysiwyg';
         $ms['wulaui']      = 'js/wulaui';
-        $modules           = json_encode($ms, JSON_UNESCAPED_SLASHES);
-        $groups            = wulaphp\app\App::$prefix;
+
+        $modules = json_encode($ms, JSON_UNESCAPED_SLASHES);
+        $groups  = wulaphp\app\App::$prefix;
         unset($groups['check'], $config['config']);
         $config['key']             = 'config';
         $config['value']['base']   = WWWROOT_DIR;
@@ -104,7 +106,7 @@ function smarty_function_initjq($config = false) {
     if ($config && isset($config['modules']) && $config['modules']) {
         $ms = (array)$config['modules'];
     }
-    if ($config && isset($config['page'])) {
+    if ($config && isset($config['page']) && $config['page']) {
         $ms = apply_filter('wula\jqadmin\module_for_' . $config['page'], $ms);
     }
     if ($ms) {
