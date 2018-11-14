@@ -16,7 +16,7 @@
         this.pagerTarget.pager(this);
 
         this.element = pager;
-        this.total   = parseInt($(targetId).find('tbody').data('total') || 0, 10);
+        this.total   = parseInt($(targetId).find('[data-total]').data('total') || 0, 10);
         this.limit   = parseInt(pager.data('limit') || 20, 10);
         this.pp      = parseInt(pager.data('pp') || 5, 10);
         this.current = 1;
