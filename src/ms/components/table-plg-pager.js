@@ -1,6 +1,6 @@
 ($ => {
-    const pagerTpl            = '<section class="col-xs-4 col-sm-4 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
-    const tipTpl              = '<section class="col-xs-8 col-sm-8 col-lg-4"><div class="m-t text-muted">每页<select></select>条&nbsp;共<span class="tp"></span>页<span class="tr"></span>条记录</div></section>';
+    const pagerTpl            = '<section class="col-xs-6 col-sm-4 col-lg-8 text-right"><ul class="pagination pagination-sm m-t-sm m-b-none"></ul></section>';
+    const tipTpl              = '<section class="col-xs-6 col-sm-8 col-lg-4"><div class="m-t text-muted">共<span class="tp"></span>页<span class="tr"></span>条记录<select class="plimit hidden-xs"></select></span></div></section>';
     const nuiPager            = function (pager) {
         let targetId = pager.data('tablePager');
         if (targetId) {
@@ -32,13 +32,13 @@
         if (pager.data('hiddenTip') === undefined) {
             this.tipElm = $(tipTpl);
             let sbox    = this.tipElm.find('select');
-            sbox.append($('<option value="5">5</option>'));
-            sbox.append($('<option value="10">10</option>'));
-            sbox.append($('<option value="15">15</option>'));
-            sbox.append($('<option value="20">20</option>'));
-            sbox.append($('<option value="30">30</option>'));
-            sbox.append($('<option value="50">50</option>'));
-            sbox.append($('<option value="100">100</option>'));
+            sbox.append($('<option value="5">5条/页</option>'));
+            sbox.append($('<option value="10">10条/页</option>'));
+            sbox.append($('<option value="15">15条/页</option>'));
+            sbox.append($('<option value="20">20条/页</option>'));
+            sbox.append($('<option value="30">30条/页</option>'));
+            sbox.append($('<option value="50">50条/页</option>'));
+            sbox.append($('<option value="100">100条/页</option>'));
             sbox.val(this.limit);
             this.tipElm.find('.tr').html(this.total);
             this.tipElm.appendTo(pager);
@@ -48,7 +48,7 @@
                 me.pagerTarget.doPage(me.current, me.limit, true, true);
             });
         } else {
-            pageWrapper.removeClass('col-md-7 col-lg-8');
+            pageWrapper.removeClass('col-xs-6 col-sm-4 col-lg-8 text-right').addClass('col-xs-12');
         }
 
         let pagerElm = this.pagerElm = pageWrapper.find('ul');
