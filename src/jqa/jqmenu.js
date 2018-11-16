@@ -25,11 +25,11 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         };
 
     jqmenu.prototype.init = function () {
+        element.init();
         var _this = this, fframe = $('iframe[data-id=0]');
         _this.resize();
         _this.menuBind();
         _this.openOldMenu();
-        element.init();
         if (fframe.length > 0) {
             fframe.attr('src', $('[lay-id=0]').find('em').data('href'));
         }
@@ -229,7 +229,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
         init = false;
     };
     jqmenu.prototype.sw       = function (data) {
-        var sStorage = window.sessionStorage || {}, menuId;
+        var sStorage = window.sessionStorage || {}, menuId, cm = null;
         if (!data) {
             menuId = sStorage.menuId;
         } else {
@@ -247,9 +247,12 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             }
         }
         if (menuId) {
-            $('#' + menuId).click();
+            cm = $('#' + menuId);
         } else if (sStorage.menuId) {
-            $('#' + sStorage.menuId).click();
+            cm = $('#' + sStorage.menuId);
+        }
+        if (cm && cm.length > 0) {
+            cm.click();
         } else {
             $('#menu li:first').click();
         }
@@ -365,7 +368,7 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 $body.removeClass('minWidth left-miss');
                 showIcon.html('&#xe66b;');
             } else {
-                if (screenWidth <= 1280) {
+                if (screenWidth < 1280) {
                     $body.addClass('left-off').removeClass('minWidth left-miss');
                     showIcon.html('&#xe66b;');
                 } else {
