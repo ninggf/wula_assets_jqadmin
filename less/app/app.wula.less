@@ -103,7 +103,7 @@
 .skin1 {
   .upload-img-box {
     overflow: hidden;
-    .clearfix{
+    .clearfix {
       display: none;
     }
     li {
@@ -118,36 +118,17 @@
         display: none;
       }
       i {
-        transform: rotate(0);
-        -ms-transform: rotate(0);
-        -moz-transform: rotate(0);
-        -webkit-transform: rotate(0);
-        -o-transform: rotate(0);
-        width: inherit;
-        width: inherit;
-        border-radius: 0;
-        color: #fff;
+        color: red;
         background: transparent;
         position: relative;
-        float: right;
-        width: 30px;
+        top: -3px;
+        right: 0;
         text-align: right;
-        &::before{
-          content: '删除';
-          color: #5b6e98;
-          font-size: 13px;
-          line-height: 30px;
-        }
+        font-size: 21px;
+        float: right;
         &:hover{
           font-weight: 600;
         }
-        &::after{
-          content: "";
-          display: block;
-          position: absolute;
-          height: 10px;
-        }
-       
       }
       span {
         &.fsrc {
@@ -172,7 +153,6 @@
         }
       }
       .progress {
-        display: block!important;
         background: #5aa1dd;
         width: 80%!important;
         height: 3px;
@@ -180,18 +160,19 @@
       }
     }
     li.uploadimg-btn {
-      float: right;
+      float: left;
       width: 15%;
+      text-align: right;
+      border: none;
       a {
         display: inline;
         border: none;
         background-image: none;
         line-height: 22px;
         &::before{
-          content: "选择";
+          content: "添加";
           color: #5b6e98;
           font-size: 13px;
-          
         }
         &:hover {
           font-weight: 600;
