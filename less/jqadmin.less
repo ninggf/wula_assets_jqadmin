@@ -810,6 +810,58 @@ html, body {
   }
 }
 
+@-webkit-keyframes layui-rl {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0)
+  }
+  to {
+    -webkit-transform: translate3d(0, 0, 0)
+  }
+}
+
+@keyframes layui-rl {
+  from {
+    transform: translate3d(100%, 0, 0)
+  }
+  to {
+    transform: translate3d(0, 0, 0)
+  }
+}
+
+.layui-anim-rl {
+  -webkit-animation-name: layui-rl;
+  animation-name: layui-rl
+}
+
+@-webkit-keyframes layui-lr {
+  from {
+    -webkit-transform: translate3d(0, 0, 0);
+    opacity: 1
+  }
+  to {
+    -webkit-transform: translate3d(100%, 0, 0);
+    opacity: 1
+  }
+}
+
+@keyframes layui-lr {
+  from {
+    transform: translate3d(0, 0, 0)
+  }
+  to {
+    transform: translate3d(100%, 0, 0)
+  }
+}
+
+.layui-anim-lr, .layui-anim-rl.layer-anim-close {
+  -webkit-animation-name: layui-lr;
+  animation-name: layui-lr
+}
+
+.layui-n-br {
+  border-radius: 0 !important;
+}
+
 @media (max-width: 750px) {
   .left-off .layui-layout-admin .layui-side, .left-off .layui-side-scroll, .left-off .layui-nav-tree {
     width: 0;
