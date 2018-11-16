@@ -209,7 +209,7 @@
                 html += '<div class="progress progress-xs" style="display:none;width: ' + $this.width + 'px"><div class="progress-bar progress-bar-info"></div></div>';
                 html += '<span class="fsrc">' + file.name + '</span>';
                 html += '<span class="fsize">' + (file.size / 1000).toFixed(1) + 'K</span>';
-                html += '<i>×</i>';
+                html += '<i>+</i>';
                 html += '<input type="hidden" id="' + file.id + '" name="' + $this.varName + '"/>';
                 html += '</li>';
                 let imgEle = $(html);
