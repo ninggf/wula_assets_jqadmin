@@ -39,17 +39,17 @@
 		<!-- 主菜单区域 -->
 		<div class="jqadmin-main-menu" id="hd-left-top">
 			<ul class="layui-nav clearfix" id="menu" lay-filter="main-menu">
-				<li class="layui-nav-item head-nav-item layui-this">
+				<li class="layui-nav-item head-nav-item layui-this" id="navi-1">
 					<a href="javascript:;" data-title="内容管理"><i class="iconfont">&#xe637;</i><span>内容管理</span></a>
 				</li>
-				<li class="layui-nav-item head-nav-item">
-					<a href="javascript:;" data-title="产品管理"><i class="iconfont">&#xe631;</i><span>产品管理</span></a>
+				<li class="layui-nav-item head-nav-item" id="navi-2">
+					<a href="javascript:;" data-title="产品管理" ><i class="iconfont">&#xe631;</i><span>产品管理</span></a>
 				</li>
-				<li class="layui-nav-item head-nav-item">
-					<a href="javascript:;" data-title="会员管理"><i class="iconfont">&#xe672;</i><span>会员管理</span></a>
+				<li class="layui-nav-item head-nav-item" id="navi-4">
+					<a href="javascript:;" data-title="会员管理" ><i class="iconfont">&#xe672;</i><span>会员管理</span></a>
 				</li>
-				<li class="layui-nav-item head-nav-item">
-					<a href="javascript:;" data-title="网站设置"><i class="iconfont">&#xe689;</i><span>网站设置</span></a>
+				<li class="layui-nav-item head-nav-item" id="navi-3">
+					<a href="javascript:;" data-title="网站设置" ><i class="iconfont">&#xe689;</i><span>网站设置</span></a>
 				</li>
 			</ul>
 
@@ -99,8 +99,8 @@
 	<div class="layui-side layui-bg-black jqamdin-left-bar">
 		<div class="layui-side-scroll">
 			<div id="submenu">
-				<div class="sub-menu">
-					<ul class="layui-nav layui-nav-tree">
+				<div class="sub-menu" >
+					<ul class="layui-nav layui-nav-tree" data-formenu="navi-1">
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;" data-title="内容管理"> <i class="iconfont">&#xe637;</i> 
 								<span>内容管理</span>
@@ -152,7 +152,7 @@
 						<span class="layui-nav-bar" style="opacity:1;"></span></ul>
 				</div>
 				<div class="sub-menu">
-					<ul class="layui-nav layui-nav-tree">
+					<ul class="layui-nav layui-nav-tree" data-formenu="navi-2" >
 						<li class="layui-nav-item">
 							<a href="javascript:;" data-url="product.html" data-title="产品列表"> <i class="iconfont"
 																								 data-icon="&#xe61a;">&#xe61a;</i>
@@ -171,7 +171,7 @@
 					</ul>
 				</div>
 				<div class="sub-menu">
-					<ul class="layui-nav layui-nav-tree">
+					<ul class="layui-nav layui-nav-tree" data-formenu="navi-4">
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;" data-title="会员管理"> <i class="iconfont">&#xe672;</i> <span>会员管理</span>
 								<em class="layui-nav-more"></em> </a>
@@ -194,7 +194,7 @@
 					</ul>
 				</div>
 				<div class="sub-menu">
-					<ul class="layui-nav layui-nav-tree">
+					<ul class="layui-nav layui-nav-tree" data-formenu="navi-3">
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;" data-title="系统管理"> <i class="iconfont">&#xe646;</i> <span>系统管理</span>
 								<em class="layui-nav-more"></em> </a>
