@@ -119,11 +119,22 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                     _this.menuSetOption(elem);
                 }
             } else {
-                var cmenu       = subMenu.eq(index), sStorage = window.sessionStorage || {};
+                var cmenu       = subMenu.eq(index),
+                    sStorage    = window.sessionStorage || {},
+                    dd          = cmenu.find('dd.layui-this'),
+                    cm          = cmenu.find('em.layui-nav-more:first');
                 sStorage.menuId = cmenu.find('[data-formmenu]').data('formenu');
+                if (!$('body').hasClass('left-off')) {
+                    if (dd.length > 0) {
+                        dd.closest('li').addClass('layui-nav-itemed');
+                    } else if (cm.length > 0) {
+                        cm.closest('li').addClass('layui-nav-itemed');
+                    }
+                }
                 if (cmenu.is(':visible')) {
                     return false;
                 }
+
                 subMenu.hide();
                 cmenu.show();
             }
@@ -237,11 +248,12 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             if (url) {
                 var li = $('#submenu').find('a[data-url="' + url + '"]');
                 if (li.length > 0) {
-                    $('.left-off .layui-nav-itemed').removeClass('layui-nav-itemed')
+                    if ($('body').hasClass('left-off')) {
+                        li.closest('.sub-menu').find('.layui-nav-itemed').removeClass('layui-nav-itemed');
+                    }
                     var subm = li.closest('ul.layui-nav');
                     subm.find('.layui-this').removeClass('layui-this');
-                    var mp = li.parent();
-                    mp.addClass('layui-this');
+                    li.parent().addClass('layui-this');
                     menuId = subm.data('formenu');
                 }
             }
@@ -310,8 +322,8 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
             }
         }
         switch (showType) {
-            case 1://打开
-                $('.layui-nav-tree .layui-nav-item').removeClass('layui-nav-itemed');
+            case 1://关闭
+                $('#submenu .layui-nav-item').removeClass('layui-nav-itemed');
                 subm.children("a").each(function () {
                     $(this).addClass('nav-collapse');
                 });
@@ -322,9 +334,17 @@ layui.define(['jquery', 'laytpl', 'layer', 'jqelem', 'tabmenu'], function (expor
                 }
                 showIcon.html('&#xe66b;');
                 break;
-            default://关闭
+            default://打开
+                var cmenu = $('#submenu .sub-menu:visible'),
+                    cd    = cmenu.find('dd.layui-this'),
+                    cm    = cmenu.find('em.layui-nav-more:first');
                 subm.find("a").removeClass('nav-collapse');
                 $body.removeClass('left-off');
+                if (cd.length > 0) {
+                    cd.closest('li').addClass('layui-nav-itemed')
+                } else if (cm.length > 0) {
+                    cm.closest('li').addClass('layui-nav-itemed')
+                }
                 if (screenWidth <= 750) {
                     $body.removeClass('left-miss');
                     showIcon.html('&#xe668;');
