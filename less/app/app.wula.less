@@ -30,9 +30,11 @@
 .upload-img-box {
   padding: 0;
   margin: 0;
+
   .clearfix {
     clear: both;
   }
+
   li {
     position: relative;
     list-style: none;
@@ -40,11 +42,13 @@
     float: left;
     padding: 2px;
     margin: 0 10px 10px 0;
+
     img {
       display: block;
       border: none;
       border-radius: 5px;
     }
+
     i {
       position: absolute;
       top: -5px;
@@ -65,35 +69,42 @@
       -webkit-transform: rotate(45deg);
       -o-transform: rotate(45deg);
       cursor: pointer;
+
       &:hover {
         background: #ed4d42
       }
     }
+
     span {
       position: absolute;
       bottom: 2px;
       right: 5px;
       color: #ffffff;
+
       &.fsrc {
         display: none;
       }
     }
+
     .progress {
       margin-bottom: 0;
       position: absolute;
       bottom: 0;
     }
   }
+
   li.uploadimg-btn {
     a {
       display: block;
       border: 1px dashed #dddddd;
       border-radius: 5px;
       background: transparent url("../images/up.png") no-repeat 50% 50%;
+
       &:hover {
         background-color: #f1f1f1;
       }
     }
+
     &:after {
       clear: right;
     }
@@ -103,9 +114,11 @@
 .skin1 {
   .upload-img-box {
     overflow: hidden;
+
     .clearfix {
       display: none;
     }
+
     li {
       position: relative;
       list-style: none;
@@ -114,9 +127,11 @@
       padding: 2px;
       margin: 0 0 10px 0;
       width: 80%;
+
       img {
         display: none;
       }
+
       i {
         color: red;
         background: transparent;
@@ -126,10 +141,12 @@
         text-align: right;
         font-size: 21px;
         float: right;
+
         &:hover {
           font-weight: 600;
         }
       }
+
       span {
         &.fsrc {
           display: inline-block;
@@ -139,19 +156,24 @@
           white-space: nowrap;
           width: 63%;
         }
+
         color: #333;
+
         &.fsize {
           position: static;
           vertical-align: super;
           color: #8d8d8d;
+
           &::before {
             content: '('
           }
+
           &::after {
             content: ')'
           }
         }
       }
+
       .progress {
         background: #5aa1dd;
         width: 80% !important;
@@ -159,29 +181,58 @@
         border-radius: 1.5px;
       }
     }
+
     li.uploadimg-btn {
       float: left;
       width: 15%;
       text-align: right;
       border: none;
+
       a {
         display: inline;
         border: none;
         background-image: none;
         line-height: 22px;
+
         &::before {
           content: "添加";
           color: #5b6e98;
           font-size: 13px;
         }
+
         &:hover {
           font-weight: 600;
           background: transparent;
         }
       }
+
       &:after {
         clear: right;
       }
+    }
+  }
+}
+
+[data-uploader] {
+  em {
+    display: none;
+    padding: 2px;
+  }
+
+  &.pendup {
+    span.input-group-addon {
+      position: relative;
+    }
+
+    em {
+      display: block;
+      font-style: normal;
+      position: absolute;
+      color: red;
+      left: -14px;
+      top: 8px;
+      z-index: 10;
+      cursor: pointer;
     }
   }
 }
@@ -201,6 +252,7 @@ button:focus {
   .layui-table-view, .layui-table {
     margin: 0;
   }
+
   .layui-table-fixed-r table {
     width: 100% !important;
   }
@@ -215,38 +267,47 @@ button:focus {
 
 .app-menu {
   background-color: #eaedf1;
+
   .layui-nav-tree {
     .layui-this a {
       background-color: #fff !important;
+
       &:after {
         height: 0;
         width: 0;
       }
     }
+
     li {
       a:hover {
         background-color: #f7f7f7;
         color: #333 !important;
       }
     }
+
     .layui-nav-more {
       border-color: #333 transparent transparent;
     }
+
     .layui-nav-item {
       line-height: 40px;
     }
+
     .layui-nav-itemed {
       a {
         color: #333 !important;
       }
+
       .layui-nav-more {
         border-color: transparent transparent #333;
       }
+
       .layui-nav-child {
         line-height: 40px;
         border-radius: 0;
         background-color: transparent !important;
         margin-bottom: 0;
+
         a {
           padding: 0 0 0 40px;
         }
@@ -259,25 +320,31 @@ button:focus {
     padding: 0;
     border-radius: 0;
     width: 100%;
+
     .layui-this {
       background-color: #fff !important;
+
       &:after {
         height: 0;
       }
     }
+
     .layui-nav-item {
       width: 100%;
     }
+
     a {
       .layui-icon {
         width: 18px;
         display: inline-block;
       }
+
       width: 100%;
       height: 40px;
       line-height: 40px;
       display: block;
       color: #333;
+
       &:hover {
         background-color: #f7f7f7;
         color: #333;
@@ -293,10 +360,12 @@ button:focus {
 div.wysiwyg {
   .btn-toolbar {
     margin-bottom: 2px;
+
     li a {
       cursor: default;
     }
   }
+
   [data-wysiwyg], textarea {
     font-size: 14px;
     height: 100px;
@@ -311,6 +380,7 @@ div.wysiwyg {
     overflow-x: hidden;
     outline: none;
   }
+
   [data-wysiwyg] {
     a {
       color: blue;
@@ -332,6 +402,7 @@ div.max1000 {
   .with-table {
     padding: 0;
   }
+
   .table {
     margin-bottom: 0;
   }
@@ -340,6 +411,7 @@ div.max1000 {
 .layui-card-footer {
   border-top: 1px solid #ddd;
   padding-bottom: 10px;
+
   select {
     height: 26px;
     line-height: 26px;
@@ -357,12 +429,15 @@ div.max1000 {
 
 .has-form {
   position: relative;
+
   .layui-form-item {
     margin-bottom: 5px
   }
+
   .more {
     display: none;
   }
+
   .search-btns {
     display: none;
     border-radius: 5px;
@@ -373,6 +448,7 @@ div.max1000 {
     left: 50%;
     margin-left: -28px;
   }
+
   &:hover {
     .search-btns {
       display: inline-block;

@@ -35,6 +35,7 @@
         elem.data('uploaderObj', this);
         let $this       = this;
         this.element    = elem;
+        this.form       = elem.closest('form[data-ajax]');
         this.value      = elem.data('value');
         this.varName    = elem.data('name');
         this.auto       = elem.data('auto') !== undefined;
@@ -121,7 +122,7 @@
             }
         };
         //销毁
-        let destroy      = function () {
+        const destroy    = function () {
             elem.off('form.placement');
             if ($this.uploader) {
                 $this.uploader.destroy();
@@ -131,12 +132,57 @@
                 delete $this.uploader;
             }
         };
-        this.id          = elem.attr('id');
-        this.btnId       = 'uploadimg-' + this.id;
-        this.wrapper     = $('<ul class="upload-img-box"><li class="uploadimg-btn"><a href="javascript:void(0);" style="' + this.whstyle + '" id="' + this.btnId + '"></a></li><br class="clearfix"/></ul>');
+        elem.closest('.wulaui').on('wulaui.widgets.destroy', destroy);
+        this.id    = elem.attr('id');
+        this.btnId = 'uploadimg-' + this.id;
+        if (elem.hasClass('input-group')) {
+            this._init2(removeFile, elem);
+        } else {
+            this._init1(removeFile, elem);
+        }
+        //全部上传完全
+        this.uploader.bind('UploadComplete', (up) => {
+            up.disableBrowse(false);
+            $this.newFile = 0;
+            up.splice(0);
+            up.refresh();
+            if ($this.element.hasClass('pendup')) {
+                $this.element.removeClass('pendup');
+                if ($this.form.length > 0 && $this.form.find('[data-uploader].pendup').length === 0) {
+                    $this.form.submit();//再次提交
+                }
+            } else {
+                $this.element.trigger('uploader.done');
+            }
+        });
+    };
+
+    nuiUploader.prototype.start  = function () {
+        if (this.newFile > 0) {
+            this.uploader.start();
+        } else {
+            this.element.trigger('uploader.done');
+        }
+    };
+    nuiUploader.prototype.stop   = function () {
+        this.uploader.stop();
+    };
+    nuiUploader.prototype.get    = function () {
+        return this.uploader;
+    };
+    nuiUploader.prototype.clear  = function () {
+        this.wrapper.find('li').not(this.uploadBtn).find('i').click();
+        this.uploader.splice(0);
+        this.uploader.refresh();
+        this.uploader.disableBrowse(false);
+        this.uploadBtn.show();
+    };
+    nuiUploader.prototype._init1 = function (removeFile, elem) {
+        let $this    = this;
+        this.wrapper = $('<ul class="upload-img-box"><li class="uploadimg-btn"><a href="javascript:void(0);" style="' + this.whstyle + '" id="' + this.btnId + '"></a></li><br class="clearfix"/></ul>');
         elem.append(this.wrapper);
         this.uploadBtn          = this.wrapper.find('.uploadimg-btn');
-        this.opts.browse_button = 'uploadimg-' + elem.attr('id');
+        this.opts.browse_button = this.btnId;
         this.opts.url           = elem.data('uploader') || '';
         let uploader            = new plupload.Uploader(this.opts);
         this.uploader           = uploader;
@@ -222,6 +268,8 @@
             }
             if ($this.auto && $this.newFile > 0) {
                 up.start();
+            } else if ($this.newFile > 0) {
+                $this.element.addClass('pendup');
             }
         });
         //上传进度
@@ -254,14 +302,6 @@
                 $('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
             }
         });
-        //全部上传完全
-        uploader.bind('UploadComplete', (up) => {
-            up.disableBrowse(false);
-            $this.newFile = 0;
-            up.splice(0);
-            up.refresh();
-            $this.element.trigger('uploader.done');
-        });
         //上传失败
         uploader.bind('Error', (up, file) => {
             up.disableBrowse(false);
@@ -280,32 +320,68 @@
             }
             $this.element.trigger('uploader.error');
         });
-
-        elem.closest('.wulaui').on('wulaui.widgets.destroy', destroy);
     };
-
-    nuiUploader.prototype.start = function () {
-        if (this.newFile > 0) {
-            this.uploader.start();
-        } else {
-            this.element.trigger('uploader.done');
+    nuiUploader.prototype._init2 = function (removeFile, elem) {
+        this.inputEle = $('<input type="text" class="form-control" autocomplete="off" id="file-' + this.id + '" name="' + this.varName + '"/>');
+        this.inputEle.val(this.value);
+        this.btnEle = $('<span class="input-group-addon"><em>x</em><i class="fa fa-upload" id="' + this.btnId + '" style="cursor: pointer"></i></span>');
+        elem.append(this.inputEle).append(this.btnEle);
+        if (this.readonly) {
+            this.inputEle.attr('readonly', 'true');
+            return;
         }
+        this.opts.browse_button = this.btnId;
+        this.opts.url           = elem.data('uploader') || '';
+        let uploader            = new plupload.Uploader(this.opts), $this = this;
+        this.uploader           = uploader;
+        uploader.init();
+        uploader.bind('FilesAdded', function (up, files) {
+            if (up.files.length > 1) {
+                up.splice(0, up.files.length - 1);
+            }
+            $this.inputEle.val(files[0].name + '（' + (files[0].size / 1000).toFixed(1) + 'KB）');
+            $this.element.addClass('pendup');
+        });
+        uploader.bind('FileUploaded', (up, file, resp) => {
+            if (file.status === plupload.DONE) {
+                try {
+                    let result = $.parseJSON(resp.response);
+                    let rst    = result.result;
+                    if (rst) {
+                        $this.inputEle.val(rst.url);
+                    } else {
+                        wui.toast.error(resp.response);
+                        $this.inputEle.val('');
+                    }
+                } catch (e) {
+                    wui.toast.error(resp.response);
+                    $this.inputEle.val('');
+                }
+            } else {
+                wui.toast.error(resp.response);
+                $this.inputEle.val('');
+            }
+        });
+        uploader.bind('Error', (up, file) => {
+            if (file.response) {
+                try {
+                    let result = eval('(' + file.response + ')');
+                    let rst    = result.error;
+                    wui.toast.error(rst.message);
+                } catch (e) {
+                    wui.toast.error('文件上传出错');
+                }
+            } else if (file.message) {
+                wui.toast.error(file.message);
+            }
+        });
+        elem.find('span > em').on('click', function () {
+            $this.element.removeClass('pendup');
+            $this.uploader.splice(0);
+            $this.inputEle.val('');
+        });
     };
-
-    nuiUploader.prototype.stop  = function () {
-        this.uploader.stop();
-    };
-    nuiUploader.prototype.get   = function () {
-        return this.uploader;
-    };
-    nuiUploader.prototype.clear = function () {
-        this.wrapper.find('li').not(this.uploadBtn).find('i').click();
-        this.uploader.splice(0);
-        this.uploader.refresh();
-        this.uploader.disableBrowse(false);
-        this.uploadBtn.show();
-    };
-    $.fn.wulauploader           = function () {
+    $.fn.wulauploader            = function () {
         let args = Array.apply(null, arguments);
         args.shift();
         return $(this).each(function (i, elm) {
