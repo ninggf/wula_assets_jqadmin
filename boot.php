@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '2.3.3');
+define('JQ_VERSION', '2.3.4');
 define('JQ_RC', '2450');
 /**
  * 加载界面样式资源.
@@ -76,7 +76,8 @@ function smarty_function_initjq($config = false) {
         $ms['tableSelect'] = 'extends/tableSelect';
         $ms['treeSelect']  = 'extends/treeSelect';
         $ms['cascader']    = 'extends/cascader';
-
+        $ms['multiSelect'] = 'extends/multiSelect';
+        //multiSelect
         //wulaui and thrid
         $ms['toastr']      = 'js/toastr';
         $ms['ztree']       = 'js/ztree';

@@ -437,6 +437,9 @@
                                 }
                             });
                             break;
+                        case 'refresh':
+                            location.reload();
+                            break;
                         default:
                     }
                 });
