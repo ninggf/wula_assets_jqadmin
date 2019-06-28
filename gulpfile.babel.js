@@ -28,6 +28,7 @@ gulp.task('clean', [], function () {
             "css/login.css",
             "css/ztree.css",
             "css/select2.css",
+            "css/simplebar.css",
             "css/**/theme.css",
             'js/*.js'
         ], {read: false}
@@ -44,7 +45,7 @@ gulp.task('build', ['css', 'jqa', 'js'], function () {
 
 // 编译less文件
 gulp.task('css', ['icss'], function () {
-    let ccss = gulp.src(['less/jqadmin.less', 'less/page.less', 'less/login.less', 'less/select2.less', 'less/**/theme.less'])
+    let ccss = gulp.src(['less/jqadmin.less', 'less/page.less', 'less/login.less', 'less/select2.less', 'less/simplebar.less', 'less/**/theme.less'])
     .pipe(less());
 
     if (options.env === 'pro')

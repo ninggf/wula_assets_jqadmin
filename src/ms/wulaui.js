@@ -13,7 +13,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
         }, getParams              = function (obj, attr) {
             let params = obj.data(attr) || obj.attr(attr);
             if (params) {
-                if (typeof(params) === "string") {
+                if (typeof (params) === "string") {
                     try {
                         return new Function("return {" + params + "}")();
                     } catch (e) {
@@ -124,7 +124,7 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
     WulaUI.prototype.toast        = top.global && top.global.toast ? top.global.toast : layui.toastr;
     WulaUI.prototype.layer        = top.global && top.global.layer ? top.global.layer : layui.layer;
     WulaUI.prototype.app          = function (url) {
-        if (typeof(url) === "string") {
+        if (typeof (url) === "string") {
             let config = this.config,
                 chunks = url.split('/');
             if (chunks[0].match(/^([~!@#%\^&\*])(.+)$/)) {
@@ -243,7 +243,6 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
             opts.type    = 1;
             opts.success = function (o) {
                 wulaui.init(o);
-                opts.$content = o;
             };
 
             if (opts.end) {
@@ -262,8 +261,8 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
                 };
             }
 
-            opts.beforeClose = function(){
-                wulaui.destroy(opts.$content);
+            opts.beforeClose = function (layero) {
+                wulaui.destroy(layero);
             };
 
             wulaui.ajax.ajax(opts.content, {

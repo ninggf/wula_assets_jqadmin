@@ -8,6 +8,7 @@ layui.config({
 	jqtags      : '../../js/jqtags',
 	plupload    : '../../lib/plupload',
 	select2     : '../../lib/select2',
+	simplebar   : '../../lib/simplebar',
 	toastr      : '../../js/toastr',
 	ztree       : '../../js/ztree',
 	"ztree.edit": '../../js/ztree_edit',

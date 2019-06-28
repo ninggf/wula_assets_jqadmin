@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('JQ_VERSION', '2.3.4');
-define('JQ_RC', '2450');
+define('JQ_VERSION', '2.5.4');
+define('JQ_RC', '2540');
 /**
  * 加载界面样式资源.
  *
@@ -71,6 +71,7 @@ function smarty_function_initjq($config = false) {
         $ms['datepicker'] = 'lib/datepicker';
         $ms['validate']   = 'lib/validate';
         $ms['sortable']   = 'lib/sortable';
+        $ms['simplebar']  = 'lib/simplebar';
 
         //extends
         $ms['tableSelect'] = 'extends/tableSelect';
