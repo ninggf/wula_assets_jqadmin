@@ -8,8 +8,9 @@
         multi_selection: false,
         max_file_size  : '28mb',
         filters        : [{
-            title     : "*.*",
-            extensions: "jpg,gif,png,jpeg"
+            title             : "*.*",
+            extensions        : "jpg,gif,png,jpeg",
+            prevent_duplicates: true
         }]
     };
     //预览文件
@@ -45,7 +46,9 @@
         this.readonly   = elem.data('readonly') !== undefined;
         this.whstyle    = 'width:' + this.width + 'px;height:' + this.height + 'px;';
         this.isLocal    = elem.data('localStore') !== undefined;
-        let opts        = {};
+        let opts        = {
+            multipart_params: {}
+        };
         if (this.extensions) {
             opts.filters = [{
                 title     : '*.*',
@@ -94,9 +97,10 @@
                 nowater: 1
             };
         }
-
+        //fid，用于防止文件上传错误
+        this.opts.multipart_params.fid = Math.random() * 10000000;
         // 删除文件
-        const removeFile = function () {
+        const removeFile               = function () {
             let up     = $this.uploader;
             let parent = $(this).parent();
             let fileId = parent.find('input').attr('id');
@@ -122,7 +126,7 @@
             }
         };
         //销毁
-        const destroy    = function () {
+        const destroy                  = function () {
             elem.off('form.placement');
             if ($this.uploader) {
                 $this.uploader.destroy();
@@ -141,18 +145,25 @@
             this._init1(removeFile, elem);
         }
         //全部上传完全
-        this.uploader.bind('UploadComplete', (up) => {
+        this.uploader.bind('UploadComplete', (up, files) => {
             up.disableBrowse(false);
-            $this.newFile = 0;
-            up.splice(0);
-            up.refresh();
-            if ($this.element.hasClass('pendup')) {
-                $this.element.removeClass('pendup');
-                if ($this.form.length > 0 && $this.form.find('[data-uploader].pendup').length === 0) {
-                    $this.form.submit();//再次提交
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    up.removeFile(files[i]);
                 }
-            } else {
-                $this.element.trigger('uploader.done');
+                $this.newFile = up.files.length;
+            }
+            if ($this.newFile === 0) {
+                if ($this.element.hasClass('pendup')) {
+                    $this.element.removeClass('pendup');
+                    if ($this.form.length > 0 && $this.form.find('[data-uploader].pendup').length === 0) {
+                        $this.form.submit();//再次提交
+                    }
+                } else {
+                    $this.element.trigger('uploader.done');
+                }
+            } else if ($this.form.length > 0) {
+                $this.form.trigger('uploader.error', [$this.element]);
             }
         });
     };
@@ -162,6 +173,12 @@
             this.uploader.start();
         } else {
             this.element.trigger('uploader.done');
+            if (this.element.hasClass('pendup')) {
+                this.element.removeClass('pendup');
+            }
+            if (this.form.length > 0) {
+                this.form.trigger('uploader.done');
+            }
         }
     };
     nuiUploader.prototype.stop   = function () {
@@ -279,46 +296,97 @@
         });
         // 上传完成
         uploader.bind('FileUploaded', (up, file, resp) => {
-            let id = file.id, idx = '#up-' + id;
+            let id = file.id, idx = '#up-' + id, pbar = $(idx + ' .progress-bar'), msg = null;
+            pbar.removeClass('progress-bar-info');
             if (file.status === plupload.DONE) {
-                $(idx + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-success');
                 try {
                     let result = $.parseJSON(resp.response);
-                    let rst    = result.result;
+                    let rst    = result.result, err = result.error;
                     if (rst) {
                         $(idx + ' input').val(rst.url);
                         try {
-                            $this.element.trigger('uploader.uploaded', [rst]);
+                            $this.element.trigger('uploader.uploaded', [rst, $(idx)]);
                         } catch (ee) {
                         }
+                        pbar.addClass('progress-bar-success');
                     } else {
-                        $(idx + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+                        //
+                        if (err && err.message) {
+                            msg = err.message;
+                        } else {
+                            msg = '文件上传失败';
+                        }
                     }
                 } catch (e) {
-                    $('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
-                    wui.toast.error(e.message);
+                    msg = e.message;
                 }
             } else {
-                $('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
+                msg = '上传失败:未知错误';
+            }
+            if (msg) {
+                uploader.removeFile(file);
+                $this.element.trigger('uploader.error', [msg, $(idx)]);
+                if (!$this.auto && $this.form.length > 0) {
+                    $this.form.trigger('uploader.error', [$this.element, msg]);
+                }
+                if ($this.auto) {
+                    wui.layer.alert(msg, {
+                        icon: 2, title: null, btn: null, shadeClose: true, resize: false, end: function () {
+                            removeFile.call($(idx + ' i'));
+                        }
+                    });
+                }
             }
         });
         //上传失败
         uploader.bind('Error', (up, file) => {
             up.disableBrowse(false);
-            let id = file.file ? file.file.id : file.id;
-            $('#up-' + id + ' .progress-bar').removeClass('progress-bar-info').addClass('progress-bar-danger');
-            if (file.response) {
+            let id = file.file ? file.file.id : file.id, msg = '文件上传出错', needRm = false, msgSet = false;
+            if (file.status) {
                 try {
-                    let result = eval('(' + file.response + ')');
-                    let rst    = result.error;
-                    wui.toast.error(rst.message);
+                    let res = $.parseJSON(file.response);
+                    if (res && res.error && res.error.message) {
+                        msg    = res.error.message;
+                        msgSet = true;
+                    }
                 } catch (e) {
-                    wui.toast.error('文件上传出错');
+
+                }
+                if (!msgSet) {
+                    switch (file.status) {
+                        case 403:
+                            msg = '无权限上传';
+                            break;
+                        case 404:
+                            msg = '上传地址不存在';
+                            break;
+                        case 500:
+                        case 502:
+                        case 503:
+                            msg = '服务器出错啦[' + file.status + ']';
+                            break;
+                        default:
+                            msg = '网络出错';
+                    }
+                }
+                uploader.removeFile(file.file);
+                needRm = true;
+                if (!$this.auto && $this.form.length > 0) {
+                    $this.form.trigger('uploader.error', [$this.element, msg]);
                 }
             } else if (file.message) {
-                wui.toast.error(file.message);
+                msg = file.message;
             }
-            $this.element.trigger('uploader.error');
+            $this.element.trigger('uploader.error', [msg, needRm ? $('#up-' + id) : null]);
+
+            if ($this.auto || !needRm) {
+                wui.layer.alert(msg, {
+                    icon: 2, title: null, btn: null, shadeClose: true, resize: false, end: function () {
+                        if (needRm)
+                            removeFile.call($('#up-' + id + ' i'));
+                    }
+                });
+            }
         });
     };
     nuiUploader.prototype._init2 = function (removeFile, elem) {
@@ -334,51 +402,111 @@
         this.opts.url           = elem.data('uploader') || '';
         let uploader            = new plupload.Uploader(this.opts), $this = this;
         this.uploader           = uploader;
+        this.fileTitle          = '';
         uploader.init();
         uploader.bind('FilesAdded', function (up, files) {
             if (up.files.length > 1) {
                 up.splice(0, up.files.length - 1);
             }
-            $this.inputEle.val(files[0].name + '（' + (files[0].size / 1000).toFixed(1) + 'KB）');
-            $this.element.addClass('pendup');
+            $this.inputEle.val(files[0].name + '（' + (files[0].size / 1000).toFixed(1) + 'KB）').removeClass('parsley-error');
+            $this.fileTitle = files[0].name;
+            $this.newFile   = up.files.length;
+            if (!$this.auto) {
+                $this.element.addClass('pendup');
+            } else {
+                up.start();
+            }
+        });
+        //上传进度
+        uploader.bind('UploadProgress', (up, file) => {
+            $this.inputEle.val($this.fileTitle + ' - ' + file.percent + '%');
         });
         uploader.bind('FileUploaded', (up, file, resp) => {
+            let msg = null;
             if (file.status === plupload.DONE) {
                 try {
                     let result = $.parseJSON(resp.response);
-                    let rst    = result.result;
+                    let rst    = result.result, err = result.error;
                     if (rst) {
-                        $this.inputEle.val(rst.url);
+                        $this.inputEle.val(rst.url).removeClass('parsley-error');
+                        $this.element.trigger('uploader.uploaded', [rst, $this.inputEle]);
                     } else {
-                        wui.toast.error(resp.response);
-                        $this.inputEle.val('');
+                        if (err && err.message) {
+                            msg = err.message;
+                        } else {
+                            msg = '文件上传出错';
+                        }
                     }
                 } catch (e) {
-                    wui.toast.error(resp.response);
-                    $this.inputEle.val('');
+                    msg = e.message;
                 }
             } else {
-                wui.toast.error(resp.response);
-                $this.inputEle.val('');
+                msg = '上传失败:未知错误';
+            }
+            if (msg) {
+                uploader.removeFile(file);
+                $this.inputEle.val('').addClass('parsley-error');
+                $this.element.trigger('uploader.reset', [$this.inputEle]);
+                if ($this.auto) {
+                    wui.layer.alert(msg, {
+                        icon: 2, title: null, btn: null, shadeClose: true, resize: false
+                    });
+                } else if ($this.form.length > 0) {
+                    $this.form.trigger('uploader.error', [$this.element, msg]);
+                }
             }
         });
         uploader.bind('Error', (up, file) => {
-            if (file.response) {
+            let msg = '文件上传出错', needRm = false, msgSet = false;
+            if (file.status) {
                 try {
-                    let result = eval('(' + file.response + ')');
-                    let rst    = result.error;
-                    wui.toast.error(rst.message);
+                    let res = $.parseJSON(file.response);
+                    if (res && res.error && res.error.message) {
+                        msg    = res.error.message;
+                        msgSet = true;
+                    }
                 } catch (e) {
-                    wui.toast.error('文件上传出错');
+
                 }
+                if (!msgSet) {
+                    switch (file.status) {
+                        case 403:
+                            msg = '无权限上传';
+                            break;
+                        case 404:
+                            msg = '上传地址不存在';
+                            break;
+                        case 500:
+                        case 502:
+                        case 503:
+                            msg = '服务器出错啦[' + file.status + ']';
+                            break;
+                        default:
+                            msg = '网络出错';
+                    }
+                }
+                uploader.removeFile(file.file);
+                if (!$this.auto && $this.form.length > 0) {
+                    $this.form.trigger('uploader.error', [$this.element, msg]);
+                }
+                needRm = true;
             } else if (file.message) {
-                wui.toast.error(file.message);
+                msg = file.message;
+            }
+            $this.inputEle.val('').addClass('parsley-error');
+            $this.element.trigger('uploader.reset', [$this.inputEle]);
+            if ($this.auto || !needRm) {
+                wui.layer.alert(msg, {
+                    icon: 2, title: null, btn: null, shadeClose: true, resize: false
+                });
             }
         });
         elem.find('span > em').on('click', function () {
             $this.element.removeClass('pendup');
             $this.uploader.splice(0);
             $this.inputEle.val('');
+            $this.newFile = 0;
+            $this.element.trigger('uploader.reset', [$this.inputEle]);
         });
     };
     $.fn.wulauploader            = function () {
@@ -405,6 +533,15 @@
                 that.wulauploader();
             } else {
                 layui.use('plupload', function () {
+                    plupload.addI18n({
+                        "Error: File too large:"              : "文件太大:",
+                        "Duplicate file error."               : "文件重复啦。",
+                        "File size error."                    : "文件太大了，请选个小点的",
+                        "Error: Invalid file extension:"      : "无效的文件扩展名:",
+                        "Runtime ran out of available memory.": "运行时已消耗所有可用内存。",
+                        "File count error."                   : "文件数量错误。",
+                        "File extension error."               : "文件类型错误。"
+                    });
                     that.wulauploader();
                 });
             }

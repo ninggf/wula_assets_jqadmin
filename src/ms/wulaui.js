@@ -245,23 +245,27 @@ layui.define(['jquery', 'layer', 'toastr'], function (exports) {
                 wulaui.init(o);
                 opts.$content = o;
             };
+
             if (opts.end) {
                 let uEnd = opts.end;
                 opts.end = function () {
                     uEnd();
-                    wulaui.destroy(opts.$content);
                     if (e) {
                         e.triggerHandler('close.dialog')
                     }
                 };
             } else {
                 opts.end = function () {
-                    wulaui.destroy(opts.$content);
                     if (e) {
                         e.triggerHandler('close.dialog')
                     }
                 };
             }
+
+            opts.beforeClose = function(){
+                wulaui.destroy(opts.$content);
+            };
+
             wulaui.ajax.ajax(opts.content, {
                 element : e || $('body'),
                 dataType: 'html',

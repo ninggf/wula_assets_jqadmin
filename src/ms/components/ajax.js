@@ -133,10 +133,13 @@
         let $this = $(this);
         if ($this.is('form')) {
             if ($this.find('[data-uploader].pendup').length > 0) {
+                $this.trigger('uploader.start');
                 $this.find('[data-uploader].pendup').each(function (i, e) {
                     $(e).data('uploaderObj').uploader.start();
                 });
                 return false;
+            } else if ($this.find('[data-uploader]').length > 0) {
+                $this.trigger('uploader.done');
             }
         }
         if ($this.is('a') && $this.closest('ul').is('.dropdown-menu')) {
