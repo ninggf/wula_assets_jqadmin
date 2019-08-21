@@ -4,6 +4,7 @@
 @logotxt-color: rgba(255, 255, 255, .8);
 @siderbar-color: #FFF;
 @siderbar-child-color: #F7F7F7;
+@siderbar-child-bd-color: #e2e2e2;
 @siderbar-text-color: #333;
 @activebk-color: #009688;
 @tab-after-color: #5FB878;
@@ -30,6 +31,7 @@ body {
     .layui-nav-more {
       border-color: @siderbar-text-color transparent transparent;
     }
+
     .layui-nav-itemed {
       .layui-nav-more {
         border-color: transparent transparent @siderbar-text-color;
@@ -47,21 +49,26 @@ body {
     background-color: @activebk-color;
     color: @siderbar-text-color !important;
   }
+
   .layui-nav-child {
     background-color: @siderbar-child-color !important;
   }
+
   .layui-nav-item {
     &:first-child {
       a {
         border-bottom: 1px solid @tab-split-color;
       }
     }
+
     a {
       color: @siderbar-text-color !important;
+
       &:hover {
         background-color: @activebk-color;
       }
     }
+
     .layui-nav-child {
       a {
         border-bottom: none;
@@ -74,6 +81,7 @@ body {
   .layui-header {
     background-color: @topbar-color;
     border-bottom: @topbarbtm-color solid 4px;
+
     .layui-nav {
       .layui-nav-item {
         .msg-num {
@@ -81,12 +89,15 @@ body {
           color: #FFF;
         }
       }
+
       .layui-nav-more {
         border-color: @topbar-text-color transparent transparent;
       }
+
       .layui-nav-mored {
         border-color: transparent transparent @topbar-text-color;
       }
+
       .layui-nav-child a {
         color: @bodyColor;
       }
@@ -106,7 +117,8 @@ body {
 
 .left-off {
   .layui-nav-itemed > .layui-nav-child {
-    background-color: @siderbar-child-color !important;
+    background-color: @siderbar-color !important;
+    border-right: 1px solid @siderbar-child-bd-color;
   }
 }
 
@@ -114,20 +126,24 @@ body {
   .jqadmin-logo-box {
     background-color: @logobk-color;
     height: 54px;
+
     h1 {
       color: @logotxt-color;
     }
   }
+
   .layui-nav {
     .layui-nav-item {
       a {
         color: @topbar-text-color;
       }
     }
+
     .layui-this {
       &:after,
       a {
         color: @topbar-active-text-color;
+
         &:after {
           background-color: @activebk-color;
         }
@@ -168,22 +184,28 @@ body {
   li {
     border-right: 1px solid @tab-split-color;
   }
+
   .layui-tab-title {
     background-color: #fff;
+
     .layui-this {
       background-color: @tab-activebk-color;
       color: #666;
+
       * {
         color: #fff;
       }
     }
   }
+
   .tab-move-btn {
     background: #FFF;
     border-left: 1px solid #CCC;
+
     .open {
       border-left: @tab-activebk-color solid 1px;
     }
+
     .move-left-btn,
     .move-right-btn {
       border-left: 1px solid #ccc;
@@ -194,6 +216,7 @@ body {
 .jqamdin-left-bar {
   border-right: 1px solid #e2e2e2;
   background-color: @siderbar-color;
+
   .layui-nav {
     background-color: @siderbar-color;
     border-radius: 0;
@@ -201,7 +224,7 @@ body {
 }
 
 .jqadmin-auxiliary-btn {
-  color:  @topbar-text-color;
+  color: @topbar-text-color;
 }
 
 .layui-layout-admin {
@@ -214,10 +237,12 @@ body {
 .right-click-menu {
   background: #FFF;
   border: 1px solid #F2F2F2;
+
   li {
     a {
       color: #CCC;
       border-bottom: 1px solid #F2F2F2;
+
       &:hover {
         background: #EEE;
         color: #666;
