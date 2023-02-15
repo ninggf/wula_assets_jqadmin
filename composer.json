@@ -4,8 +4,7 @@
     "type": "wula-asset",
     "license": "MIT",
     "require": {
-        "wula/wula-installer": "^2.0",
-        "wula/trumbowyg": "^1.0"
+        "wula/wula-installer": "^2.0"
     },
     "keywords": [
         "webui",
